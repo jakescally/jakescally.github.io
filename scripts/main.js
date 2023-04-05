@@ -9,28 +9,28 @@ myImage.onclick = () => {
     }
 };
 
-// Button stuff
-let myButton = document.querySelector("button");
-let myHeader = document.querySelector("h1");
+// // Button stuff
+// let myButton = document.querySelector("button");
+// let myHeader = document.querySelector("h1");
 
 
-function setUserName() {
-    const myName = prompt("Please enter your name.");
-    if (!myName) {
-        setUserName();
-    } else {
-        localStorage.setItem("name", myName);
-        myHeader.textContent = "Here are photos, " + myName;
-    }
-}
+// function setUserName() {
+//     const myName = prompt("Please enter your name.");
+//     if (!myName) {
+//         setUserName();
+//     } else {
+//         localStorage.setItem("name", myName);
+//         myHeader.textContent = "Here are photos, " + myName;
+//     }
+// }
 
-if (localStorage.getItem("name")) {
-    setUserName();
-} else {
-    const storedName = localStorage.getItem("name");
-    myHeader.textContent = "Here's some photos, " + storedName;
-}
+// if (localStorage.getItem("name")) {
+//     setUserName();
+// } else {
+//     const storedName = localStorage.getItem("name");
+//     myHeader.textContent = "Here's some photos, " + storedName;
+// }
 
-myButton.onclick = () => {
-    setUserName();
-}
+// myButton.onclick = () => {
+//     setUserName();
+// }
