@@ -1,0 +1,19 @@
+Notes and such
+
+Design
+- Color #1A306F
+- Image sources
+  Orion Image
+  Milky Way Landscape
+  Orange Moon
+- Font Prata by Cyreal
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Prata">
+  <style>
+    body {
+      font-family: 'Prata', serif;
+      font-size: 24px;
+    }
+  </style>
+
+  
