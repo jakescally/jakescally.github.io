@@ -1,0 +1,28 @@
+---
+title: "Gallery"
+layout: default
+permalink: "/gallery.html"
+---
+<section class="featured-posts">
+    <div class="section-title">
+        <h2><span>Gallery</span></h2>
+    </div>
+    <div class="row">
+
+        {% for gallery_item in page.gallery %}
+
+        {% include gallerybox.html %}
+
+        {% endfor %}
+
+    </div>
+</section>
+
+<!-- <div class="gallery">
+    {% for item in page.gallery %}
+    <div class="gallery-item">
+        <img src="{{ item.url }}" alt="{{ item.title }}">
+        <p class="image-title">{{ item.title }}</p>
+    </div>
+    {% endfor %}
+</div> -->
