@@ -6,7 +6,7 @@ categories: [ Astrophotography, Photography, Andromeda ]
 tags: [Photography, Andromeda, Galaxy, Deep Space ]
 image: assets/images/andromeda.png
 description: "My first attempt at imaging Andromeda from my backyard."
-featured: true
+featured: false
 hidden: false
 comments: false
 ---

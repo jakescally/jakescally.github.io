@@ -5,9 +5,32 @@
     <description>All things Jake Scally</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 09 Aug 2024 00:27:54 -0400</pubDate>
-    <lastBuildDate>Fri, 09 Aug 2024 00:27:54 -0400</lastBuildDate>
+    <pubDate>Fri, 09 Aug 2024 17:24:03 -0400</pubDate>
+    <lastBuildDate>Fri, 09 Aug 2024 17:24:03 -0400</lastBuildDate>
     <generator>Jekyll v3.9.3</generator>
+    
+      <item>
+        <title>What is this blog?</title>
+        <description>&lt;p&gt;This blog is supposed to serve as a portfolio/documentary/place to store descriptions of all of the stuff or projects I work on. I plan on including some of my physics research, my astrophotography, projects I work on at FSU’s FABLAB, old cameras, cool pictures, old TVs, and much much more.&lt;/p&gt;
+
+&lt;p&gt;Hopefully, at some point I’ll be like “Oh remember that project I did years ago?” and I’ll be able to go look for it and remind myself what the project was.&lt;/p&gt;
+
+&lt;p&gt;Or I can use this blog to show to employers and others as a catalog of what I do in my free time.&lt;/p&gt;
+
+&lt;p&gt;Dome posts will be small, some will be longer. Maybe I just want to write something down (like how to add posts to this website in case I forget!). Or maybe I want to compare a bunch of different cameras I’ve owned. Who knows!&lt;/p&gt;
+
+&lt;p&gt;Anyways, I’m glad everything is up and running now. Hopefully I keep this updated but ‘the best laid plans of mice and men’ etc etc…&lt;/p&gt;
+</description>
+        <pubDate>Fri, 09 Aug 2024 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/this-blog/</link>
+        <guid isPermaLink="true">http://localhost:4000/this-blog/</guid>
+        
+        <category>blog</category>
+        
+        
+        <category>blog</category>
+        
+      </item>
     
       <item>
         <title>An Orange Moon Picture</title>

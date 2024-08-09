@@ -6,7 +6,7 @@ categories: [ Astrophotography, Photography ]
 tags: [ Nebula, Orion, Photography, Astrophotography ]
 image: assets/images/orion16-bit.png
 description: "How I got a pretty decent shot of the Orion Nebula without tracking. And how NOT to get a shot of the Orion Nebula."
-featured: true
+featured: false
 hidden: false
 comments: false
 ---
