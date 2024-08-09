@@ -5,7 +5,8 @@ description: "All things Jake Scally"
 logo: 'assets/images/logo.png'
 favicon: 'assets/images/favicon.ico'
 headerimg: 'assets/images/scallynetwork.png'
-baseurl: '/home'
+baseurl: ''
+url: 'https://jakescally.github.io'
 google_analytics: 'UA-46278016-1'
 include: ["_pages"]
 permalink: /:title/
