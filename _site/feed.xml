@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Scally Network</title>
+    <description>All things Jake Scally</description>
+    <link>http://localhost:4000/home/</link>
+    <atom:link href="http://localhost:4000/home/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 08 Aug 2024 22:52:17 -0400</pubDate>
+    <lastBuildDate>Thu, 08 Aug 2024 22:52:17 -0400</lastBuildDate>
+    <generator>Jekyll v3.9.3</generator>
+    
+      <item>
+        <title>Some Moon Shots</title>
+        <description>&lt;p&gt;Some moon pictures. I’ll put more detail here later when I have time.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/home/some-moon-shots/</link>
+        <guid isPermaLink="true">http://localhost:4000/home/some-moon-shots/</guid>
+        
+        <category>Moon</category>
+        
+        <category>Lunar</category>
+        
+        <category>Photography</category>
+        
+        <category>Astrophotography</category>
+        
+        
+        <category>Moon</category>
+        
+        <category>Photography</category>
+        
+      </item>
+    
+      <item>
+        <title>Imaging the Orion Nebula</title>
+        <description>&lt;p&gt;Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/home/imaging-the-orion-nebula/</link>
+        <guid isPermaLink="true">http://localhost:4000/home/imaging-the-orion-nebula/</guid>
+        
+        <category>Nebula</category>
+        
+        <category>Orion</category>
+        
+        <category>Photography</category>
+        
+        <category>Astrophotography</category>
+        
+        
+        <category>Astrophotography</category>
+        
+        <category>Photography</category>
+        
+      </item>
+    
+      <item>
+        <title>Imaging Andromeda for the First Time</title>
+        <description>&lt;p&gt;Don’t have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/home/astro-images-thus-far/</link>
+        <guid isPermaLink="true">http://localhost:4000/home/astro-images-thus-far/</guid>
+        
+        <category>Photography</category>
+        
+        <category>Andromeda</category>
+        
+        <category>Galaxy</category>
+        
+        <category>Deep Space</category>
+        
+        
+        <category>Astrophotography</category>
+        
+        <category>Photography</category>
+        
+        <category>Andromeda</category>
+        
+      </item>
+    
+      <item>
+        <title>The CRT Stash As Of 2024</title>
+        <description>&lt;p&gt;Hey! I collect, repair, service, and modify old CRT televisions and monitors!&lt;/p&gt;
+
+&lt;p&gt;I’m super busy right now, so I haven’t had the time to fill in this page, but eventually I’ll list here how I got into the hobby, my first few TVs, and more.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 23 Jan 2024 00:00:00 -0500</pubDate>
+        <link>http://localhost:4000/home/my-crt-history/</link>
+        <guid isPermaLink="true">http://localhost:4000/home/my-crt-history/</guid>
+        
+        <category>CRT</category>
+        
+        <category>tube</category>
+        
+        <category>TV</category>
+        
+        
+        <category>CRT</category>
+        
+      </item>
+    
+  </channel>
+</rss>

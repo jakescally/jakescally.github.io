@@ -1,0 +1,62 @@
+# Site
+name: "Scally Network"
+title: "Scally Network"
+description: "All things Jake Scally"
+logo: 'assets/images/logo.png'
+favicon: 'assets/images/favicon.ico'
+headerimg: 'assets/images/scallynetwork.png'
+baseurl: '/home'
+google_analytics: 'UA-46278016-1'
+include: ["_pages"]
+permalink: /:title/
+
+# Authors
+authors:
+  jake:
+    name: Jake Scally
+    display_name: Jake
+    gravatar: 4b021ff491c32749c72869539829850d386282991192f11e323e2af9024b285a
+    email: jakemoosie@gmail.com
+    web: https://www.jakescally.com/
+    twitter: 
+    description: "Physics and Astrophysics major at FSU. Into astrophotography, 3D printing, 3D modeling, app development, piano, retro video games and technology, CRT TV repair, and more."
+  
+# Plugins
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-archives
+    
+# Archives
+jekyll-archives:
+  enabled:
+    - categories
+  layout: archive
+  permalinks:
+    category: '/category/:name/'
+    
+# Pagination 
+paginate: 6
+paginate_path: /page:num/
+    
+# Other
+markdown: kramdown
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
+
+# Adsense (change to "enabled" to activate, also your client id and ad slot. Create a new ad unit from your Adsense account to get the slot.)
+adsense: "disabled"
+adsense-data-ad-client: "ca-pub-3412143450191416"
+adsense-data-ad-slot: "1363087678"
+
+# Lazy Images ("enabled" or "disabled")
+lazyimages: "disabled"
+
+exclude: [changelog.md, LICENSE.txt, README.md, Gemfile, Gemfile.lock]
