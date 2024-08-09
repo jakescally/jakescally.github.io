@@ -1,54 +1,54 @@
 
 var documents = [{
     "id": 0,
-    "url": "https://jakescally.github.io/404.html",
+    "url": "http://localhost:4000/404.html",
     "title": "404",
     "body": "404 Page does not exist!Please use the search bar at the top or visit our homepage! "
     }, {
     "id": 1,
-    "url": "https://jakescally.github.io/about",
+    "url": "http://localhost:4000/about",
     "title": "About Scallywag Network",
     "body": "Hey! This is my website. I'm Jake Scally, a Physics and Astrophysics student at FSU. I'm into astrophotography, 3D printing, 3D modeling, app development, piano, retro video games and technology, CRT TV repair, and more.  Documentation: Please, read the docs here. Questions or bug reports?: Head over to our Github repository! Etc. Thanks for stopping by! "
     }, {
     "id": 2,
-    "url": "https://jakescally.github.io/categories",
+    "url": "http://localhost:4000/categories",
     "title": "Categories",
     "body": ""
     }, {
     "id": 3,
-    "url": "https://jakescally.github.io/gallery",
+    "url": "http://localhost:4000/gallery",
     "title": "Gallery",
     "body": ""
     }, {
     "id": 4,
-    "url": "https://jakescally.github.io/",
+    "url": "http://localhost:4000/",
     "title": "Home",
-    "body": "      Featured:                                                                                                                                                                                                                 Imaging the Orion Nebula                              :               Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have. . . :                                                                                                                                                                               Jake                                    25 Jan 2024                                                                                                                                                                                                                                                                                                                                                            Imaging Andromeda for the First Time                              :               Don’t have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard. :                                                                                                                                                                               Jake                                    25 Jan 2024                                                                                                                                                                      All Stories:                                                                                                     Some Moon Shots              :       Some moon pictures. I’ll put more detail here later when I have time. :                                                                               Jake                25 Jan 2024                                                                                                                                     Imaging the Orion Nebula              :       Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now. :                                                                               Jake                25 Jan 2024                                                                                                                                     Imaging Andromeda for the First Time              :       Don’t have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard. :                                                                               Jake                25 Jan 2024                                                                                                                                     The CRT Stash As Of 2024              :       Hey! I collect, repair, service, and modify old CRT televisions and monitors!:                                                                               Jake                23 Jan 2024                                            "
+    "body": "      Featured:                                                                                                                                                                                                                 Imaging the Orion Nebula                              :               Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have. . . :                                                                                                                                                                               Jake Scally                                    25 Jan 2024                                                                                                                                                                                                                                                                                                                                                            Imaging Andromeda for the First Time                              :               This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on. . . :                                                                                                                                                                               Jake Scally                                    25 Jan 2024                                                                                                                                                                      All Stories:                                                                                                     An Orange Moon Picture              :       This was taken just outside of Tallahassee on my way home from an attempted astrophotography night. The astro pictures didn’t come out like I hoped, but I saw this as. . . :                                                                               Jake Scally                25 Jan 2024                                                                                                                                     Imaging the Orion Nebula              :       Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now. :                                                                               Jake Scally                25 Jan 2024                                                                                                                                     Imaging Andromeda for the First Time              :       This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on a relatively clear night. Gear. . . :                                                                               Jake Scally                25 Jan 2024                                                                                                                                     The CRT Stash As Of 2024              :       My wonderful collection of those old TVs everyone throws away. One man’s trash is another man’s treasure, and finding these old TVs has been a hobby of mine for the. . . :                                                                               Jake Scally                23 Jan 2024                                            "
     }, {
     "id": 5,
-    "url": "https://jakescally.github.io/robots.txt",
+    "url": "http://localhost:4000/robots.txt",
     "title": "",
     "body": "      Sitemap: {{ “sitemap. xml”   absolute_url }}   "
     }, {
     "id": 6,
-    "url": "https://jakescally.github.io/some-moon-shots/",
-    "title": "Some Moon Shots",
-    "body": "2024/01/25 - Some moon pictures. I’ll put more detail here later when I have time. "
+    "url": "http://localhost:4000/some-moon-shots/",
+    "title": "An Orange Moon Picture",
+    "body": "2024/01/25 - This was taken just outside of Tallahassee on my way home from an attempted astrophotography night. The astro pictures didn’t come out like I hoped, but I saw this as I drove home and just had to take pictures of it. "
     }, {
     "id": 7,
-    "url": "https://jakescally.github.io/imaging-the-orion-nebula/",
+    "url": "http://localhost:4000/imaging-the-orion-nebula/",
     "title": "Imaging the Orion Nebula",
     "body": "2024/01/25 - Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now. "
     }, {
     "id": 8,
-    "url": "https://jakescally.github.io/astro-images-thus-far/",
+    "url": "http://localhost:4000/astro-images-thus-far/",
     "title": "Imaging Andromeda for the First Time",
-    "body": "2024/01/25 - Don’t have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard. "
+    "body": "2024/01/25 - This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on a relatively clear night. Gear was a Canon 80D and whatever that something-to-300mm zoom lens is that Canon makes too. "
     }, {
     "id": 9,
-    "url": "https://jakescally.github.io/my-crt-history/",
+    "url": "http://localhost:4000/my-crt-history/",
     "title": "The CRT Stash As Of 2024",
-    "body": "2024/01/23 - Hey! I collect, repair, service, and modify old CRT televisions and monitors! I’m super busy right now, so I haven’t had the time to fill in this page, but eventually I’ll list here how I got into the hobby, my first few TVs, and more. "
+    "body": "2024/01/23 - My wonderful collection of those old TVs everyone throws away. One man’s trash is another man’s treasure, and finding these old TVs has been a hobby of mine for the past couple years I’m super busy right now, so I haven’t had the time to fill in this page, but eventually I’ll list here how I got into the hobby, my first few TVs, and more. "
     }];
 
 var idx = lunr(function () {

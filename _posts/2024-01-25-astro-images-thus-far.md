@@ -10,4 +10,4 @@ featured: true
 hidden: false
 comments: false
 ---
-Don't have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard.
+This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on a relatively clear night. Gear was a Canon 80D and whatever that something-to-300mm zoom lens is that Canon makes too.

@@ -3,19 +3,19 @@
   <channel>
     <title>Scally Network</title>
     <description>All things Jake Scally</description>
-    <link>https://jakescally.github.io/</link>
-    <atom:link href="https://jakescally.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 09 Aug 2024 00:04:04 -0400</pubDate>
-    <lastBuildDate>Fri, 09 Aug 2024 00:04:04 -0400</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 09 Aug 2024 00:27:54 -0400</pubDate>
+    <lastBuildDate>Fri, 09 Aug 2024 00:27:54 -0400</lastBuildDate>
     <generator>Jekyll v3.9.3</generator>
     
       <item>
-        <title>Some Moon Shots</title>
-        <description>&lt;p&gt;Some moon pictures. I’ll put more detail here later when I have time.&lt;/p&gt;
+        <title>An Orange Moon Picture</title>
+        <description>&lt;p&gt;This was taken just outside of Tallahassee on my way home from an attempted astrophotography night. The astro pictures didn’t come out like I hoped, but I saw this as I drove home and just had to take pictures of it.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/some-moon-shots/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/some-moon-shots/</guid>
+        <link>http://localhost:4000/some-moon-shots/</link>
+        <guid isPermaLink="true">http://localhost:4000/some-moon-shots/</guid>
         
         <category>Moon</category>
         
@@ -37,8 +37,8 @@
         <description>&lt;p&gt;Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/imaging-the-orion-nebula/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/imaging-the-orion-nebula/</guid>
+        <link>http://localhost:4000/imaging-the-orion-nebula/</link>
+        <guid isPermaLink="true">http://localhost:4000/imaging-the-orion-nebula/</guid>
         
         <category>Nebula</category>
         
@@ -57,11 +57,11 @@
     
       <item>
         <title>Imaging Andromeda for the First Time</title>
-        <description>&lt;p&gt;Don’t have the time to fill this out fully, but here is my stacked image of Andromeda from my backyard.&lt;/p&gt;
+        <description>&lt;p&gt;This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on a relatively clear night. Gear was a Canon 80D and whatever that something-to-300mm zoom lens is that Canon makes too.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/astro-images-thus-far/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/astro-images-thus-far/</guid>
+        <link>http://localhost:4000/astro-images-thus-far/</link>
+        <guid isPermaLink="true">http://localhost:4000/astro-images-thus-far/</guid>
         
         <category>Photography</category>
         
@@ -82,13 +82,13 @@
     
       <item>
         <title>The CRT Stash As Of 2024</title>
-        <description>&lt;p&gt;Hey! I collect, repair, service, and modify old CRT televisions and monitors!&lt;/p&gt;
+        <description>&lt;p&gt;My wonderful collection of those old TVs everyone throws away. One man’s trash is another man’s treasure, and finding these old TVs has been a hobby of mine for the past couple years&lt;/p&gt;
 
 &lt;p&gt;I’m super busy right now, so I haven’t had the time to fill in this page, but eventually I’ll list here how I got into the hobby, my first few TVs, and more.&lt;/p&gt;
 </description>
         <pubDate>Tue, 23 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/my-crt-history/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/my-crt-history/</guid>
+        <link>http://localhost:4000/my-crt-history/</link>
+        <guid isPermaLink="true">http://localhost:4000/my-crt-history/</guid>
         
         <category>CRT</category>
         

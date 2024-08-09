@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Some Moon Shots"
+title:  "An Orange Moon Picture"
 author: jake
 categories: [ Moon, Photography ]
 tags: [Moon, Lunar, Photography, Astrophotography ]
 image: assets/images/orange-moon.png
-description: "Two very blurry pictures of the moon."
+description: "A somewhat blurry picture of an orange moon."
 featured: false
 hidden: false
 comments: false
 ---
-Some moon pictures. I'll put more detail here later when I have time.
+This was taken just outside of Tallahassee on my way home from an attempted astrophotography night. The astro pictures didn't come out like I hoped, but I saw this as I drove home and just had to take pictures of it.
