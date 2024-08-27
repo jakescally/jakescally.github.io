@@ -271,6 +271,7 @@ PLATFORMS
   x86_64-darwin
 
 DEPENDENCIES
+  bundler (~> 2.3)
   exifr
   github-pages
   jekyll-archives
