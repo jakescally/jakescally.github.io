@@ -2,7 +2,7 @@
 layout: post
 title:  "Imaging Andromeda for the First Time"
 author: jake
-categories: [ Astrophotography, Photography, Andromeda ]
+categories: [ Astrophotography, Photography ]
 tags: [Photography, Andromeda, Galaxy, Deep Space ]
 image: assets/images/andromeda.png
 description: "My first attempt at imaging Andromeda from my backyard."

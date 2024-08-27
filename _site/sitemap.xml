@@ -25,6 +25,10 @@
 <lastmod>2024-08-09T00:00:00-04:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/my-first-gallery/</loc>
+<lastmod>2024-08-27T00:00:00-04:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/about</loc>
 </url>
 <url>
@@ -49,12 +53,9 @@
 <loc>http://localhost:4000/category/photography/</loc>
 </url>
 <url>
-<loc>http://localhost:4000/category/andromeda/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/category/moon/</loc>
-</url>
-<url>
 <loc>http://localhost:4000/category/blog/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page2/</loc>
 </url>
 </urlset>

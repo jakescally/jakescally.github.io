@@ -2,8 +2,8 @@
 layout: post
 title:  "An Orange Moon Picture"
 author: jake
-categories: [ Moon, Photography ]
-tags: [Moon, Lunar, Photography, Astrophotography ]
+categories: [ Photography ]
+tags: [Moon, Photography, Astrophotography ]
 image: assets/images/orange-moon.png
 description: "A somewhat blurry picture of an orange moon."
 featured: false
