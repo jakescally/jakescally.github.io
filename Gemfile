@@ -23,4 +23,3 @@ gem "webrick", "~> 1.8"
 gem 'github-pages'
 gem "mini_magick"
 gem "exifr"
-gem 'bundler', '~> 2.3'
