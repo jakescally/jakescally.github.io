@@ -8,6 +8,10 @@
 
     <link rel="icon" href="/assets/images/logo.png">
 
+    <!-- Stuff for lightGallery -->
+    <link type="text/css" rel="stylesheet" href="/node_modules/lightgallery/css/lightgallery-bundle.css" />
+
+
     <title>Gallery Test | Scally Network</title>
 
     <!-- Begin Jekyll SEO tag v2.8.0 -->
@@ -50,7 +54,7 @@
 
 
 
-<body class="layout-post">
+<body class="layout-post-with-gallery">
     <!-- defer loading of font and font awesome -->
     <noscript id="deferred-styles">
         <link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i"
@@ -184,6 +188,13 @@
             <div class="main-content">
                 <!-- Begin Article
 ================================================== -->
+
+<!-- lightGallery Stuff -->
+<script src="/node_modules/lightgallery/lightgallery.umd.js"></script>
+<script src="/node_modules/lightgallery/plugins/thumbnail/lg-thumbnail.umd.js"></script>
+<script src="/node_modules/lightgallery/plugins/zoom/lg-zoom.umd.js"></script>
+
+
 <div class="container">
     <div class="row">
 
@@ -260,6 +271,17 @@
                 
                 <!-- End Toc -->
                 <p>This is a test of the Image Gallery script.</p>
+
+<div id="lightgallery">
+    <a href="/assets/images/japanPictures1/flower-fields1.jpg">
+        <img alt="img1" src="/assets/images/japanPictures1/flower-fields1.jpg" />
+    </a>
+</div>
+
+<script type="text/javascript">
+    lightGallery(document.getElementById('lightgallery')); 
+</script>
+
 
             </div>
 
@@ -404,9 +426,7 @@ https://search.google.com/structured-data/testing-tool/u/0/
 
     <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
 
-    <!-- 
-    <script id="dsq-count-scr" src="//.disqus.com/count.js"></script>
-     -->
+    <!--  -->
 
 </body>
 
