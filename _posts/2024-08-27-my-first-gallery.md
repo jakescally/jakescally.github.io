@@ -10,5 +10,3 @@ hidden: false
 comments: false
 ---
 This is a test of the Image Gallery script.
-
-{% include album.html albumname="japanAlbum" %}

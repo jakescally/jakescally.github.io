@@ -38,7 +38,7 @@ var documents = [{
     "id": 7,
     "url": "http://localhost:4000/my-first-gallery/",
     "title": "Gallery Test",
-    "body": "2024/08/27 - This is a test of the Image Gallery script.                                                                         "
+    "body": "2024/08/27 - This is a test of the Image Gallery script. "
     }, {
     "id": 8,
     "url": "http://localhost:4000/this-blog/",
