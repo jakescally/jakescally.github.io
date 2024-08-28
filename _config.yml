@@ -10,8 +10,7 @@ url: 'https://jakescally.github.io'
 google_analytics: 'UA-46278016-1'
 include: ["_pages"]
 permalink: /:title/
-exclude:
-  - vendor/
+exclude: [vendor]
 
 # Mini magick
 mini_magick:
