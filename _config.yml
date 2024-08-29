@@ -12,6 +12,16 @@ include: ["_pages"]
 permalink: /:title/
 exclude: [vendor]
 
+# Mini Magick
+mini_magick:
+    photoFolders:
+        source: assets/images/gallery
+        destination: thumbnails/assets/images/gallery
+        resize: "320x240^"
+        gravity: "center"
+        extent: "320x240"
+
+
 # Authors
 authors:
   jake:
