@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" href="/assets/images/logo.png">
+
+    <!-- Stuff for lightGallery -->
+    <link type="text/css" rel="stylesheet" href="/node_modules/lightgallery/css/lightgallery-bundle.css" />
+
+
+    <title>Setting Up LightGallery on a Jekyll Website Hosted by Github Pages | Scally Network</title>
+
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Setting Up LightGallery on a Jekyll Website Hosted by Github Pages | Scally Network</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Setting Up LightGallery on a Jekyll Website Hosted by Github Pages" />
+<meta name="author" content="jake" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Oh, the pains and joys of HTML, Liquid, Jekyll, and Ruby" />
+<meta property="og:description" content="Oh, the pains and joys of HTML, Liquid, Jekyll, and Ruby" />
+<link rel="canonical" href="http://localhost:4000/setting-up-lightgallery/" />
+<meta property="og:url" content="http://localhost:4000/setting-up-lightgallery/" />
+<meta property="og:site_name" content="Scally Network" />
+<meta property="og:image" content="http://localhost:4000/assets/images/lightgallerylogo.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-08-29T00:00:00-04:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="http://localhost:4000/assets/images/lightgallerylogo.png" />
+<meta property="twitter:title" content="Setting Up LightGallery on a Jekyll Website Hosted by Github Pages" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"jake"},"dateModified":"2024-08-29T00:00:00-04:00","datePublished":"2024-08-29T00:00:00-04:00","description":"Oh, the pains and joys of HTML, Liquid, Jekyll, and Ruby","headline":"Setting Up LightGallery on a Jekyll Website Hosted by Github Pages","image":"http://localhost:4000/assets/images/lightgallerylogo.png","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/setting-up-lightgallery/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/images/logo.png"},"name":"jake"},"url":"http://localhost:4000/setting-up-lightgallery/"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link href="/assets/css/screen.css" rel="stylesheet">
+
+    <link href="/assets/css/main.css" rel="stylesheet">
+
+    <script src="/assets/js/jquery.min.js"></script>
+
+    <!-- Uncomment for google font, Libre Bodoni -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet">
+</head>
+
+
+
+
+
+<body class="layout-post-with-gallery">
+    <!-- defer loading of font and font awesome -->
+    <noscript id="deferred-styles">
+        <link href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i"
+            rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+            integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    </noscript>
+
+
+    <!-- Begin Menu Navigation
+================================================== -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top mediumnavigation nav-down">
+
+        <div class="container pr-0">
+
+            <!-- Begin Logo -->
+            <a class="navbar-brand" href="/">
+                <img src="/assets/images/logo.png" alt="Scally Network">
+            </a>
+            <!-- End Logo -->
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMediumish"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMediumish">
+
+                <!-- Begin Menu -->
+
+                <ul class="navbar-nav ml-auto">
+
+                    
+                    <li class="nav-item">
+                        
+                        <a class="nav-link" href="/index.html">Blog</a>
+                    </li>
+
+                    
+                    <li class="nav-item">
+                        
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+
+                    <!-- 
+                    <li class="nav-item">
+                        
+                        <a class="nav-link" href="/gallery">Gallery</a>
+                    </li> -->
+
+                    
+                    <li class="nav-item">
+                        
+                        <a class="nav-link" href="/categories">Categories</a>
+                    </li>
+
+                    <!-- <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://bootstrapstarter.com/bootstrap-templates/template-mediumish-bootstrap-jekyll/"> Docs</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://www.wowthemes.net/themes/mediumish-wordpress/"><i class="fab fa-wordpress-simple"></i> WP Version</a>
+                </li>
+
+                <li class="nav-item">
+                <a target="_blank" class="nav-link" href="https://www.wowthemes.net/themes/mediumish-ghost/"><i class="fab fa-snapchat-ghost"></i> Ghost Version</a>
+                </li> -->
+
+                    <li class="nav-item">
+                        <a target="_blank" class="nav-link" href="https://github.com/jakescally"><i
+                                class="fab fa-github"></i>
+                            Github</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a target="_blank" class="nav-link" href="https://www.instagram.com/js.astrophoto/"><i
+                                class="fab fa-instagram"></i>
+                            Instagram</a>
+                    </li>
+
+                    <script src="/assets/js/lunr.js"></script>
+
+
+<style>
+    .lunrsearchresult .title {color: #d9230f;}
+    .lunrsearchresult .url {color: silver;}
+    .lunrsearchresult a {display: block; color: #777;}
+    .lunrsearchresult a:hover, .lunrsearchresult a:focus {text-decoration: none;}
+    .lunrsearchresult a:hover .title {text-decoration: underline;}
+</style>
+
+
+<form class="bd-search" onSubmit="return lunr_search(document.getElementById('lunrsearch').value);">
+    <input type="text" class="form-control text-small launch-modal-search" id="lunrsearch" name="q" maxlength="255" value="" placeholder="Type and enter..."/>
+</form>
+
+<div id="lunrsearchresults">
+    <ul></ul>
+</div>
+
+<script src="/assets/js/lunrsearchengine.js"></script>
+
+                </ul>
+
+                <!-- End Menu -->
+
+            </div>
+
+        </div>
+    </nav>
+    <!-- End Navigation
+================================================== -->
+
+    <div class="site-content">
+
+        <div class="container">
+
+            <!-- Site Title
+================================================== -->
+            <div class="mainheading">
+                <!-- <h1 class="sitetitle">Scally Network</h1> -->
+                <img src="/assets/images/scallynetwork.png" class="headerImg"
+                    alt="Header image of the Scally Network logo">
+                <p class="lead">
+                    All things Jake Scally
+                </p>
+            </div>
+
+            <!-- Content
+================================================== -->
+            <div class="main-content">
+                <!-- Begin Article
+================================================== -->
+
+<!-- lightGallery Stuff -->
+<script src="/node_modules/lightgallery/lightgallery.umd.js"></script>
+<script src="/node_modules/lightgallery/plugins/thumbnail/lg-thumbnail.umd.js"></script>
+<script src="/node_modules/lightgallery/plugins/zoom/lg-zoom.umd.js"></script>
+
+
+<div class="container">
+    <div class="row">
+
+        <!-- Post Share -->
+        <div class="col-md-2 pl-0">
+            <div class="share sticky-top sticky-top-offset">
+    <p>
+        Share
+    </p>
+    <ul>
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://twitter.com/intent/tweet?text=Setting Up LightGallery on a Jekyll Website Hosted by Github Pages&url=http://localhost:4000/setting-up-lightgallery/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                <i class="fab fa-twitter"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://facebook.com/sharer.php?u=http://localhost:4000/setting-up-lightgallery/" onclick="window.open(this.href, 'facebook-share', 'width=550,height=435');return false;">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+        </li>
+
+        <li class="ml-1 mr-1">
+            <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/setting-up-lightgallery/" onclick="window.open(this.href, 'width=550,height=435');return false;">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+        </li>
+
+    </ul>
+    
+</div>
+
+        </div>
+
+        <!-- Post -->
+        
+
+        <div class="col-md-9 flex-first flex-md-unordered">
+            <div class="mainheading">
+
+                <!-- Author Box -->
+                
+                <div class="row post-top-meta">
+                    <div class="col-xs-12 col-md-3 col-lg-2 text-center text-md-left mb-4 mb-md-0">
+                        
+                        <img class="author-thumb"
+                            src="https://www.gravatar.com/avatar/4b021ff491c32749c72869539829850d386282991192f11e323e2af9024b285a?s=250&d=mm&r=x"
+                            alt="Jake Scally">
+                        
+                    </div>
+                    <div class="col-xs-12 col-md-9 col-lg-10 text-center text-md-left">
+                        <a target="_blank" class="link-dark" href="https://www.jakescally.com/">Jake Scally</a>
+                        <span class="author-description">Physics and Astrophysics major at FSU. Into astrophotography, 3D printing, 3D modeling, app development, piano, retro video games and technology, CRT TV repair, and more.</span>
+                    </div>
+                </div>
+                
+
+                <!-- Post Title -->
+                <h1 class="posttitle">Setting Up LightGallery on a Jekyll Website Hosted by Github Pages</h1>
+
+            </div>
+
+            <!-- Adsense if enabled from _config.yml (change your pub id and slot) -->
+            
+            <!-- End Adsense -->
+
+            <!-- Post Featured Image -->
+            
+
+            
+            <img class="featured-image img-fluid" src="/assets/images/lightgallerylogo.png" alt="Setting Up LightGallery on a Jekyll Website Hosted by Github Pages">
+            
+
+            
+            <!-- End Featured Image -->
+
+            <!-- Post Content -->
+            <div class="article-post">
+                <!-- Toc if any -->
+                
+                <!-- End Toc -->
+                <p>As I mentioned in the “What is this blog?” post, I want this website to serve as both tutorials/documentation for myself, while also being a portfolio of my projects. Having recently travelled to Japan, I wanted a nice way to display my photos in a nice carousel, with a gallery of thumbnails that I could embed in a blog post.</p>
+
+<p>Lightgallery is the best way to achieve this. For personal use, it’s free, and it is a very powerful (and professional-looking) tool to display and offer downloads to your photos. Many websites and blogs use it, so you’ve probably seen it before without even knowing it.</p>
+
+<h3 id="github-pages-doesnt-like-plugins">Github Pages Doesn’t Like Plugins</h3>
+<p>Github pages doesn’t like plugins. They like <em>some</em> plugins, but not all plugins. if you add a gem to your gemfile that isn’t on Github’s supported list of plugins, Github will fail to build and publish the website.</p>
+
+<p>In order to get things working, I recommend you switch over to Github Actions for deploying your site. It’s necessary for some of the gems we need, so you should get it working before changing any of your underlying website code. Jekyll’s docs are great for this, and the relevant tutorial can be found <a href="https://jekyllrb.com/docs/continuous-integration/github-actions/">here</a>.</p>
+
+<p>The error I ran into here was something strange about a date in a markdown file in the <code class="language-plaintext highlighter-rouge">\vendor\</code> directory, which doesn’t even exist when I build the website locally. Either way, this can be fixed by adding simply the word “vendor” to the “excludes” list in <code class="language-plaintext highlighter-rouge">_config.yml</code>.</p>
+
+<h3 id="installing-the-necessary-plugins">Installing the Necessary Plugins</h3>
+<p>The way I figured out the rest of this was mostly by following Jimmy Xiao’s <a href="https://jimmyxiao.me/guides/technical/2019/07/28/folder-based-jekyll-lightgallery">blog post</a> describing the process. HUGE thanks to him for his work, I never could’ve gotten such an easy-to use solution without his work. However, I ran into a variety of issues, likely due to my amateurish skills with this sort of thing. As such, I am going to describe exactly what I did, in order, to get this up and running on Github Pages.</p>
+
+<p>Firstly, you’ll want to install <strong>ImageMagick</strong>. ImageMagick is an open-source image manipulation command line tool. As I’m on a Mac, I installed it using the package manager <strong>homebrew</strong> with <code class="language-plaintext highlighter-rouge">brew install imagemagick</code>. If you’re on a Mac and have never installed a package manager, you’ll have to install brew or something similar. This is straightforward and instructions are available on homebrew’s website. Other download instructions exist <a href="https://imagemagick.org/script/download.php">here</a> for other operating systems.</p>
+
+<p>Then, you’ll want to download the ruby gems <a href="/assets/files/exiftag.rb">exiftag.rb</a> and <a href="https://github.com/MattKevan/Jekyll-MiniMagick-new">jekyll_minimagick.rb</a>. <code class="language-plaintext highlighter-rouge">exiftag.rb</code> is a plugin that extracts metadata from the images you want in your gallery (we’ll get to that later). The <code class="language-plaintext highlighter-rouge">jekyll_minimagick.rb</code> uses the program ImageMagick to automatically convert the images we want in our gallery to small, easy-to-load thumbnails. Put these both in the <code class="language-plaintext highlighter-rouge">_plugins</code> folder in the root of the directory of your jekyll project. If there isn’t one, don’t worry, just create one and put the files in.</p>
+
+<p>Now we want to make sure we install the necessary gems. Open your <code class="language-plaintext highlighter-rouge">gemfile</code> and add these two lines anywhere in the file:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>gem "mini_magick"
+gem "exifr"
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Then (if you’re using bundle, which hopefully you are) run <code class="language-plaintext highlighter-rouge">bundle install</code> in the root of your project and the gems should install.</p>
+
+<h3 id="installing-lightgallery">Installing Lightgallery</h3>
+<p>Installing lightgallery is easy using npm, yarn, or bower. I recommend using npm, as that’s what I’m familiar with. Make sure you initialize your directory (the root of your jekyll project) using <code class="language-plaintext highlighter-rouge">npm init</code> and then install lightgallery with <code class="language-plaintext highlighter-rouge">npm install lightgallery</code>.</p>
+
+<h3 id="file-structure">File Structure</h3>
+<p>This is very important. I had tons of file structure issues for some reason that took hours to figure out, but I think I got it. Here is what my file structure looks like:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre>├── _includes
+│   └── album.html
+├── _layouts
+│   └── layout-with-gallery.html
+├── _plugins
+│   ├── exiftag.rb
+│   └── jekyll_minimagick.rb
+├── _posts
+│   └── 2024-08-29-setting-up-lightgallery.md
+└── assets
+    └── images
+        └── gallery
+            └── galleryNameHere
+                └── my-picture.jpg
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="albumhtml-and-layout-with-galleryhtml">Album.html and Layout-with-gallery.html</h3>
+<p>My version of <a href="/assets/files/album.html">album.html</a> is a <em>slightly</em> tweaked version of Jimmy Xiao’s, but the underlying functionality is the same. The code is here:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"{{include.albumname}}"</span><span class="nt">&gt;</span>
+
+    {%- for image in site.static_files -%}
+    {%- if image.path contains 'images/gallery' and image.path contains include.albumname -%}
+    {%- unless image.path contains 'thumbnails' -%}
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ image.path }}"</span> <span class="na">data-sub-html=</span><span class="s">"{% exiftag image_description, , {{ image.path }} %}"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">"/thumbnails{{ image.path }}"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/a&gt;</span>
+    {%- endunless -%}
+    {%- endif -%}
+    {%- endfor -%}
+
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+    <span class="nx">lightGallery</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">{{include.albumname}}</span><span class="dl">"</span><span class="p">));</span> 
+<span class="nt">&lt;/script&gt;</span>
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+<p>I’ll try to describe to the best of my ability what’s going on here. This first element is a <code class="language-plaintext highlighter-rouge">div</code> that contains the images for lightgallery. Lightgallery works in two steps: first, you create a simple <code class="language-plaintext highlighter-rouge">div</code> that contains your images, which are set up as links (as you can see above) with an image tag between the two <code class="language-plaintext highlighter-rouge">&lt;a&gt;</code> tags. This <code class="language-plaintext highlighter-rouge">div</code> has an id that you can refer to later. The second step is actually running the lightgallery script and feeding it the id of the <code class="language-plaintext highlighter-rouge">div</code> that contains your images.</p>
+
+<p>Here, we want this <code class="language-plaintext highlighter-rouge">album.html</code> to take an argument called <code class="language-plaintext highlighter-rouge">albumname</code> when it’s ‘called’. I’m saying ‘called’ in quotes because I have no idea what the proper terminology is for embedding an html file inside another. But either way, when we ‘call’ <code class="language-plaintext highlighter-rouge">album.html</code>, we pass the <code class="language-plaintext highlighter-rouge">albumname</code> argument to be used as the id for the <code class="language-plaintext highlighter-rouge">div</code>. Then the Liquid code loops through all the images on the site, and searches for paths that contain <code class="language-plaintext highlighter-rouge">images/gallery</code> AND the album name. This allows us to use this for different album names (folders of pictures) inside the <code class="language-plaintext highlighter-rouge">images/gallery</code> folder. Because we also created thumbnails for these in another folder with a similar path, we want to use the Liquid command <code class="language-plaintext highlighter-rouge">unless</code> to avoid double-counting images.</p>
+
+<p>The link and image are pretty straightforward, except for the <code class="language-plaintext highlighter-rouge">data-sub-html</code> section. This is where we ‘call’ exiftag, which can read the description from the image specified at <code class="language-plaintext highlighter-rouge">image.path</code>. In this case, we want the description, so we pass <code class="language-plaintext highlighter-rouge">image_description</code> as an argument.</p>
+
+<p>Now how does lightgallery interpret all of this? The link specified by the <code class="language-plaintext highlighter-rouge">href</code> is going to be the full-size image that lightgallery serves once the thumbnail is clicked. The image between the <code class="language-plaintext highlighter-rouge">&lt;a&gt;</code> tags should be the thumbnail, which is what we want to display on the actual page before it is clicked.</p>
+
+<p>As for <code class="language-plaintext highlighter-rouge">layout-with-gallery.html</code>, this should be one of your existing jekyll layout files in <code class="language-plaintext highlighter-rouge">_layouts</code>. The following code should be put at the top of this file, or really just anywhere before your content from your markdown file is read-in:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="c">&lt;!-- lightgallery Stuff --&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/node_modules/lightgallery/lightgallery.umd.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/node_modules/lightgallery/plugins/thumbnail/lg-thumbnail.umd.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/node_modules/lightgallery/plugins/zoom/lg-zoom.umd.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>In order for this to work, we must also add these lines to the <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> of the default layout, which is usually just called default.html:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nt">&lt;head&gt;</span>
+    <span class="c">&lt;!-- Stuff for lightGallery --&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">href=</span><span class="s">"/node_modules/lightgallery/css/lightgallery-bundle.css"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">lightgallery-bundle.css</code> includes various lightgallery tools that we want.</p>
+
+<h3 id="calling-albumhtml">Calling album.html</h3>
+<p>Finally, we can use this in our markdown files. First make sure that your layout is set to <code class="language-plaintext highlighter-rouge">layout-with-gallery.html</code> in your markdown file’s YAML front matter. Then you can simply add the album with lightgallery using this line:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>
+{% include album.html albumname="your_album_name_here" %}
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="ah-finally-beautiful-galleries">Ah, finally, beautiful galleries</h3>
+<p>Here, you can see this working:</p>
+<div id="japanPictures1"><a href="/assets/images/gallery/japanPictures1/P1010589.jpg" data-sub-html="">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/P1010589.jpg" />
+    </a><a href="/assets/images/gallery/japanPictures1/P1010602.jpg" data-sub-html="">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/P1010602.jpg" />
+    </a><a href="/assets/images/gallery/japanPictures1/P1010662.jpg" data-sub-html="">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/P1010662.jpg" />
+    </a><a href="/assets/images/gallery/japanPictures1/P1010703.jpg" data-sub-html="">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/P1010703.jpg" />
+    </a><a href="/assets/images/gallery/japanPictures1/P1010704.jpg" data-sub-html="">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/P1010704.jpg" />
+    </a><a href="/assets/images/gallery/japanPictures1/flower-fields1.jpg" data-sub-html="This is a test description.">
+        <img src="/thumbnails/assets/images/gallery/japanPictures1/flower-fields1.jpg" />
+    </a></div>
+<script type="text/javascript">
+    lightGallery(document.getElementById("japanPictures1")); 
+</script>
+
+<p>There’s still some slight formatting gripes I have (like why isn’t it centered?), but it works well enough that I’m satisfied. If anything isn’t working for you, feel free to download this entire website as a folder using one of those online website downloader tools so that you can look at the code yourself.</p>
+
+<p>Thanks for reading and happy coding!</p>
+
+            </div>
+
+            <!-- Rating -->
+            
+
+            <!-- Post Date -->
+            <p>
+                <small>
+                    <span class="post-date"><time class="post-date" datetime=" 2024-08-29">29 Aug 2024</time></span>
+                    
+                </small>
+            </p>
+
+            <!-- Post Categories -->
+            <div class="after-post-cats">
+                <ul class="tags mb-4">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/categories#Development">Development</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Categories -->
+
+            <!-- Post Tags -->
+            <div class="after-post-tags">
+                <ul class="tags">
+                    
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#Development">#Development</a>
+                    </li>
+                    
+                    <li>
+                        <a class="smoothscroll" href="/tags#Tutorial">#Tutorial</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- End Tags -->
+
+            <!-- Prev/Next -->
+            <div class="row PageNavigation d-flex justify-content-between font-weight-bold">
+                
+                <a class="prev d-block col-md-6" href="//my-first-gallery/"> &laquo;
+                    Gallery test (working!)</a>
+                
+                
+                <div class="clearfix"></div>
+            </div>
+            <!-- End Categories -->
+
+        </div>
+        <!-- End Post -->
+
+    </div>
+</div>
+<!-- End Article
+================================================== -->
+
+<!-- Begin Comments
+================================================== -->
+
+<!--End Comments
+================================================== -->
+
+<!-- Review with LD-JSON, adapt it for your needs if you like, but make sure you test the generated HTML source code first: 
+https://search.google.com/structured-data/testing-tool/u/0/
+================================================== -->
+
+            </div>
+
+            
+
+        </div>
+
+        <!-- Categories Jumbotron
+================================================== -->
+        <div class="jumbotron fortags">
+            <div class="d-md-flex h-100">
+                <div class="col-md-4 transpdark align-self-center text-center h-100">
+                    <div class="d-md-flex align-items-center justify-content-center h-100">
+                        <h2 class="d-md-block align-self-center py-1 font-weight-light">Explore <span
+                                class="d-none d-md-inline">→</span></h2>
+                    </div>
+                </div>
+                <div class="col-md-8 p-5 align-self-center text-center">
+                    
+                    
+                    
+                    <a class="mt-1 mb-1"
+                        href="/categories#CRT">CRT (1)</a>
+                    
+                    <a class="mt-1 mb-1"
+                        href="/categories#Astrophotography">Astrophotography (2)</a>
+                    
+                    <a class="mt-1 mb-1"
+                        href="/categories#Photography">Photography (4)</a>
+                    
+                    <a class="mt-1 mb-1"
+                        href="/categories#Development">Development (2)</a>
+                    
+                    <a class="mt-1 mb-1"
+                        href="/categories#blog">blog (1)</a>
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Begin Footer
+================================================== -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 text-center text-lg-left">
+                        Copyright © 2024 Scally Network
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer
+================================================== -->
+
+    </div> <!-- /.site-content -->
+
+    <!-- Scripts
+================================================== -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+
+    <script src="/assets/js/mediumish.js"></script>
+
+    
+
+    <script src="/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <!--  -->
+
+</body>
+
+</html>

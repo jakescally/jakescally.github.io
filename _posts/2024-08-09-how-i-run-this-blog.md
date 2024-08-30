@@ -2,8 +2,8 @@
 layout: post
 title:  "How I run this blog"
 author: jake
-categories: [ blog ]
-tags: [ blog ]
+categories: [ Development ]
+tags: [ Blog, Development, Tutorial ]
 image: assets/images/github_image.png
 description: "A description for others (but primarily myself) of how I update, run, and host this blog."
 featured: true

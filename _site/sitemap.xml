@@ -29,6 +29,10 @@
 <lastmod>2024-08-27T00:00:00-04:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/setting-up-lightgallery/</loc>
+<lastmod>2024-08-29T00:00:00-04:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/about</loc>
 </url>
 <url>
@@ -53,9 +57,16 @@
 <loc>http://localhost:4000/category/photography/</loc>
 </url>
 <url>
+<loc>http://localhost:4000/category/development/</loc>
+</url>
+<url>
 <loc>http://localhost:4000/category/blog/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/page2/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/assets/files/album.html</loc>
+<lastmod>2024-08-29T20:53:12-04:00</lastmod>
 </url>
 </urlset>

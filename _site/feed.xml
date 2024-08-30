@@ -5,12 +5,199 @@
     <description>All things Jake Scally</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 29 Aug 2024 13:43:51 -0400</pubDate>
-    <lastBuildDate>Thu, 29 Aug 2024 13:43:51 -0400</lastBuildDate>
+    <pubDate>Fri, 30 Aug 2024 12:38:35 -0400</pubDate>
+    <lastBuildDate>Fri, 30 Aug 2024 12:38:35 -0400</lastBuildDate>
     <generator>Jekyll v3.9.3</generator>
     
       <item>
-        <title>Gallery Test</title>
+        <title>Setting Up LightGallery on a Jekyll Website Hosted by Github Pages</title>
+        <description>&lt;p&gt;As I mentioned in the “What is this blog?” post, I want this website to serve as both tutorials/documentation for myself, while also being a portfolio of my projects. Having recently travelled to Japan, I wanted a nice way to display my photos in a nice carousel, with a gallery of thumbnails that I could embed in a blog post.&lt;/p&gt;
+
+&lt;p&gt;Lightgallery is the best way to achieve this. For personal use, it’s free, and it is a very powerful (and professional-looking) tool to display and offer downloads to your photos. Many websites and blogs use it, so you’ve probably seen it before without even knowing it.&lt;/p&gt;
+
+&lt;h3 id=&quot;github-pages-doesnt-like-plugins&quot;&gt;Github Pages Doesn’t Like Plugins&lt;/h3&gt;
+&lt;p&gt;Github pages doesn’t like plugins. They like &lt;em&gt;some&lt;/em&gt; plugins, but not all plugins. if you add a gem to your gemfile that isn’t on Github’s supported list of plugins, Github will fail to build and publish the website.&lt;/p&gt;
+
+&lt;p&gt;In order to get things working, I recommend you switch over to Github Actions for deploying your site. It’s necessary for some of the gems we need, so you should get it working before changing any of your underlying website code. Jekyll’s docs are great for this, and the relevant tutorial can be found &lt;a href=&quot;https://jekyllrb.com/docs/continuous-integration/github-actions/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The error I ran into here was something strange about a date in a markdown file in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\vendor\&lt;/code&gt; directory, which doesn’t even exist when I build the website locally. Either way, this can be fixed by adding simply the word “vendor” to the “excludes” list in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-the-necessary-plugins&quot;&gt;Installing the Necessary Plugins&lt;/h3&gt;
+&lt;p&gt;The way I figured out the rest of this was mostly by following Jimmy Xiao’s &lt;a href=&quot;https://jimmyxiao.me/guides/technical/2019/07/28/folder-based-jekyll-lightgallery&quot;&gt;blog post&lt;/a&gt; describing the process. HUGE thanks to him for his work, I never could’ve gotten such an easy-to use solution without his work. However, I ran into a variety of issues, likely due to my amateurish skills with this sort of thing. As such, I am going to describe exactly what I did, in order, to get this up and running on Github Pages.&lt;/p&gt;
+
+&lt;p&gt;Firstly, you’ll want to install &lt;strong&gt;ImageMagick&lt;/strong&gt;. ImageMagick is an open-source image manipulation command line tool. As I’m on a Mac, I installed it using the package manager &lt;strong&gt;homebrew&lt;/strong&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;brew install imagemagick&lt;/code&gt;. If you’re on a Mac and have never installed a package manager, you’ll have to install brew or something similar. This is straightforward and instructions are available on homebrew’s website. Other download instructions exist &lt;a href=&quot;https://imagemagick.org/script/download.php&quot;&gt;here&lt;/a&gt; for other operating systems.&lt;/p&gt;
+
+&lt;p&gt;Then, you’ll want to download the ruby gems &lt;a href=&quot;/assets/files/exiftag.rb&quot;&gt;exiftag.rb&lt;/a&gt; and &lt;a href=&quot;https://github.com/MattKevan/Jekyll-MiniMagick-new&quot;&gt;jekyll_minimagick.rb&lt;/a&gt;. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;exiftag.rb&lt;/code&gt; is a plugin that extracts metadata from the images you want in your gallery (we’ll get to that later). The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll_minimagick.rb&lt;/code&gt; uses the program ImageMagick to automatically convert the images we want in our gallery to small, easy-to-load thumbnails. Put these both in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_plugins&lt;/code&gt; folder in the root of the directory of your jekyll project. If there isn’t one, don’t worry, just create one and put the files in.&lt;/p&gt;
+
+&lt;p&gt;Now we want to make sure we install the necessary gems. Open your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gemfile&lt;/code&gt; and add these two lines anywhere in the file:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;gem &quot;mini_magick&quot;
+gem &quot;exifr&quot;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then (if you’re using bundle, which hopefully you are) run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bundle install&lt;/code&gt; in the root of your project and the gems should install.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-lightgallery&quot;&gt;Installing Lightgallery&lt;/h3&gt;
+&lt;p&gt;Installing lightgallery is easy using npm, yarn, or bower. I recommend using npm, as that’s what I’m familiar with. Make sure you initialize your directory (the root of your jekyll project) using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;npm init&lt;/code&gt; and then install lightgallery with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;npm install lightgallery&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;file-structure&quot;&gt;File Structure&lt;/h3&gt;
+&lt;p&gt;This is very important. I had tons of file structure issues for some reason that took hours to figure out, but I think I got it. Here is what my file structure looks like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;├── _includes
+│   └── album.html
+├── _layouts
+│   └── layout-with-gallery.html
+├── _plugins
+│   ├── exiftag.rb
+│   └── jekyll_minimagick.rb
+├── _posts
+│   └── 2024-08-29-setting-up-lightgallery.md
+└── assets
+    └── images
+        └── gallery
+            └── galleryNameHere
+                └── my-picture.jpg
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;albumhtml-and-layout-with-galleryhtml&quot;&gt;Album.html and Layout-with-gallery.html&lt;/h3&gt;
+&lt;p&gt;My version of &lt;a href=&quot;/assets/files/album.html&quot;&gt;album.html&lt;/a&gt; is a &lt;em&gt;slightly&lt;/em&gt; tweaked version of Jimmy Xiao’s, but the underlying functionality is the same. The code is here:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{include.albumname}}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+    {%- for image in site.static_files -%}
+    {%- if image.path contains &apos;images/gallery&apos; and image.path contains include.albumname -%}
+    {%- unless image.path contains &apos;thumbnails&apos; -%}
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{ image.path }}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-sub-html=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{% exiftag image_description, , {{ image.path }} %}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/thumbnails{{ image.path }}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+    {%- endunless -%}
+    {%- endif -%}
+    {%- endfor -%}
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;lightGallery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getElementById&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;{{include.albumname}}&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt; 
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;I’ll try to describe to the best of my ability what’s going on here. This first element is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; that contains the images for lightgallery. Lightgallery works in two steps: first, you create a simple &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; that contains your images, which are set up as links (as you can see above) with an image tag between the two &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;a&amp;gt;&lt;/code&gt; tags. This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; has an id that you can refer to later. The second step is actually running the lightgallery script and feeding it the id of the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt; that contains your images.&lt;/p&gt;
+
+&lt;p&gt;Here, we want this &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;album.html&lt;/code&gt; to take an argument called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;albumname&lt;/code&gt; when it’s ‘called’. I’m saying ‘called’ in quotes because I have no idea what the proper terminology is for embedding an html file inside another. But either way, when we ‘call’ &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;album.html&lt;/code&gt;, we pass the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;albumname&lt;/code&gt; argument to be used as the id for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt;. Then the Liquid code loops through all the images on the site, and searches for paths that contain &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;images/gallery&lt;/code&gt; AND the album name. This allows us to use this for different album names (folders of pictures) inside the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;images/gallery&lt;/code&gt; folder. Because we also created thumbnails for these in another folder with a similar path, we want to use the Liquid command &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;unless&lt;/code&gt; to avoid double-counting images.&lt;/p&gt;
+
+&lt;p&gt;The link and image are pretty straightforward, except for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;data-sub-html&lt;/code&gt; section. This is where we ‘call’ exiftag, which can read the description from the image specified at &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;image.path&lt;/code&gt;. In this case, we want the description, so we pass &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;image_description&lt;/code&gt; as an argument.&lt;/p&gt;
+
+&lt;p&gt;Now how does lightgallery interpret all of this? The link specified by the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;href&lt;/code&gt; is going to be the full-size image that lightgallery serves once the thumbnail is clicked. The image between the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;a&amp;gt;&lt;/code&gt; tags should be the thumbnail, which is what we want to display on the actual page before it is clicked.&lt;/p&gt;
+
+&lt;p&gt;As for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;layout-with-gallery.html&lt;/code&gt;, this should be one of your existing jekyll layout files in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_layouts&lt;/code&gt;. The following code should be put at the top of this file, or really just anywhere before your content from your markdown file is read-in:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- lightgallery Stuff --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/node_modules/lightgallery/lightgallery.umd.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/node_modules/lightgallery/plugins/thumbnail/lg-thumbnail.umd.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/node_modules/lightgallery/plugins/zoom/lg-zoom.umd.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;In order for this to work, we must also add these lines to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;head&amp;gt;&lt;/code&gt; of the default layout, which is usually just called default.html:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Stuff for lightGallery --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/node_modules/lightgallery/css/lightgallery-bundle.css&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lightgallery-bundle.css&lt;/code&gt; includes various lightgallery tools that we want.&lt;/p&gt;
+
+&lt;h3 id=&quot;calling-albumhtml&quot;&gt;Calling album.html&lt;/h3&gt;
+&lt;p&gt;Finally, we can use this in our markdown files. First make sure that your layout is set to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;layout-with-gallery.html&lt;/code&gt; in your markdown file’s YAML front matter. Then you can simply add the album with lightgallery using this line:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;
+{% include album.html albumname=&quot;your_album_name_here&quot; %}
+
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;ah-finally-beautiful-galleries&quot;&gt;Ah, finally, beautiful galleries&lt;/h3&gt;
+&lt;p&gt;Here, you can see this working:&lt;/p&gt;
+&lt;div id=&quot;japanPictures1&quot;&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010589.jpg&quot; data-sub-html=&quot;&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/P1010589.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010602.jpg&quot; data-sub-html=&quot;&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/P1010602.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010662.jpg&quot; data-sub-html=&quot;&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/P1010662.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010703.jpg&quot; data-sub-html=&quot;&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/P1010703.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010704.jpg&quot; data-sub-html=&quot;&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/P1010704.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/flower-fields1.jpg&quot; data-sub-html=&quot;This is a test description.&quot;&gt;
+        &lt;img src=&quot;/thumbnails/assets/images/gallery/japanPictures1/flower-fields1.jpg&quot; /&gt;
+    &lt;/a&gt;&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    lightGallery(document.getElementById(&quot;japanPictures1&quot;)); 
+&lt;/script&gt;
+
+&lt;p&gt;There’s still some slight formatting gripes I have (like why isn’t it centered?), but it works well enough that I’m satisfied. If anything isn’t working for you, feel free to download this entire website as a folder using one of those online website downloader tools so that you can look at the code yourself.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading and happy coding!&lt;/p&gt;
+</description>
+        <pubDate>Thu, 29 Aug 2024 00:00:00 -0400</pubDate>
+        <link>http://localhost:4000/setting-up-lightgallery/</link>
+        <guid isPermaLink="true">http://localhost:4000/setting-up-lightgallery/</guid>
+        
+        <category>Tutorial</category>
+        
+        <category>Development</category>
+        
+        
+        <category>Development</category>
+        
+      </item>
+    
+      <item>
+        <title>Gallery test (working!)</title>
         <description>&lt;p&gt;This is a test of the Image Gallery script.&lt;/p&gt;
 
 &lt;div id=&quot;japanPictures1&quot;&gt;&lt;a href=&quot;/assets/images/gallery/japanPictures1/P1010589.jpg&quot; data-sub-html=&quot;&quot;&gt;
@@ -85,10 +272,14 @@
         <link>http://localhost:4000/how-i-run-this-blog/</link>
         <guid isPermaLink="true">http://localhost:4000/how-i-run-this-blog/</guid>
         
-        <category>blog</category>
+        <category>Blog</category>
+        
+        <category>Development</category>
+        
+        <category>Tutorial</category>
         
         
-        <category>blog</category>
+        <category>Development</category>
         
       </item>
     

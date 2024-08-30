@@ -1,10 +1,10 @@
 ---
 layout: post-with-gallery
-title:  "Gallery Test"
+title:  "Gallery test (working!)"
 author: jake
 categories: [ Photography ]
 tags: [Photography, Japan ]
-description: "My current stash of TVs, plus honorable mentions from the past."
+description: "A test of lightgallery."
 featured: false
 hidden: false
 comments: false
