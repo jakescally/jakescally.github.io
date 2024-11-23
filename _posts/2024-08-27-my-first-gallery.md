@@ -2,7 +2,7 @@
 layout: post-with-gallery
 title:  "Gallery test (working!)"
 author: jake
-categories: [ Photography ]
+categories: [ Test ]
 tags: [Photography, Japan ]
 description: "A test of lightgallery."
 featured: false

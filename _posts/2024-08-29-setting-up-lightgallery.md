@@ -2,7 +2,7 @@
 layout: post-with-gallery
 title:  "Setting Up LightGallery on a Jekyll Website Hosted by Github Pages"
 author: jake
-categories: [ Development ]
+categories: [ Tutorial ]
 tags: [ Tutorial, Development ]
 image: assets/images/lightgallerylogo.png
 description: "Oh, the pains and joys of HTML, Liquid, Jekyll, and Ruby"
