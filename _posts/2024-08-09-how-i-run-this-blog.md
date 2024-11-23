@@ -16,7 +16,7 @@ With that in mind, I found out about Github Pages. Maybe you've seen them before
 
 Jekyll is a static website creator. It lets you easily put together markdown files, images, and themes/layouts created by other people into a single website. Like a folder you could have any ol browser open and navigate it like a true website (even without an internet connection of course). So basically Github just hosts a folder containing all the website files created by Jekyll and serves them to visitors.
 
-At least that's what I thought. You don't actually dump the output "_site" folder from Jekyll to your main branch on your repo. You actually dump the *whole directory*, meaning the directory which you run the `jekyll build` command from in the command line. For some reason I had tons of issues when just uploading the `_site` folder itself.
+At least that's what I thought. You don't actually dump the output "_site" folder from Jekyll to your main branch on your repo. You actually dump the *whole directory*, meaning the directory which you run the `bundle exec jekyll build` command from in the command line. For some reason I had tons of issues when just uploading the `_site` folder itself.
 
 Once this is working, these commands are my bread and butter to get this stuff working...
 
