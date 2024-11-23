@@ -5,8 +5,8 @@
     <description>All things Jake Scally</description>
     <link>https://jakescally.github.io/</link>
     <atom:link href="https://jakescally.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 22 Nov 2024 23:04:15 -0500</pubDate>
-    <lastBuildDate>Fri, 22 Nov 2024 23:04:15 -0500</lastBuildDate>
+    <pubDate>Fri, 22 Nov 2024 23:12:03 -0500</pubDate>
+    <lastBuildDate>Fri, 22 Nov 2024 23:12:03 -0500</lastBuildDate>
     <generator>Jekyll v3.9.3</generator>
     
       <item>
@@ -15,7 +15,7 @@
 
 &lt;p&gt;I won’t try to argue that this is the best camera in the world. Low resolution, annoying storage media, terrible viewfinder, utterly unusable screen, and more. Even though I own nearly 15 different cameras, and even in spite of its many flaws, I constantly find myself grabbing this camera when going out for a casual shoot. A combination of an excellent sensor, excellent build quality, and a fast, wide lens make the photos that come out of this camera full of life and character.&lt;/p&gt;
 
-&lt;div id=&quot;powershotG2camera&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2camera/angle_extended.jpg&quot; data-sub-html=&quot;OLYMPUS DIGITAL CAMERA         &quot;&gt;
+&lt;!-- &lt;div id=&quot;powershotG2camera&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2camera/angle_extended.jpg&quot; data-sub-html=&quot;OLYMPUS DIGITAL CAMERA         &quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2camera/angle_extended.jpg&quot; /&gt;
     &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2camera/back.jpg&quot; data-sub-html=&quot;OLYMPUS DIGITAL CAMERA         &quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2camera/back.jpg&quot; /&gt;
@@ -34,7 +34,7 @@
     &lt;/a&gt;&lt;/div&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
     lightGallery(document.getElementById(&quot;powershotG2camera&quot;)); 
-&lt;/script&gt;
+&lt;/script&gt; --&gt;
 
 &lt;h2 id=&quot;general-specs&quot;&gt;General Specs&lt;/h2&gt;
 
@@ -50,7 +50,7 @@
 
 &lt;p&gt;The camera is excellent for macro photography, complete with the dedicated macro focus button.&lt;/p&gt;
 
-&lt;div id=&quot;powershotG2macro&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2macro/boltinwood.jpg&quot; data-sub-html=&quot;&quot;&gt;
+&lt;!-- &lt;div id=&quot;powershotG2macro&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2macro/boltinwood.jpg&quot; data-sub-html=&quot;&quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2macro/boltinwood.jpg&quot; /&gt;
     &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2macro/lichen.jpg&quot; data-sub-html=&quot;&quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2macro/lichen.jpg&quot; /&gt;
@@ -59,7 +59,7 @@
     &lt;/a&gt;&lt;/div&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
     lightGallery(document.getElementById(&quot;powershotG2macro&quot;)); 
-&lt;/script&gt;
+&lt;/script&gt; --&gt;
 
 &lt;p&gt;I have complaints with the lens though. The autofocus is brutally slow sometimes. In addition, there’s only three AF points. In addition, there’s some serious softness and warping in some photos at the widest focal length and aperture. Take this one for example:&lt;/p&gt;
 
@@ -71,7 +71,7 @@
 
 &lt;p&gt;I’m sure you’ve heard about the CCD craze at this point. Whether you think it’s the CCD technology or (more realistically) the way they process colors. Either way you put it, if you get the white balance just right (which it often doesn’t) the colors are just gorgeous. They do have a retro feel to them, but the colors still pop. The blues are vibrant, the reds are rich, and the greens, although somewhat finnicky, are gorgeous. I just wish the AWB was more accurate. I often find myself having to set the white balance manually, as it will often wash out all the colors in cloudy conditions.&lt;/p&gt;
 
-&lt;div id=&quot;powershotG2shots&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2shots/boltinwood.jpg&quot; data-sub-html=&quot;&quot;&gt;
+&lt;!-- &lt;div id=&quot;powershotG2shots&quot;&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2shots/boltinwood.jpg&quot; data-sub-html=&quot;&quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2shots/boltinwood.jpg&quot; /&gt;
     &lt;/a&gt;&lt;a href=&quot;/assets/images/gallery/powershotG2shots/firetower.jpg&quot; data-sub-html=&quot;&quot;&gt;
         &lt;img src=&quot;/thumbnails/assets/images/gallery/powershotG2shots/firetower.jpg&quot; /&gt;
@@ -92,7 +92,7 @@
     &lt;/a&gt;&lt;/div&gt;
 &lt;script type=&quot;text/javascript&quot;&gt;
     lightGallery(document.getElementById(&quot;powershotG2shots&quot;)); 
-&lt;/script&gt;
+&lt;/script&gt; --&gt;
 
 &lt;h2 id=&quot;the-little-things&quot;&gt;The Little Things&lt;/h2&gt;
 
