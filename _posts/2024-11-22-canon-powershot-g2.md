@@ -4,7 +4,7 @@ title:  "Why the Canon PowerShot G2 from 2001 is so loveable"
 author: jake
 categories: [ Review ]
 tags: [ Cameras, Photography ]
-image: assets/images/gallery/powershotG2/angle_extended.jpg
+image: assets/images/gallery/powershotG2camera/angle_extended.jpg
 description: "Shooting with an old camera like this is an absolute blast"
 featured: true
 hidden: false
