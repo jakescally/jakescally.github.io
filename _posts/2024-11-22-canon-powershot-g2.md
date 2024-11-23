@@ -4,14 +4,14 @@ title:  "Why the Canon PowerShot G2 from 2001 is so loveable"
 author: jake
 categories: [ Review ]
 tags: [ Cameras, Photography ]
-image: assets/images/gallery/powershotG2/angle_extended.JPG
+image: assets/images/gallery/powershotG2/angle_extended.jpg
 description: "Shooting with an old camera like this is an absolute blast"
 featured: true
 hidden: false
 comments: false
 ---
 
-![Firetower on top of hill](/assets/images/gallery/powershotG2shots/firetower.JPG "Firetower")
+![Firetower on top of hill](/assets/images/gallery/powershotG2shots/firetower.jpg "Firetower")
 
 I won't try to argue that this is the best camera in the world. Low resolution, annoying storage media, terrible viewfinder, utterly unusable screen, and more. Even though I own nearly 15 different cameras, and even in spite of its many flaws, I constantly find myself grabbing this camera when going out for a casual shoot. A combination of an excellent sensor, excellent build quality, and a fast, wide lens make the photos that come out of this camera full of life and character.
 
@@ -35,7 +35,7 @@ The camera is excellent for macro photography, complete with the dedicated macro
 
 I have complaints with the lens though. The autofocus is brutally slow sometimes. In addition, there's only three AF points. In addition, there's some serious softness and warping in some photos at the widest focal length and aperture. Take this one for example:
 
-![Wide angle photo with distortion and fuzzy corners](/assets/images/softcornersG2.JPG "Soft corners G2")
+![Wide angle photo with distortion and fuzzy corners](/assets/images/softcornersG2.jpg "Soft corners G2")
 
 It's not great. The softness isn't that bad, but the warping is. If you're ever shooting with this camera, be careful near straight lines at wide angles.
 
