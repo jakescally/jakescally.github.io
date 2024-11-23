@@ -15,7 +15,7 @@ comments: false
 
 I won't try to argue that this is the best camera in the world. Low resolution, annoying storage media, terrible viewfinder, utterly unusable screen, and more. Even though I own nearly 15 different cameras, and even in spite of its many flaws, I constantly find myself grabbing this camera when going out for a casual shoot. A combination of an excellent sensor, excellent build quality, and a fast, wide lens make the photos that come out of this camera full of life and character.
 
-{% include album.html albumname="powershotG2" %}
+{% include album.html albumname="powershotG2camera" %}
 
 ## General Specs
 
