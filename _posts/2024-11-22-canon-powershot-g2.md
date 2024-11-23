@@ -15,7 +15,7 @@ comments: false
 
 I won't try to argue that this is the best camera in the world. Low resolution, annoying storage media, terrible viewfinder, utterly unusable screen, and more. Even though I own nearly 15 different cameras, and even in spite of its many flaws, I constantly find myself grabbing this camera when going out for a casual shoot. A combination of an excellent sensor, excellent build quality, and a fast, wide lens make the photos that come out of this camera full of life and character.
 
-<!-- {% include album.html albumname="powershotG2camera" %} -->
+{% include album.html albumname="powershotG2camera" %}
 
 ## General Specs
 
@@ -31,7 +31,7 @@ The lens is generally great. Super wide and fast, with a little bit of zoom to m
 
 The camera is excellent for macro photography, complete with the dedicated macro focus button.
 
-<!-- {% include album.html albumname="powershotG2macro" %} -->
+{% include album.html albumname="powershotG2macro" %}
 
 I have complaints with the lens though. The autofocus is brutally slow sometimes. In addition, there's only three AF points. In addition, there's some serious softness and warping in some photos at the widest focal length and aperture. Take this one for example:
 
@@ -43,7 +43,7 @@ It's not great. The softness isn't that bad, but the warping is. If you're ever 
 
 I'm sure you've heard about the CCD craze at this point. Whether you think it's the CCD technology or (more realistically) the way they process colors. Either way you put it, if you get the white balance just right (which it often doesn't) the colors are just gorgeous. They do have a retro feel to them, but the colors still pop. The blues are vibrant, the reds are rich, and the greens, although somewhat finnicky, are gorgeous. I just wish the AWB was more accurate. I often find myself having to set the white balance manually, as it will often wash out all the colors in cloudy conditions.
 
-<!-- {% include album.html albumname="powershotG2shots" %} -->
+{% include album.html albumname="powershotG2shots" %}
 
 ## The Little Things
 
