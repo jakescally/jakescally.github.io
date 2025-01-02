@@ -3,11 +3,11 @@
   <channel>
     <title>Scally Network</title>
     <description>All things Jake Scally</description>
-    <link>https://jakescally.github.io/</link>
-    <atom:link href="https://jakescally.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 Nov 2024 14:04:50 -0500</pubDate>
-    <lastBuildDate>Sat, 23 Nov 2024 14:04:50 -0500</lastBuildDate>
-    <generator>Jekyll v3.9.3</generator>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 02 Jan 2025 13:59:36 -0500</pubDate>
+    <lastBuildDate>Thu, 02 Jan 2025 13:59:36 -0500</lastBuildDate>
+    <generator>Jekyll v3.9.5</generator>
     
       <item>
         <title>Why the Canon PowerShot G2 from 2001 is so loveable</title>
@@ -111,8 +111,8 @@
 &lt;p&gt;The Canon PowerShot G2 is awesome. Go get one!&lt;/p&gt;
 </description>
         <pubDate>Fri, 22 Nov 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/canon-powershot-g2/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/canon-powershot-g2/</guid>
+        <link>http://localhost:4000/canon-powershot-g2/</link>
+        <guid isPermaLink="true">http://localhost:4000/canon-powershot-g2/</guid>
         
         <category>Cameras</category>
         
@@ -214,8 +214,8 @@ gem &quot;exifr&quot;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{include.albumname}}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
 
     {%- for image in site.static_files -%}
-    {%- if image.path contains &apos;images/gallery&apos; and image.path contains include.albumname -%}
-    {%- unless image.path contains &apos;thumbnails&apos; -%}
+    {%- if image.path contains 'images/gallery' and image.path contains include.albumname -%}
+    {%- unless image.path contains 'thumbnails' -%}
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{{ image.path }}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-sub-html=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;{% exiftag image_description, , {{ image.path }} %}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;img&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/thumbnails{{ image.path }}&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
@@ -298,8 +298,8 @@ gem &quot;exifr&quot;
 &lt;p&gt;Thanks for reading and happy coding!&lt;/p&gt;
 </description>
         <pubDate>Thu, 29 Aug 2024 00:00:00 -0400</pubDate>
-        <link>https://jakescally.github.io/setting-up-lightgallery/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/setting-up-lightgallery/</guid>
+        <link>http://localhost:4000/setting-up-lightgallery/</link>
+        <guid isPermaLink="true">http://localhost:4000/setting-up-lightgallery/</guid>
         
         <category>Tutorial</category>
         
@@ -333,8 +333,8 @@ gem &quot;exifr&quot;
 
 </description>
         <pubDate>Tue, 27 Aug 2024 00:00:00 -0400</pubDate>
-        <link>https://jakescally.github.io/my-first-gallery/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/my-first-gallery/</guid>
+        <link>http://localhost:4000/my-first-gallery/</link>
+        <guid isPermaLink="true">http://localhost:4000/my-first-gallery/</guid>
         
         <category>Photography</category>
         
@@ -358,8 +358,8 @@ gem &quot;exifr&quot;
 &lt;p&gt;Anyways, I’m glad everything is up and running now. Hopefully I keep this updated but ‘the best laid plans of mice and men’ etc etc…&lt;/p&gt;
 </description>
         <pubDate>Fri, 09 Aug 2024 00:00:00 -0400</pubDate>
-        <link>https://jakescally.github.io/this-blog/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/this-blog/</guid>
+        <link>http://localhost:4000/this-blog/</link>
+        <guid isPermaLink="true">http://localhost:4000/this-blog/</guid>
         
         <category>Blog</category>
         
@@ -383,8 +383,8 @@ gem &quot;exifr&quot;
 &lt;p&gt;Once I add a post or update something, I run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git add .&lt;/code&gt; to add all updated files in the directory on my computer. Then I check it with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git status&lt;/code&gt; and it should show all the files that were modified or added. Then I use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit&lt;/code&gt; to commit it all to the main branch. Then I had issues verifying my user from the command line, so I used Github for Desktop to push to remote. And then the website updated automatically. Pretty cool!&lt;/p&gt;
 </description>
         <pubDate>Fri, 09 Aug 2024 00:00:00 -0400</pubDate>
-        <link>https://jakescally.github.io/how-i-run-this-blog/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/how-i-run-this-blog/</guid>
+        <link>http://localhost:4000/how-i-run-this-blog/</link>
+        <guid isPermaLink="true">http://localhost:4000/how-i-run-this-blog/</guid>
         
         <category>Blog</category>
         
@@ -402,8 +402,8 @@ gem &quot;exifr&quot;
         <description>&lt;p&gt;This was taken just outside of Tallahassee on my way home from an attempted astrophotography night. The astro pictures didn’t come out like I hoped, but I saw this as I drove home and just had to take pictures of it.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/some-moon-shots/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/some-moon-shots/</guid>
+        <link>http://localhost:4000/some-moon-shots/</link>
+        <guid isPermaLink="true">http://localhost:4000/some-moon-shots/</guid>
         
         <category>Moon</category>
         
@@ -421,8 +421,8 @@ gem &quot;exifr&quot;
         <description>&lt;p&gt;Here is a shot of the Orion Nebula I got in Tallahassee. I’ll explain more in-detail at a later date, as I don’t quite have the time right now.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/imaging-the-orion-nebula/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/imaging-the-orion-nebula/</guid>
+        <link>http://localhost:4000/imaging-the-orion-nebula/</link>
+        <guid isPermaLink="true">http://localhost:4000/imaging-the-orion-nebula/</guid>
         
         <category>Nebula</category>
         
@@ -444,8 +444,8 @@ gem &quot;exifr&quot;
         <description>&lt;p&gt;This is a stacked image of Andromeda photographed from my backyard. This was in a Bortle 4, so somewhat bright, but I got it on a relatively clear night. Gear was a Canon 80D and whatever that something-to-300mm zoom lens is that Canon makes too.&lt;/p&gt;
 </description>
         <pubDate>Thu, 25 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/astro-images-thus-far/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/astro-images-thus-far/</guid>
+        <link>http://localhost:4000/astro-images-thus-far/</link>
+        <guid isPermaLink="true">http://localhost:4000/astro-images-thus-far/</guid>
         
         <category>Photography</category>
         
@@ -469,8 +469,8 @@ gem &quot;exifr&quot;
 &lt;p&gt;I’m super busy right now, so I haven’t had the time to fill in this page, but eventually I’ll list here how I got into the hobby, my first few TVs, and more.&lt;/p&gt;
 </description>
         <pubDate>Tue, 23 Jan 2024 00:00:00 -0500</pubDate>
-        <link>https://jakescally.github.io/my-crt-history/</link>
-        <guid isPermaLink="true">https://jakescally.github.io/my-crt-history/</guid>
+        <link>http://localhost:4000/my-crt-history/</link>
+        <guid isPermaLink="true">http://localhost:4000/my-crt-history/</guid>
         
         <category>CRT</category>
         
