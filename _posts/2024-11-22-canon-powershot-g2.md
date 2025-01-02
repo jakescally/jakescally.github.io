@@ -6,12 +6,14 @@ categories: [ Review ]
 tags: [ Cameras, Photography ]
 image: assets/images/gallery/powershotG2camera/angle_extended.jpg
 description: "Shooting with an old camera like this is an absolute blast"
-featured: true
+featured: false
 hidden: false
 comments: false
 ---
 
 ![Firetower on top of hill](/assets/images/gallery/powershotG2shots/firetower.jpg "Firetower")
+
+### NOTE: I'm aware some images aren't rendering properly. Of course, it works fine on my machine but fails in deployment. Currently working on a fix.
 
 I won't try to argue that this is the best camera in the world. Low resolution, annoying storage media, terrible viewfinder, utterly unusable screen, and more. Even though I own nearly 15 different cameras, and even in spite of its many flaws, I constantly find myself grabbing this camera when going out for a casual shoot. A combination of an excellent sensor, excellent build quality, and a fast, wide lens make the photos that come out of this camera full of life and character.
 
@@ -19,7 +21,7 @@ I won't try to argue that this is the best camera in the world. Low resolution, 
 
 ## General Specs
 
-The Canon PowerShot G2 released in 2001 comes with a 1/1.8" CCD sensor, which is pretty solid sensor size for a "compact" camera. I say "compact" because it really isn't. It's a pro-ish point and shoot digicam that is both chunky and heavy, weighing 510g. That's into the modern mirrorless category in terms of weight. The sensor is 4.0 MP at a 3.8 MP maximum image size. Of course, that's quite small nowadays. Believe it or not, its still more than enough for Instagram and most online media posts that aren't filling up the ENTIRE screen.
+The Canon PowerShot G2 released in 2001 comes with a 1/1.8" CCD sensor, which is pretty solid sensor size for a "compact" camera. I say "compact" in quotes because it really isn't. It's a pro-ish point and shoot digicam that is both chunky and heavy, weighing 510g. That's into the modern mirrorless category in terms of weight. The sensor is 4.0 MP at a 3.8 MP maximum image size. Of course, that's quite small nowadays. Believe it or not, its still more than enough for Instagram and most online media posts that aren't filling up the ENTIRE screen.
 
 As for the lens, the G2 is equipped with a 3x f2.0-2.5 zoom lens. I'll talk more about my gripes with the lens in a later section, but I both love and hate it. As for shutter, it can do anywhere from 15-1/1000th sec and can shoot continuous at 2.5 FPS and 1.5 FPS with AF (I think). In addition, it can do 10-bit RAW, which is great to see.
 
