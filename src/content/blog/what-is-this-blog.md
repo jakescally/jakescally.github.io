@@ -1,0 +1,22 @@
+---
+title: What is this blog?
+slug: what-is-this-blog
+description: A brief description of what this blog is going to be moving forward.
+publishedAt: 2024-08-09
+topics:
+  - Blog
+  - Portfolio
+heroImage: brand/logo.png
+featured: true
+legacyPaths:
+  - /this-blog/
+---
+This blog is supposed to serve as a portfolio, documentary, and place to store descriptions of all of the stuff or projects I work on. I plan on including some of my physics research, my astrophotography, projects I work on at FSU's FABLAB, old cameras, cool pictures, old TVs, and much much more.
+
+Hopefully, at some point I'll be like "Oh remember that project I did years ago?" and I'll be able to go look for it and remind myself what the project was.
+
+Or I can use this blog to show to employers and others as a catalog of what I do in my free time.
+
+Some posts will be small, some will be longer. Maybe I just want to write something down, like how to add posts to this website in case I forget. Or maybe I want to compare a bunch of different cameras I've owned. Who knows.
+
+Anyways, I'm glad everything is up and running now. Hopefully I keep this updated but "the best laid plans of mice and men" etc. etc...

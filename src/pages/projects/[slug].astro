@@ -1,0 +1,56 @@
+---
+import LightboxImage from "@/components/LightboxImage.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  getCaseStudyProjects,
+  getProjectBySlug
+} from "@/lib/content";
+
+export function getStaticPaths() {
+  return getCaseStudyProjects()
+    .map((entry) => ({
+      params: { slug: entry.data.slug }
+    }));
+}
+
+const entry = getProjectBySlug(Astro.params.slug);
+
+if (!entry || entry.data.detailMode !== "case-study") {
+  throw new Error(`Missing case study project: ${Astro.params.slug}`);
+}
+
+const Content = entry.Content;
+const hasHeroImage = Boolean(entry.data.heroImage);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary} image={entry.data.heroImage}>
+  <article class="frame article-shell">
+    <header class:list={["article-hero", !hasHeroImage && "article-hero--text-only"]}>
+      <div class="article-hero__copy">
+        <p class="eyebrow">Project</p>
+        <h1>{entry.data.title}</h1>
+        <p class="article-hero__dek">{entry.data.summary}</p>
+        <div class="article-meta">
+          <span>{entry.data.year}</span>
+          <span>{entry.data.status}</span>
+        </div>
+      </div>
+      {hasHeroImage && (
+        <LightboxImage
+          asset={entry.data.heroImage}
+          alt={entry.data.title}
+          caption={entry.data.title}
+          rootTag="div"
+          rootId={`project-hero-${entry.data.slug}`}
+          rootClass="article-hero__media"
+          linkClass="article-hero__media-link"
+          widths={[840, 1200, 1600]}
+          sizes="(min-width: 1120px) 42vw, 100vw"
+        />
+      )}
+    </header>
+    <div class="prose article-content article-content--full">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

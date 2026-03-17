@@ -1,0 +1,266 @@
+---
+import "@/styles/global.css";
+
+import SearchPalette from "@/components/SearchPalette.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { resolveImage } from "@/lib/assets";
+import { siteMeta } from "@/lib/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  bodyClass?: string;
+  showHeader?: boolean;
+  showSiteSearch?: boolean;
+  showFooter?: boolean;
+  themeColor?: string;
+}
+
+const {
+  title,
+  description = siteMeta.description,
+  image,
+  bodyClass = "",
+  showHeader = true,
+  showSiteSearch = true,
+  showFooter = true,
+  themeColor = "#ffffff"
+} = Astro.props;
+
+const resolvedImage = resolveImage(image);
+const pageTitle = title ? `${title} | ${siteMeta.name}` : siteMeta.name;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? siteMeta.url).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={themeColor} />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:site_name" content={siteMeta.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {resolvedImage && (
+      <>
+        <meta property="og:image" content={new URL(resolvedImage.src, canonical).toString()} />
+        <meta name="twitter:image" content={new URL(resolvedImage.src, canonical).toString()} />
+      </>
+    )}
+  </head>
+  <body class={bodyClass}>
+    {showHeader && <SiteHeader showSearch={showSiteSearch} />}
+    {showSiteSearch && <SearchPalette />}
+    <main class="site-main">
+      <slot />
+    </main>
+    {showFooter && <SiteFooter />}
+
+    <script>
+      const masonryGrids = document.querySelectorAll<HTMLElement>("[data-masonry-grid]");
+      const masonryObservers = new WeakMap<HTMLElement, ResizeObserver>();
+
+      const getColumnCount = (grid: HTMLElement) => {
+        const template = window.getComputedStyle(grid).gridTemplateColumns;
+
+        if (!template || template === "none") {
+          return 1;
+        }
+
+        return template.split(" ").length;
+      };
+
+      const clearMasonryLayout = (grid: HTMLElement) => {
+        grid.classList.remove("is-masonry-ready");
+        grid.style.height = "";
+
+        for (const child of grid.children) {
+          if (!(child instanceof HTMLElement)) {
+            continue;
+          }
+
+          child.style.position = "";
+          child.style.top = "";
+          child.style.left = "";
+          child.style.width = "";
+        }
+      };
+
+      const layoutMasonryGrid = (grid: HTMLElement) => {
+        const styles = window.getComputedStyle(grid);
+        const columns = getColumnCount(grid);
+
+        if (columns < 2) {
+          clearMasonryLayout(grid);
+          return;
+        }
+
+        const gap = Number.parseFloat(styles.columnGap || styles.rowGap || styles.gap || "0");
+        const gridWidth = grid.clientWidth;
+
+        if (!gridWidth) {
+          clearMasonryLayout(grid);
+          return;
+        }
+
+        const columnWidth = (gridWidth - gap * (columns - 1)) / columns;
+
+        if (!Number.isFinite(columnWidth) || columnWidth <= 0) {
+          clearMasonryLayout(grid);
+          return;
+        }
+
+        grid.classList.add("is-masonry-ready");
+        const columnHeights = Array.from({ length: columns }, () => 0);
+
+        for (const child of grid.children) {
+          if (!(child instanceof HTMLElement)) {
+            continue;
+          }
+
+          if (child.hidden || window.getComputedStyle(child).display === "none") {
+            child.style.position = "";
+            child.style.top = "";
+            child.style.left = "";
+            child.style.width = "";
+            continue;
+          }
+
+          const spanAllColumns =
+            child.matches(".post-card--featured") ||
+            Boolean(child.querySelector(".post-card--featured"));
+
+          child.style.position = "absolute";
+          child.style.width = spanAllColumns ? `${gridWidth}px` : `${columnWidth}px`;
+
+          let top = 0;
+          let left = 0;
+
+          if (spanAllColumns) {
+            top = Math.max(...columnHeights);
+          } else {
+            const shortestColumn = columnHeights.reduce(
+              (bestIndex, height, index, heights) =>
+                height < heights[bestIndex] ? index : bestIndex,
+              0
+            );
+
+            top = columnHeights[shortestColumn];
+            left = shortestColumn * (columnWidth + gap);
+          }
+
+          child.style.top = `${top}px`;
+          child.style.left = `${left}px`;
+
+          const height = child.getBoundingClientRect().height;
+          const nextBottom = top + height + gap;
+
+          if (spanAllColumns) {
+            columnHeights.fill(nextBottom);
+          } else {
+            const columnIndex = Math.round(left / (columnWidth + gap));
+            columnHeights[columnIndex] = nextBottom;
+          }
+        }
+
+        const height = Math.max(0, ...columnHeights) - gap;
+        grid.style.height = height > 0 ? `${Math.ceil(height)}px` : "";
+      };
+
+      const scheduleLayout = (grid: HTMLElement) => {
+        if (grid.dataset.masonryPending === "true") {
+          return;
+        }
+
+        grid.dataset.masonryPending = "true";
+
+        requestAnimationFrame(() => {
+          grid.dataset.masonryPending = "false";
+          layoutMasonryGrid(grid);
+        });
+      };
+
+      const bindMasonryGrid = (grid: HTMLElement) => {
+        if (grid.dataset.masonryBound === "true") {
+          return;
+        }
+
+        grid.dataset.masonryBound = "true";
+
+        const observer = new ResizeObserver(() => {
+          scheduleLayout(grid);
+        });
+
+        observer.observe(grid);
+
+        for (const child of grid.children) {
+          if (!(child instanceof HTMLElement)) {
+            continue;
+          }
+
+          observer.observe(child);
+
+          for (const image of child.querySelectorAll("img")) {
+            if (!image.complete) {
+              image.addEventListener("load", () => scheduleLayout(grid), { once: true });
+            }
+          }
+        }
+
+        const mutationObserver = new MutationObserver(() => {
+          scheduleLayout(grid);
+        });
+
+        mutationObserver.observe(grid, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+          attributeFilter: ["hidden", "class", "style"]
+        });
+
+        masonryObservers.set(grid, observer);
+        scheduleLayout(grid);
+      };
+
+      for (const grid of masonryGrids) {
+        bindMasonryGrid(grid);
+      }
+
+      window.addEventListener("resize", () => {
+        for (const grid of masonryGrids) {
+          scheduleLayout(grid);
+        }
+      });
+
+      window.addEventListener("masonry:refresh", () => {
+        for (const grid of masonryGrids) {
+          scheduleLayout(grid);
+        }
+      });
+
+      window.addEventListener("load", () => {
+        for (const grid of masonryGrids) {
+          scheduleLayout(grid);
+        }
+      });
+
+      document.fonts?.ready.then(() => {
+        for (const grid of masonryGrids) {
+          scheduleLayout(grid);
+        }
+      });
+    </script>
+  </body>
+</html>

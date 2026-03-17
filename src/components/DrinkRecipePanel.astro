@@ -1,0 +1,54 @@
+---
+import type { DrinkEntry } from "@/lib/drinks";
+
+interface Props {
+  entry: DrinkEntry;
+}
+
+const { entry } = Astro.props;
+const details = [
+  { label: "Glassware", value: entry.data.glassware },
+  { label: "Garnish", value: entry.data.garnish },
+  { label: "Method", value: entry.data.method }
+].filter((item) => Boolean(item.value));
+---
+
+<section class="recipe-panel">
+  <div class="recipe-panel__block">
+    <p class="recipe-panel__eyebrow">Ingredients</p>
+    <ul class="recipe-panel__ingredients">
+      {entry.data.ingredients.map((item) => (
+        <li>
+          <span class="recipe-panel__amount">{item.amount}</span>
+          <div>
+            <strong>{item.ingredient}</strong>
+            {item.notes && <small>{item.notes}</small>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="recipe-panel__block">
+    <p class="recipe-panel__eyebrow">Instructions</p>
+    <ol class="recipe-panel__instructions">
+      {entry.data.instructions.map((step) => (
+        <li>{step}</li>
+      ))}
+    </ol>
+  </div>
+
+  {details.length > 0 && (
+    <div class="recipe-panel__block">
+      <p class="recipe-panel__eyebrow">Service</p>
+      <dl class="recipe-panel__details">
+        {details.map((item) => (
+          <>
+            <dt>{item.label}</dt>
+            <dd>{item.value}</dd>
+          </>
+        ))}
+      </dl>
+    </div>
+  )}
+</section>

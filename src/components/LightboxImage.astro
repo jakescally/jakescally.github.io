@@ -1,0 +1,78 @@
+---
+import { Image } from "astro:assets";
+
+import { requireImage } from "@/lib/assets";
+
+interface Props {
+  asset: string;
+  alt: string;
+  caption?: string;
+  rootClass?: string;
+  linkClass?: string;
+  imageClass?: string;
+  rootId?: string;
+  rootTag?: "div" | "figure";
+  sizes?: string;
+  widths?: number[];
+}
+
+const {
+  asset,
+  alt,
+  caption,
+  rootClass,
+  linkClass,
+  imageClass,
+  rootId,
+  rootTag = "figure",
+  sizes = "(min-width: 1120px) 54rem, (min-width: 720px) calc(100vw - 3rem), 100vw",
+  widths = [720, 1100, 1440]
+} = Astro.props;
+
+const image = requireImage(asset);
+const lightboxId =
+  rootId ??
+  `${rootTag}-${`${asset}-${alt}`.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}`;
+const RootTag = rootTag;
+---
+
+<RootTag class={rootClass} data-lightbox-root id={lightboxId}>
+  <a
+    class={linkClass}
+    data-pswp-height={image.height}
+    data-pswp-width={image.width}
+    data-pswp-caption={caption ?? alt}
+    href={image.src}
+  >
+    <Image
+      class={imageClass}
+      src={image}
+      alt={alt}
+      widths={widths}
+      sizes={sizes}
+    />
+  </a>
+  {rootTag === "figure" && caption && <figcaption>{caption}</figcaption>}
+</RootTag>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  const roots = document.querySelectorAll<HTMLElement>("[data-lightbox-root]");
+
+  for (const root of roots) {
+    if (root.dataset.bound === "true") {
+      continue;
+    }
+
+    root.dataset.bound = "true";
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: `#${root.id}`,
+      children: "a",
+      pswpModule: () => import("photoswipe")
+    });
+
+    lightbox.init();
+  }
+</script>

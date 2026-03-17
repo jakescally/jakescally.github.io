@@ -1,0 +1,74 @@
+---
+import GalleryEmbed from "@/components/GalleryEmbed.astro";
+import InlineImage from "@/components/InlineImage.astro";
+import LightboxImage from "@/components/LightboxImage.astro";
+import RelatedPosts from "@/components/RelatedPosts.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  formatDate,
+  getBlogPostBySlug,
+  getPublishedPosts,
+  getRelatedPosts
+} from "@/lib/content";
+
+export function getStaticPaths() {
+  return getPublishedPosts().map((entry) => ({
+    params: { slug: entry.data.slug }
+  }));
+}
+
+const entry = getBlogPostBySlug(Astro.params.slug);
+
+if (!entry) {
+  throw new Error(`Missing blog entry: ${Astro.params.slug}`);
+}
+
+const allEntries = getPublishedPosts();
+const relatedPosts = getRelatedPosts(entry, allEntries);
+const Content = entry.Content;
+const hasHeroImage = Boolean(entry.data.heroImage);
+---
+
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  image={entry.data.heroImage}
+  bodyClass="page-article"
+>
+  <article class="frame article-shell article-shell--writing">
+    <header class:list={["article-hero", !hasHeroImage && "article-hero--text-only"]}>
+      <div class="article-hero__copy">
+        <p class="eyebrow">Writing</p>
+        <h1>{entry.data.title}</h1>
+        <p class="article-hero__dek">{entry.data.description}</p>
+        <div class="article-meta">
+          <span>{formatDate(entry.data.publishedAt)}</span>
+          {entry.data.topics.map((topic) => (
+            <span>{topic}</span>
+          ))}
+        </div>
+      </div>
+      {hasHeroImage && (
+        <LightboxImage
+          asset={entry.data.heroImage}
+          alt={entry.data.title}
+          caption={entry.data.title}
+          rootTag="div"
+          rootId={`article-hero-${entry.data.slug}`}
+          rootClass="article-hero__media"
+          linkClass="article-hero__media-link"
+          widths={[840, 1200, 1600]}
+          sizes="(min-width: 1120px) 42vw, 100vw"
+        />
+      )}
+    </header>
+
+    <div class="article-content article-content--writing prose">
+      <Content components={{ GalleryEmbed, InlineImage }} />
+    </div>
+  </article>
+
+  <div class="frame">
+    <RelatedPosts entries={relatedPosts} />
+  </div>
+</BaseLayout>

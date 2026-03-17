@@ -1,0 +1,35 @@
+---
+import GalleryEmbed from "@/components/GalleryEmbed.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPhotoSetBySlug, getPhotoSets } from "@/lib/content";
+
+export function getStaticPaths() {
+  return getPhotoSets().map((entry) => ({
+    params: { slug: entry.data.slug }
+  }));
+}
+
+const entry = getPhotoSetBySlug(Astro.params.slug);
+
+if (!entry) {
+  throw new Error(`Missing photo set: ${Astro.params.slug}`);
+}
+
+const Content = entry.Content;
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description} image={entry.data.coverImage}>
+  <article class="frame article-shell">
+    <header class="page-heading page-heading--narrow">
+      <p class="page-heading__eyebrow">Photography</p>
+      <h1 class="page-heading__title">{entry.data.title}</h1>
+      <p class="page-heading__description">{entry.data.description}</p>
+    </header>
+
+    <div class="prose article-content article-content--full">
+      <Content />
+    </div>
+
+    <GalleryEmbed set={entry.id} />
+  </article>
+</BaseLayout>

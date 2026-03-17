@@ -1,0 +1,24 @@
+---
+import ArticleCard from "@/components/ArticleCard.astro";
+import type { BlogEntry } from "@/lib/content";
+
+interface Props {
+  entries: BlogEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+{entries.length > 0 && (
+  <section class="related-posts">
+    <div class="section-heading">
+      <p class="section-heading__eyebrow">Related Posts</p>
+      <h2>You could also take a look at</h2>
+    </div>
+    <div class="card-grid card-grid--three" data-masonry-grid>
+      {entries.map((entry) => (
+        <ArticleCard entry={entry} />
+      ))}
+    </div>
+  </section>
+)}

@@ -1,0 +1,137 @@
+---
+import { Image } from "astro:assets";
+
+import ArticleCard from "@/components/ArticleCard.astro";
+import PageHeading from "@/components/PageHeading.astro";
+import PhotoSetCard from "@/components/PhotoSetCard.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  getCompactImageWindowConfig,
+  requireImage,
+  shouldUseCompactImageCard
+} from "@/lib/assets";
+import { getPhotoSets, getProjects, getPublishedPosts } from "@/lib/content";
+import { frontmatter as about } from "@/content/sitePages/about.md";
+
+const posts = getPublishedPosts();
+const projects = getProjects();
+const photoSets = getPhotoSets();
+
+const leadPost = posts.find((entry) => entry.data.featured) ?? posts[0];
+const recentPosts = posts.filter((entry) => entry.id !== leadPost.id).slice(0, 4);
+const writingPosts = [leadPost, ...recentPosts];
+const featuredProjects = projects.filter((entry) => entry.data.featured).slice(0, 3);
+const featuredPhotoSets = photoSets.filter((entry) => entry.data.featured).slice(0, 3);
+const visiblePhotoSets = featuredPhotoSets.length ? featuredPhotoSets : photoSets.slice(0, 3);
+const heroImage = requireImage(leadPost.data.heroImage);
+const compactLeadPanel = shouldUseCompactImageCard(heroImage);
+const compactLeadWindow = compactLeadPanel ? getCompactImageWindowConfig(heroImage) : undefined;
+const compactLeadStyle = compactLeadWindow
+  ? {
+      "--compact-media-min": compactLeadWindow.minWidth,
+      "--compact-media-max": compactLeadWindow.maxWidth,
+      "--compact-media-padding": compactLeadWindow.padding,
+      "--compact-media-fit": compactLeadWindow.fit,
+      ...(compactLeadWindow.aspectRatio
+        ? { "--compact-media-aspect": compactLeadWindow.aspectRatio }
+        : {})
+    }
+  : undefined;
+const logoImage = requireImage("brand/logo.png");
+---
+
+<BaseLayout image={leadPost.data.heroImage}>
+  <section class="frame home-hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">The Archive</p>
+        <h1 class="hero-title">
+          A resource for my work in tech, software, science and photography.
+        </h1>
+        <p class="hero-copy">
+          Plus miscellaneous bits information I note for myself and others.
+        </p>
+        <div class="button-row">
+          <a class="button button--primary" href="/writing/">Enter the archive</a>
+          <a class="button button--ghost" href="/projects/">See selected work</a>
+        </div>
+      </div>
+      <div
+        class:list={[
+          "hero-panel",
+          compactLeadPanel && "hero-panel--compact",
+          compactLeadWindow?.crop && "hero-panel--compact-crop"
+        ]}
+        style={compactLeadStyle}
+      >
+        <div class="hero-panel__art">
+          <Image src={heroImage} alt={leadPost.data.title} widths={[720, 1200]} sizes="(min-width: 960px) 36vw, 100vw" />
+          <img class="hero-panel__mark" src={logoImage.src} alt="" aria-hidden="true" />
+        </div>
+        <div class="hero-panel__card">
+          <p class="eyebrow">Featured entry</p>
+          <h2>
+            <a href={`/writing/${leadPost.data.slug}/`}>{leadPost.data.title}</a>
+          </h2>
+          <p>{leadPost.data.description}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="frame section-stack">
+    <div class="section-heading">
+      <p class="section-heading__eyebrow">Selected work</p>
+      <h2>Recent projects I've worked on</h2>
+    </div>
+    <div class="card-grid card-grid--three" data-masonry-grid>
+      {featuredProjects.map((entry) => (
+        <ProjectCard entry={entry} />
+      ))}
+    </div>
+  </section>
+
+  <section class="frame section-stack">
+    <div class="section-heading">
+      <p class="section-heading__eyebrow">Recent writing</p>
+      <h2>Articles and notes</h2>
+    </div>
+    <div class="card-grid card-grid--writing" data-masonry-grid>
+      {writingPosts.map((entry, index) => (
+        <ArticleCard entry={entry} featured={index === 0} />
+      ))}
+    </div>
+  </section>
+
+  <section class="frame section-stack section-stack--offset">
+    <div class="section-heading">
+      <p class="section-heading__eyebrow">Photography</p>
+      <h2>Astrophotography, travel photos, camera reviews, and more</h2>
+    </div>
+    <div class="card-grid card-grid--three" data-masonry-grid>
+      {visiblePhotoSets.map((entry) => (
+        <PhotoSetCard entry={entry} />
+      ))}
+    </div>
+  </section>
+
+  <section class="frame about-slice">
+    <PageHeading
+      eyebrow="About the site"
+      title={about.title}
+      description={about.description}
+    />
+    <div class="about-slice__body prose">
+      <p>
+        I'm Jake Scally, and I maintain this site as a repository of a variety of things I work on.
+        Applications, physics, cameras, photography, astronomy, and more.
+      </p>
+      <p>
+        The main idea is to archive the things I do over the years and slowly grow a large
+        portfolio of the many, many things I do.
+      </p>
+      <a class="button button--ghost" href="/about/">Read the full about page</a>
+    </div>
+  </section>
+</BaseLayout>

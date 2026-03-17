@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+
+import { requireImage } from "@/lib/assets";
+import type { DrinkEntry } from "@/lib/drinks";
+
+interface Props {
+  entry: DrinkEntry;
+}
+
+const { entry } = Astro.props;
+const heroImage = entry.data.heroImage ? requireImage(entry.data.heroImage) : undefined;
+---
+
+<article class="drink-card">
+  <a class="drink-card__link" href={`/bar/${entry.data.slug}/`}>
+    {heroImage ? (
+      <div class="drink-card__media">
+        <Image
+          src={heroImage}
+          alt={entry.data.title}
+          widths={[420, 720, 960]}
+          sizes="(min-width: 1080px) 26vw, (min-width: 720px) 40vw, 100vw"
+        />
+      </div>
+    ) : (
+      <div class="drink-card__media drink-card__media--empty" aria-hidden="true">
+        <span>{entry.data.baseSpirit}</span>
+      </div>
+    )}
+    <div class="drink-card__body">
+      <div class="drink-card__meta">
+        <span>{entry.data.menuSection}</span>
+        <span>{entry.data.baseSpirit}</span>
+      </div>
+      <h3 class="drink-card__title">{entry.data.title}</h3>
+      <p class="drink-card__description">{entry.data.description}</p>
+      <div class="drink-card__tags">
+        {entry.data.tags.slice(0, 3).map((tag) => (
+          <span>{tag}</span>
+        ))}
+      </div>
+      <span class="drink-card__cta">View recipe</span>
+    </div>
+  </a>
+</article>

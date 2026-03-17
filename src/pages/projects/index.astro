@@ -1,0 +1,23 @@
+---
+import PageHeading from "@/components/PageHeading.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getProjects } from "@/lib/content";
+
+const projects = getProjects();
+---
+
+<BaseLayout title="Projects" description="Selected systems, experiments, and site work from the Scally Network archive.">
+  <section class="frame archive-shell">
+    <PageHeading
+      eyebrow="Selected work"
+      title="Projects and experiences"
+      description="Various things I've worked on and felt were worth documenting"
+    />
+    <div class="card-grid card-grid--three" data-masonry-grid>
+      {projects.map((entry) => (
+        <ProjectCard entry={entry} />
+      ))}
+    </div>
+  </section>
+</BaseLayout>

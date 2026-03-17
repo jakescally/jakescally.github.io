@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+
+import {
+  getCompactImageWindowConfig,
+  requireImage,
+  shouldUseCompactImageCard
+} from "@/lib/assets";
+import type { BlogEntry } from "@/lib/content";
+import { formatDate } from "@/lib/content";
+
+interface Props {
+  entry: BlogEntry;
+  featured?: boolean;
+}
+
+const { entry, featured = false } = Astro.props;
+const hasHeroImage = Boolean(entry.data.heroImage);
+const heroImage = hasHeroImage ? requireImage(entry.data.heroImage) : undefined;
+const compact = heroImage ? !featured && shouldUseCompactImageCard(heroImage) : false;
+const compactWindow = heroImage && compact ? getCompactImageWindowConfig(heroImage) : undefined;
+const compactStyle = compactWindow
+  ? {
+      "--compact-media-min": compactWindow.minWidth,
+      "--compact-media-max": compactWindow.maxWidth,
+      "--compact-media-padding": compactWindow.padding,
+      "--compact-media-fit": compactWindow.fit,
+      ...(compactWindow.aspectRatio ? { "--compact-media-aspect": compactWindow.aspectRatio } : {})
+    }
+  : undefined;
+---
+
+<article
+  class:list={[
+    "post-card",
+    featured && "post-card--featured",
+    !hasHeroImage && "post-card--no-image",
+    compact && "post-card--compact",
+    compactWindow?.crop && "post-card--compact-crop"
+  ]}
+  style={compactStyle}
+>
+  {heroImage && (
+    <a class="post-card__image" href={`/writing/${entry.data.slug}/`}>
+      <Image
+        src={heroImage}
+        alt={entry.data.title}
+        widths={[480, 720, 960]}
+        sizes={featured
+          ? "(min-width: 960px) 42vw, 100vw"
+          : compact
+            ? "(min-width: 960px) 10rem, 36vw"
+            : "(min-width: 960px) 28vw, 100vw"}
+      />
+    </a>
+  )}
+  <div class="post-card__body">
+    <p class="post-card__meta">{formatDate(entry.data.publishedAt)}</p>
+    <h3 class="post-card__title">
+      <a href={`/writing/${entry.data.slug}/`}>{entry.data.title}</a>
+    </h3>
+    <p class="post-card__summary">{entry.data.description}</p>
+    <div class="topic-row">
+      {entry.data.topics.slice(0, 3).map((topic) => (
+        <span class="topic-pill">{topic}</span>
+      ))}
+    </div>
+  </div>
+</article>

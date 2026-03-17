@@ -1,0 +1,56 @@
+---
+import SearchInterface from "@/components/SearchInterface.astro";
+---
+
+<dialog class="search-palette" data-search-dialog>
+  <div class="search-palette__panel">
+    <div class="search-palette__bar">
+      <p class="search-palette__eyebrow">Command palette</p>
+      <button class="search-palette__close" type="button" data-close-search>
+        Close
+      </button>
+    </div>
+    <SearchInterface />
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
+  const openers = document.querySelectorAll("[data-open-search]");
+  const closers = document.querySelectorAll("[data-close-search]");
+
+  const openDialog = () => {
+    if (!dialog?.open) {
+      dialog?.showModal();
+    }
+  };
+
+  const closeDialog = () => dialog?.close();
+
+  openers.forEach((button) => button.addEventListener("click", openDialog));
+  closers.forEach((button) => button.addEventListener("click", closeDialog));
+
+  dialog?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target === dialog) {
+      closeDialog();
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      event.preventDefault();
+      openDialog();
+    }
+
+    if (event.key === "/" && !event.metaKey && !event.ctrlKey) {
+      const target = event.target;
+      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+        return;
+      }
+
+      event.preventDefault();
+      openDialog();
+    }
+  });
+</script>

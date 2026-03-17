@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { requireImage } from "@/lib/assets";
+import AboutContent, { frontmatter as about } from "@/content/sitePages/about.md";
+
+const heroImage = about.heroImage ? requireImage(about.heroImage) : undefined;
+---
+
+<BaseLayout title="About" description={about.description} image={about.heroImage}>
+  <section class="frame about-page">
+    <header class="page-heading">
+      <p class="page-heading__eyebrow">About</p>
+      <h1 class="page-heading__title">{about.title}</h1>
+      <p class="page-heading__description">{about.description}</p>
+    </header>
+    <div class="about-page__grid">
+      <div class="prose">
+        <AboutContent />
+      </div>
+      {heroImage && (
+        <div class="about-page__media">
+          <Image src={heroImage} alt="Andromeda photograph by Jake Scally." widths={[840, 1200]} sizes="(min-width: 960px) 32vw, 100vw" />
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

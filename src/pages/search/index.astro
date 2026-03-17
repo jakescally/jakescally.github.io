@@ -1,0 +1,14 @@
+---
+import SearchInterface from "@/components/SearchInterface.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Search" description="Search the Scally Network archive.">
+  <section class="frame archive-shell">
+    <header class="page-heading">
+      <p class="page-heading__eyebrow">Search</p>
+      <h1 class="page-heading__title">Search</h1>
+    </header>
+    <SearchInterface mode="page" />
+  </section>
+</BaseLayout>

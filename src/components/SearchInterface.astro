@@ -1,0 +1,126 @@
+---
+interface Props {
+  mode?: "dialog" | "page";
+}
+
+const { mode = "dialog" } = Astro.props;
+---
+
+<section class:list={["search-ui", mode === "page" && "search-ui--page"]} data-search-ui>
+  <label class="search-ui__label" for={`search-input-${mode}`}>
+    Search the site
+  </label>
+  <input
+    class="search-ui__input"
+    id={`search-input-${mode}`}
+    name="q"
+    placeholder={'Try "Astro", "PowerShot G2", or "Japan"'}
+    autocomplete="off"
+    data-search-input
+    type="search"
+  />
+  <p class="search-ui__hint" data-search-status>Type at least two characters.</p>
+  <div class="search-ui__results" data-search-results></div>
+</section>
+
+<script>
+  interface PagefindItem {
+    url: string;
+    excerpt?: string;
+    meta: {
+      title?: string;
+    };
+  }
+
+  interface PagefindMatch {
+    data: () => Promise<PagefindItem>;
+  }
+
+  interface PagefindModule {
+    search: (term: string) => Promise<{
+      results: PagefindMatch[];
+    }>;
+  }
+
+  const PAGEFIND_PATH = "/pagefind/pagefind.js";
+  const roots = document.querySelectorAll<HTMLElement>("[data-search-ui]");
+
+  const escapeHtml = (value: string) =>
+    value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  for (const root of roots) {
+    if (root.dataset.bound === "true") {
+      continue;
+    }
+
+    root.dataset.bound = "true";
+
+    const input = root.querySelector<HTMLInputElement>("[data-search-input]");
+    const status = root.querySelector<HTMLElement>("[data-search-status]");
+    const results = root.querySelector<HTMLElement>("[data-search-results]");
+
+    let pagefindPromise: Promise<PagefindModule> | undefined;
+
+    const loadPagefind = async () => {
+      if (!pagefindPromise) {
+        pagefindPromise = import(/* @vite-ignore */ PAGEFIND_PATH) as Promise<PagefindModule>;
+      }
+
+      return pagefindPromise;
+    };
+
+    input?.addEventListener("input", async () => {
+      const term = input.value.trim();
+
+      if (!results || !status || !input) {
+        return;
+      }
+
+      if (term.length < 2) {
+        status.textContent = "Type at least two characters.";
+        results.innerHTML = "";
+        return;
+      }
+
+      status.textContent = "Searching...";
+
+      try {
+        const pagefind = await loadPagefind();
+        const search = await pagefind.search(term);
+        const items = await Promise.all(
+          search.results.slice(0, 7).map((result: Awaited<typeof search>["results"][number]) => result.data())
+        );
+
+        if (!items.length) {
+          status.textContent = `No matches for "${term}".`;
+          results.innerHTML = "";
+          return;
+        }
+
+        status.textContent = `${items.length} result${items.length === 1 ? "" : "s"} for "${term}".`;
+        results.innerHTML = items
+          .map(
+            (item: PagefindItem) => `
+              <article class="search-hit">
+                <a class="search-hit__link" href="${item.url}">
+                  <p class="search-hit__title">${escapeHtml(item.meta.title || item.url)}</p>
+                  <p class="search-hit__meta">${escapeHtml(item.url)}</p>
+                  <p class="search-hit__excerpt">${escapeHtml(item.excerpt || "")}</p>
+                </a>
+              </article>
+            `
+          )
+          .join("");
+      } catch (error) {
+        status.textContent =
+          "Search is available in the production build after Pagefind indexes the site.";
+        results.innerHTML = "";
+      }
+    });
+  }
+</script>

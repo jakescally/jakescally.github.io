@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+
+import { requireImage } from "@/lib/assets";
+import type { ProjectEntry } from "@/lib/content";
+
+interface Props {
+  entry: ProjectEntry;
+}
+
+const { entry } = Astro.props;
+const heroImage = requireImage(entry.data.heroImage);
+const href =
+  entry.data.detailMode === "case-study"
+    ? `/projects/${entry.data.slug}/`
+    : entry.data.links.writeup ?? entry.data.links.github ?? entry.data.links.demo;
+---
+
+<article class="project-card">
+  <div class="project-card__media">
+    <Image
+      src={heroImage}
+      alt={entry.data.title}
+      widths={[520, 820]}
+      sizes="(min-width: 960px) 32vw, 100vw"
+    />
+  </div>
+  <div class="project-card__body">
+    <p class="project-card__meta">
+      <span>{entry.data.year}</span>
+      <span>{entry.data.status}</span>
+    </p>
+    <h3 class="project-card__title">
+      {href ? <a href={href}>{entry.data.title}</a> : entry.data.title}
+    </h3>
+    <p class="project-card__summary">{entry.data.summary}</p>
+    <div class="topic-row">
+      {entry.data.stack.slice(0, 4).map((item) => (
+        <span class="topic-pill">{item}</span>
+      ))}
+    </div>
+  </div>
+</article>

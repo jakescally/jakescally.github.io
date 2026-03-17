@@ -1,0 +1,468 @@
+---
+import { Image } from "astro:assets";
+
+import {
+  collectDrinkBaseSpirits,
+  collectDrinkSections,
+  type DrinkEntry
+} from "@/lib/drinks";
+import { requireImage } from "@/lib/assets";
+import DrinkRecipePanel from "@/components/DrinkRecipePanel.astro";
+
+interface Props {
+  drinks: DrinkEntry[];
+}
+
+const { drinks } = Astro.props;
+const sections = collectDrinkSections(drinks);
+const baseSpirits = collectDrinkBaseSpirits(drinks);
+const groupedDrinks = sections.map((section) => ({
+  section,
+  entries: drinks.filter((entry) => entry.data.menuSection === section)
+}));
+
+function createSearchIndex(entry: DrinkEntry) {
+  const ingredients = entry.data.ingredients
+    .map((item) => [item.amount, item.ingredient, item.notes].filter(Boolean).join(" "))
+    .join(" ");
+
+  return [
+    entry.data.title,
+    entry.data.description,
+    entry.data.menuSection,
+    entry.data.baseSpirit,
+    entry.data.glassware ?? "",
+    entry.data.garnish ?? "",
+    entry.data.method ?? "",
+    entry.data.tags.join(" "),
+    entry.data.searchTerms.join(" "),
+    ingredients
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+---
+
+<section class="drink-browser" data-drink-browser>
+  <div class="menu-book">
+    <section class="menu-sheet menu-sheet--overview">
+      <div class="menu-sheet__inner">
+        <div class="menu-sheet__header">
+          <p class="menu-sheet__eyebrow">House selection</p>
+          <h2 class="menu-sheet__title">Cocktail menu</h2>
+          <p class="menu-sheet__lede">
+            Search by ingredient, spirit, or tag, then open any listing for the full build.
+          </p>
+        </div>
+
+        <div class="drink-browser__controls">
+          <label class="drink-browser__search-label" for="drink-menu-search">
+            Search the menu
+          </label>
+          <input
+            class="drink-browser__search-input"
+            id="drink-menu-search"
+            name="drink-menu-search"
+            placeholder='Search by spirit, ingredient, or tag'
+            type="search"
+            autocomplete="off"
+            data-drink-search
+          />
+          <p class="drink-browser__status" data-drink-status>
+            {drinks.length
+              ? `Browsing ${drinks.length} drink${drinks.length === 1 ? "" : "s"}.`
+              : "No house drinks are published yet."}
+          </p>
+        </div>
+
+        <div class="drink-browser__filters" aria-label="Drink filters">
+          <div class="drink-browser__filter-group" data-filter-group="section">
+            <p>Sections</p>
+            <div class="drink-browser__chip-row">
+              <button class="filter-chip is-active" data-filter-group="section" data-filter-value="all" type="button">
+                All sections
+              </button>
+              {sections.map((section) => (
+                <button class="filter-chip" data-filter-group="section" data-filter-value={section} type="button">
+                  {section}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div class="drink-browser__filter-group" data-filter-group="spirit">
+            <p>Base spirit</p>
+            <div class="drink-browser__chip-row">
+              <button class="filter-chip is-active" data-filter-group="spirit" data-filter-value="all" type="button">
+                All spirits
+              </button>
+              {baseSpirits.map((spirit) => (
+                <button class="filter-chip" data-filter-group="spirit" data-filter-value={spirit} type="button">
+                  {spirit}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <aside class="drink-browser__sidebar-note">
+          <p class="drink-browser__sidebar-title">Menu notes</p>
+          <p>
+            The landing page reads like a menu. Open a drink to see the full recipe card, service
+            notes, and direct link.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="menu-sheet menu-sheet--menu">
+      <div class="menu-sheet__inner">
+        <div class="menu-sheet__header menu-sheet__header--menu">
+          <p class="menu-sheet__eyebrow">Tonight's list</p>
+          <p class="menu-sheet__instruction">Tap a drink for the full recipe.</p>
+        </div>
+
+        <p class="drink-browser__no-results" data-drink-no-results hidden>
+          Nothing matches that search right now.
+        </p>
+
+        {drinks.length === 0 && (
+          <article class="drink-browser__empty-state">
+            <p class="drink-browser__empty-eyebrow">Cellar doors closed</p>
+            <h2>No published drinks yet.</h2>
+            <p>
+              The menu is wired up and ready. When you want to publish recipes, add Markdown files
+              under <code>src/content/drinks</code>.
+            </p>
+          </article>
+        )}
+
+        <div class="drink-browser__sections">
+          {groupedDrinks.map(({ section, entries }) => (
+            <section class="drink-browser__section" data-drink-section={section}>
+              <div class="drink-browser__section-heading">
+                <p>{section}</p>
+                <span>{entries.length} drink{entries.length === 1 ? "" : "s"}</span>
+              </div>
+              <div class="drink-browser__list">
+                {entries.map((entry) => (
+                  <button
+                    class:list={["menu-entry", !entry.data.inStock && "menu-entry--out"]}
+                    data-drink-card
+                    data-drink-section-value={entry.data.menuSection}
+                    data-drink-spirit={entry.data.baseSpirit}
+                    data-drink-search-value={createSearchIndex(entry)}
+                    data-open-drink={entry.data.slug}
+                    type="button"
+                  >
+                    <span class="menu-entry__head">
+                      <span class="menu-entry__title-row">
+                        <span class="menu-entry__title">{entry.data.title}</span>
+                        {!entry.data.inStock && (
+                          <span class="menu-entry__status">Out of stock</span>
+                        )}
+                      </span>
+                      <span class="menu-entry__spirit">{entry.data.baseSpirit}</span>
+                    </span>
+                    <span class="menu-entry__description">{entry.data.description}</span>
+                    <span class="menu-entry__tail">
+                      {entry.data.method && <span>{entry.data.method}</span>}
+                      {entry.data.glassware && <span>{entry.data.glassware}</span>}
+                      {entry.data.tags.slice(0, 2).map((tag) => (
+                        <span>{tag}</span>
+                      ))}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  {drinks.map((entry) => {
+    const heroImage = entry.data.heroImage ? requireImage(entry.data.heroImage) : undefined;
+
+    return (
+      <dialog
+        class="drink-modal"
+        data-drink-dialog={entry.data.slug}
+        aria-labelledby={`drink-modal-title-${entry.data.slug}`}
+      >
+        <article class="drink-modal__frame">
+          <div class="drink-modal__paper">
+            <div class="drink-modal__masthead">
+              <p class="drink-modal__eyebrow">{entry.data.menuSection}</p>
+              <div class="drink-modal__actions">
+                <a class="drink-modal__page-link" href={`/bar/${entry.data.slug}/`}>
+                  Open recipe page
+                </a>
+                <button
+                  class="drink-modal__close"
+                  data-close-drink
+                  data-close-drink-slug={entry.data.slug}
+                  type="button"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+
+            <div class="drink-modal__hero">
+              <div class="drink-modal__copy">
+                <h2 id={`drink-modal-title-${entry.data.slug}`}>{entry.data.title}</h2>
+                <p class="drink-modal__description">{entry.data.description}</p>
+                <div class="drink-modal__meta">
+                  <span>{entry.data.baseSpirit}</span>
+                  {entry.data.method && <span>{entry.data.method}</span>}
+                  {entry.data.garnish && <span>{entry.data.garnish}</span>}
+                </div>
+              </div>
+
+              <div class:list={["drink-modal__media", !heroImage && "drink-modal__media--placeholder"]}>
+                {heroImage ? (
+                  <Image
+                    src={heroImage}
+                    alt={entry.data.title}
+                    widths={[480, 720, 960]}
+                    sizes="(min-width: 1000px) 24rem, 100vw"
+                  />
+                ) : (
+                  <>
+                    <p>{entry.data.baseSpirit}</p>
+                    <span>{entry.data.menuSection}</span>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div class="drink-modal__body">
+              <DrinkRecipePanel entry={entry} />
+            </div>
+          </div>
+        </article>
+      </dialog>
+    );
+  })}
+</section>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>("[data-drink-browser]");
+
+  for (const root of roots) {
+    if (root.dataset.bound === "true") {
+      continue;
+    }
+
+    root.dataset.bound = "true";
+
+    const input = root.querySelector<HTMLInputElement>("[data-drink-search]");
+    const status = root.querySelector<HTMLElement>("[data-drink-status]");
+    const noResults = root.querySelector<HTMLElement>("[data-drink-no-results]");
+    const cards = root.querySelectorAll<HTMLElement>("[data-drink-card]");
+    const sections = root.querySelectorAll<HTMLElement>("[data-drink-section]");
+    const dialogs = new Map(
+      Array.from(root.querySelectorAll<HTMLDialogElement>("[data-drink-dialog]")).map((dialog) => [
+        dialog.dataset.drinkDialog ?? "",
+        dialog
+      ])
+    );
+
+    let activeSection = "all";
+    let activeSpirit = "all";
+
+    const syncModalState = () => {
+      const anyOpen = [...dialogs.values()].some((dialog) => dialog.open);
+      document.documentElement.classList.toggle("has-drink-modal", anyOpen);
+    };
+
+    const clearHash = (slug?: string) => {
+      if (!slug || window.location.hash !== `#${slug}`) {
+        return;
+      }
+
+      history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    };
+
+    const closeDialog = (dialog?: HTMLDialogElement | null, shouldClearHash = true) => {
+      if (!dialog?.open) {
+        return;
+      }
+
+      const slug = dialog.dataset.drinkDialog;
+      dialog.close();
+
+      if (shouldClearHash) {
+        clearHash(slug);
+      }
+
+      syncModalState();
+    };
+
+    const closeAllDialogs = (shouldClearHash = true) => {
+      dialogs.forEach((dialog) => {
+        if (dialog.open) {
+          closeDialog(dialog, shouldClearHash);
+        }
+      });
+    };
+
+    const openDialog = (slug?: string, updateHash = true) => {
+      if (!slug) {
+        return;
+      }
+
+      const dialog = dialogs.get(slug);
+
+      if (!dialog) {
+        return;
+      }
+
+      closeAllDialogs(false);
+
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+
+      if (updateHash) {
+        history.replaceState(null, "", `#${slug}`);
+      }
+
+      syncModalState();
+    };
+
+    const syncFromHash = () => {
+      const slug = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+
+      if (!slug) {
+        closeAllDialogs(false);
+        return;
+      }
+
+      if (dialogs.has(slug)) {
+        openDialog(slug, false);
+      }
+    };
+
+    const refresh = () => {
+      const term = input?.value.trim().toLowerCase() ?? "";
+
+      if (!cards.length) {
+        if (status) {
+          status.textContent = "No house drinks are published yet.";
+        }
+
+        return;
+      }
+
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const section = card.dataset.drinkSectionValue ?? "";
+        const spirit = card.dataset.drinkSpirit ?? "";
+        const haystack = card.dataset.drinkSearchValue ?? "";
+        const matchesSection = activeSection === "all" || section === activeSection;
+        const matchesSpirit = activeSpirit === "all" || spirit === activeSpirit;
+        const matchesSearch = !term || haystack.includes(term);
+        const visible = matchesSection && matchesSpirit && matchesSearch;
+
+        card.toggleAttribute("hidden", !visible);
+
+        if (visible) {
+          visibleCount += 1;
+        }
+      });
+
+      sections.forEach((section) => {
+        const visibleCards = section.querySelectorAll("[data-drink-card]:not([hidden])").length;
+        section.toggleAttribute("hidden", visibleCards === 0);
+      });
+
+      if (status) {
+        if (!visibleCount) {
+          status.textContent = term
+            ? `No drinks match "${input?.value.trim() ?? ""}".`
+            : "No drinks match the selected filters.";
+        } else if (term) {
+          status.textContent = `${visibleCount} drink${visibleCount === 1 ? "" : "s"} match "${input?.value.trim()}".`;
+        } else {
+          status.textContent = `Browsing ${visibleCount} drink${visibleCount === 1 ? "" : "s"}.`;
+        }
+      }
+
+      if (noResults) {
+        noResults.hidden = visibleCount !== 0;
+      }
+    };
+
+    dialogs.forEach((dialog) => {
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+          closeDialog(dialog);
+        }
+      });
+
+      dialog.addEventListener("close", () => {
+        clearHash(dialog.dataset.drinkDialog);
+        syncModalState();
+      });
+    });
+
+    root.addEventListener("click", (event) => {
+      const target = event.target;
+
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const filterButton = target.closest<HTMLButtonElement>("button[data-filter-group]");
+
+      if (filterButton) {
+        const group = filterButton.dataset.filterGroup;
+        const value = filterButton.dataset.filterValue ?? "all";
+
+        if (!group) {
+          return;
+        }
+
+        if (group === "section") {
+          activeSection = value;
+        }
+
+        if (group === "spirit") {
+          activeSpirit = value;
+        }
+
+        root
+          .querySelectorAll<HTMLButtonElement>(`button[data-filter-group="${group}"]`)
+          .forEach((button) => {
+            button.classList.toggle("is-active", button === filterButton);
+          });
+
+        refresh();
+        return;
+      }
+
+      const openButton = target.closest<HTMLButtonElement>("button[data-open-drink]");
+
+      if (openButton) {
+        openDialog(openButton.dataset.openDrink);
+        return;
+      }
+
+      const closeButton = target.closest<HTMLButtonElement>("button[data-close-drink]");
+
+      if (closeButton) {
+        const slug = closeButton.dataset.closeDrinkSlug;
+        closeDialog(slug ? dialogs.get(slug) : undefined);
+      }
+    });
+
+    input?.addEventListener("input", refresh);
+    window.addEventListener("hashchange", syncFromHash);
+    refresh();
+    syncFromHash();
+  }
+</script>

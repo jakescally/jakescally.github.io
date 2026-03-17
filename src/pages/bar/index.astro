@@ -1,0 +1,14 @@
+---
+import DrinkBrowser from "@/components/DrinkBrowser.astro";
+import DrinksLayout from "@/layouts/DrinksLayout.astro";
+import { barMeta } from "@/lib/bar";
+import { getPublishedDrinks } from "@/lib/drinks";
+
+const drinks = getPublishedDrinks();
+---
+
+<DrinksLayout title={barMeta.title} description={barMeta.description}>
+  <section class="frame bar-home">
+    <DrinkBrowser drinks={drinks} />
+  </section>
+</DrinksLayout>

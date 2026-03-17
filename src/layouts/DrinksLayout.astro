@@ -1,0 +1,35 @@
+---
+import "@/styles/drinks.css";
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { barMeta } from "@/lib/bar";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = barMeta.description,
+  image,
+  bodyClass = ""
+} = Astro.props;
+
+const combinedBodyClass = ["page-bar", bodyClass].filter(Boolean).join(" ");
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  bodyClass={combinedBodyClass}
+  showHeader={false}
+  showSiteSearch={false}
+  showFooter={false}
+  themeColor="#5d3a29"
+>
+  <slot />
+</BaseLayout>

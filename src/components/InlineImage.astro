@@ -1,0 +1,21 @@
+---
+import LightboxImage from "@/components/LightboxImage.astro";
+
+interface Props {
+  asset: string;
+  alt: string;
+  caption?: string;
+}
+
+const { asset, alt, caption } = Astro.props;
+const figureId = `inline-${`${asset}-${alt}`.replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase()}`;
+---
+
+<LightboxImage
+  asset={asset}
+  alt={alt}
+  caption={caption}
+  rootClass="inline-figure"
+  linkClass="inline-figure__link"
+  rootId={figureId}
+/>

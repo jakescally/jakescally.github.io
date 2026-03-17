@@ -1,0 +1,71 @@
+---
+import { Image } from "astro:assets";
+
+import { requireImage } from "@/lib/assets";
+import { getPhotoSetById, getPhotoSetBySlug } from "@/lib/content";
+
+interface Props {
+  set: string;
+}
+
+const { set } = Astro.props;
+const entry = getPhotoSetById(set) ?? getPhotoSetBySlug(set);
+
+if (!entry) {
+  throw new Error(`Missing photo set: ${set}`);
+}
+
+const galleryId = `gallery-${entry.data.slug}`;
+const images = entry.data.images.map((image) => ({
+  ...image,
+  asset: requireImage(image.src)
+}));
+---
+
+<section class="gallery-embed">
+  <div class="gallery-embed__header">
+    <p class="gallery-embed__eyebrow">Photo set</p>
+    <h3>{entry.data.title}</h3>
+    <p>{entry.data.description}</p>
+  </div>
+  <div class="gallery-grid" data-gallery-root id={galleryId}>
+    {images.map((image) => (
+      <a
+        class="gallery-grid__item"
+        data-pswp-height={image.asset.height}
+        data-pswp-width={image.asset.width}
+        data-pswp-caption={image.caption ?? image.alt}
+        href={image.asset.src}
+      >
+        <Image
+          src={image.asset}
+          alt={image.alt}
+          widths={[360, 640, 960]}
+          sizes="(min-width: 1120px) 20vw, (min-width: 760px) 30vw, 92vw"
+        />
+      </a>
+    ))}
+  </div>
+</section>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  const galleries = document.querySelectorAll<HTMLElement>("[data-gallery-root]");
+
+  for (const gallery of galleries) {
+    if (gallery.dataset.bound === "true") {
+      continue;
+    }
+
+    gallery.dataset.bound = "true";
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: `#${gallery.id}`,
+      children: "a",
+      pswpModule: () => import("photoswipe")
+    });
+
+    lightbox.init();
+  }
+</script>

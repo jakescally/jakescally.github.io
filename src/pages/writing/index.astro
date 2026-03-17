@@ -1,0 +1,62 @@
+---
+import ArticleCard from "@/components/ArticleCard.astro";
+import PageHeading from "@/components/PageHeading.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { collectTopics, getPublishedPosts } from "@/lib/content";
+
+const posts = getPublishedPosts();
+const topics = collectTopics(posts);
+---
+
+<BaseLayout title="Writing" description="The full writing archive, organized around topics and built for search-first browsing.">
+  <section class="frame archive-shell">
+    <PageHeading
+      eyebrow="Written Works"
+      title="Articles, notes, reviews, and more"
+    />
+    <div class="archive-toolbar">
+      <div class="filter-row" data-filter-group>
+        <button class="filter-chip is-active" data-topic="all" type="button">All</button>
+        {topics.map((topic) => (
+          <button class="filter-chip" data-topic={topic} type="button">
+            {topic}
+          </button>
+        ))}
+      </div>
+    </div>
+    <div class="card-grid card-grid--archive" data-filter-results data-masonry-grid>
+      {posts.map((entry) => (
+        <div data-topics={entry.data.topics.join("|")}>
+          <ArticleCard entry={entry} />
+        </div>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const group = document.querySelector("[data-filter-group]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-filter-results] > div");
+
+  group?.addEventListener("click", (event) => {
+    const button = event.target;
+
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    const topic = button.dataset.topic ?? "all";
+
+    group.querySelectorAll("button").forEach((chip) => {
+      chip.classList.toggle("is-active", chip === button);
+    });
+
+    cards.forEach((card) => {
+      const topics = card.dataset.topics?.split("|") ?? [];
+      const visible = topic === "all" || topics.includes(topic);
+      card.toggleAttribute("hidden", !visible);
+    });
+
+    window.dispatchEvent(new Event("masonry:refresh"));
+  });
+</script>

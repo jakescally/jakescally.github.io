@@ -1,0 +1,41 @@
+---
+import PageHeading from "@/components/PageHeading.astro";
+import PhotoSetCard from "@/components/PhotoSetCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getPhotoSets, getPublishedPosts, sortByDate } from "@/lib/content";
+
+const photoSets = getPhotoSets();
+const visualEssays = sortByDate(
+  getPublishedPosts().filter((entry) => Boolean(entry.data.photoSetIds?.length))
+);
+---
+
+<BaseLayout title="Photography" description="Photo sets, camera studies, and image-led writing from the Scally Network archive.">
+  <section class="frame archive-shell">
+    <PageHeading
+      eyebrow="Photography"
+      title="Sets of photos, camera reviews, and photography adventures"
+      description="This is where I keep my galleries of photos, whether for reviews or for viewing pleasure"
+    />
+    <div class="card-grid card-grid--three" data-masonry-grid>
+      {photoSets.map((entry) => (
+        <PhotoSetCard entry={entry} />
+      ))}
+    </div>
+  </section>
+
+  <section class="frame section-stack">
+    <div class="section-heading">
+      <p class="section-heading__eyebrow">Photo-first posts</p>
+      <h2>Articles with lots of pictures</h2>
+    </div>
+    <div class="essay-rail">
+      {visualEssays.map((entry) => (
+        <a class="essay-rail__item" href={`/writing/${entry.data.slug}/`}>
+          <span>{entry.data.title}</span>
+          <small>{entry.data.description}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

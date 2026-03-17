@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Not Found" description="The page you were looking for drifted out of frame.">
+  <section class="frame not-found">
+    <p class="eyebrow">404</p>
+    <h1>Well um I got nothing.</h1>
+    <p>
+      Seems that either the page doesn't exist, or I screwed somethign up on the backend.
+    </p>
+    <div class="button-row">
+      <a class="button button--primary" href="/writing/">Check out articles</a>
+      <a class="button button--ghost" href="/search/">Open search</a>
+    </div>
+  </section>
+</BaseLayout>

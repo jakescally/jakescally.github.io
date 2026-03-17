@@ -1,0 +1,34 @@
+---
+import { Image } from "astro:assets";
+
+import { requireImage } from "@/lib/assets";
+import type { PhotoSetEntry } from "@/lib/content";
+
+interface Props {
+  entry: PhotoSetEntry;
+}
+
+const { entry } = Astro.props;
+const coverImage = requireImage(entry.data.coverImage);
+---
+
+<article class="photo-card">
+  <a class="photo-card__image" href={`/photography/${entry.data.slug}/`}>
+    <Image
+      src={coverImage}
+      alt={entry.data.title}
+      widths={[480, 720, 960]}
+      sizes="(min-width: 960px) 32vw, 100vw"
+    />
+  </a>
+  <div class="photo-card__body">
+    <p class="photo-card__meta">
+      {entry.data.camera && <span>{entry.data.camera}</span>}
+      {entry.data.location && <span>{entry.data.location}</span>}
+    </p>
+    <h3 class="photo-card__title">
+      <a href={`/photography/${entry.data.slug}/`}>{entry.data.title}</a>
+    </h3>
+    <p class="photo-card__summary">{entry.data.description}</p>
+  </div>
+</article>

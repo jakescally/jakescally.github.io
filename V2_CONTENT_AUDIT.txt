@@ -1,0 +1,55 @@
+Scally Network v2 Content Audit
+===============================
+
+Source checked
+--------------
+- /Users/jakescally/Documents/Jake's Website/jakescally.github.io_v2
+
+Posts in v2
+-----------
+- 2024-01-23-my-crt-history.md
+- 2024-01-25-astro-images-thus-far.md
+- 2024-01-25-imaging-the-orion-nebula.md
+- 2024-01-25-some-moon-shots.md
+- 2024-08-09-how-i-run-this-blog.md
+- 2024-08-09-this-blog.md
+- 2024-08-27-my-first-gallery.md
+- 2024-08-29-setting-up-lightgallery.md
+- 2024-11-22-canon-powershot-g2.md
+
+Migration status
+----------------
+- All 9 v2 posts are present in the Astro site under src/content/blog.
+- The v2 About page is present in the Astro site under src/content/sitePages/about.md.
+- The v2 Categories and Tags pages were not migrated as standalone routes. This was an intentional redesign decision rather than a missing-content bug.
+- The v2 Gallery page was not migrated as a standalone route.
+
+Notes on the old Gallery page
+-----------------------------
+- v2 _pages/gallery.md referenced two images:
+  - /assets/images/milkyway.png
+  - /assets/images/image2.jpg
+- milkyway.png exists in v2.
+- image2.jpg does not exist in v2. The old gallery page already had a broken reference in the source repo.
+- The descriptions in _pages/gallery.md were placeholder copy:
+  - "This is a description of the milky way photo."
+  - "This is a description of image 2."
+
+Projects in v2
+--------------
+- There were no standalone project markdown files or project pages in v2.
+- The current Astro Projects section is new curation, not a one-to-one migration of old project content.
+
+Title normalization performed
+-----------------------------
+- About -> About Scally Network
+- Jekyll Gallery Pipeline -> Setting Up LightGallery on a Jekyll Website Hosted by Github Pages
+- Japan Field Notes -> Gallery test (working!)
+- PowerShot G2 split photo sets -> collapsed into one photo set that reuses the original article title:
+  - Why the Canon PowerShot G2 from 2001 is so loveable
+
+Remaining manual decisions
+--------------------------
+- Decide whether the restored original title "Gallery test (working!)" should stay as the standalone Japan photo-set title.
+- Decide whether the consolidated G2 photo set should keep the article title or get a dedicated gallery title.
+- Decide whether the old gallery page's single real image (Milky Way Core) should return as a standalone photo set in the new site.
