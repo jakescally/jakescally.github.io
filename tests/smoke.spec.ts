@@ -48,16 +48,20 @@ test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
   const browser = page.locator("[data-drink-browser]");
   const menuToggle = browser.getByRole("button", { name: "Menu" });
   const searchInput = page.getByLabel("Search the menu");
-  const clearFiltersButton = browser.getByRole("button", { name: "Clear filters" });
-  const sectionButtons = browser.locator('[data-filter-group="section"] button');
-  const allSectionsButton = sectionButtons.first();
-  const filteredSectionButton = sectionButtons.nth(1);
 
   await expect(menuToggle).toBeVisible();
   await expect(page.getByRole("link", { name: /back to scally network home/i })).toHaveCount(0);
   await expect(searchInput).not.toBeVisible();
 
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await expect(menuToggle).toBeVisible();
   await menuToggle.click();
+
+  const clearFiltersButton = page.getByRole("button", { name: "Clear filters" });
+  const sectionButtons = page.locator('[data-drink-menu-panel] [data-filter-group="section"] button');
+  const allSectionsButton = sectionButtons.first();
+  const filteredSectionButton = sectionButtons.nth(1);
+
   await expect(searchInput).toBeVisible();
   await expect(page.getByRole("link", { name: /back to scally network home/i })).toBeVisible();
   await expect(clearFiltersButton).toBeDisabled();
@@ -85,6 +89,19 @@ test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
         height: Math.round(rect.height)
       };
     })(),
+    backdropRect: (() => {
+      const backdrop = document.querySelector<HTMLElement>("[data-drink-menu-backdrop]");
+
+      if (!backdrop) {
+        return null;
+      }
+
+      const rect = backdrop.getBoundingClientRect();
+      return {
+        top: Math.round(rect.top),
+        bottom: Math.round(rect.bottom)
+      };
+    })(),
     panelScrollState: (() => {
       const panelInner = document.querySelector<HTMLElement>(
         "[data-drink-menu-panel] .menu-sheet__inner"
@@ -104,9 +121,12 @@ test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
 
   expect(openMetrics.scrollWidth).toBeLessThanOrEqual(openMetrics.innerWidth);
   expect(openMetrics.panelRect).not.toBeNull();
+  expect(openMetrics.backdropRect).not.toBeNull();
   expect(openMetrics.panelScrollState).not.toBeNull();
   expect(openMetrics.panelRect!.top).toBeGreaterThanOrEqual(0);
   expect(openMetrics.panelRect!.bottom).toBeLessThanOrEqual(openMetrics.innerHeight);
+  expect(openMetrics.backdropRect!.top).toBe(0);
+  expect(openMetrics.backdropRect!.bottom).toBe(openMetrics.innerHeight);
   expect(openMetrics.panelScrollState!.overflowY).toBe("auto");
   expect(openMetrics.panelScrollState!.scrollHeight).toBeGreaterThan(
     openMetrics.panelScrollState!.clientHeight

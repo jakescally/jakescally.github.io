@@ -2,14 +2,14 @@
 title: Old Fashioned
 slug: old-fashioned
 description: Classic old fashioned recipe with aromatic orange peel and bitters
-menuSection: House Standards
+menuSection: Classics
 baseSpirit: Rye
 tags:
   - Classic
   - Spirit-forward
 glassware: Whisky glass
 garnish: Orange twist
-method: Stir
+method: Stirred
 ingredients:
   - amount: 2 oz
     ingredient: Rye
@@ -31,4 +31,3 @@ sortOrder: 10
 inStock: true
 draft: false
 ---
-A straightforward baseline old fashioned for testing the menu and recipe modal.

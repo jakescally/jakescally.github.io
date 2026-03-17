@@ -281,6 +281,7 @@ function createSearchIndex(entry: DrinkEntry) {
     root.dataset.bound = "true";
 
     const input = root.querySelector<HTMLInputElement>("[data-drink-search]");
+    const menuBackdrop = root.querySelector<HTMLButtonElement>("[data-drink-menu-backdrop]");
     const menuToggle = root.querySelector<HTMLButtonElement>("[data-drink-menu-toggle]");
     const menuPanel = root.querySelector<HTMLElement>("[data-drink-menu-panel]");
     const clearFiltersButton = root.querySelector<HTMLButtonElement>("[data-clear-drink-filters]");
@@ -288,6 +289,10 @@ function createSearchIndex(entry: DrinkEntry) {
     const cards = root.querySelectorAll<HTMLElement>("[data-drink-card]");
     const sections = root.querySelectorAll<HTMLElement>("[data-drink-section]");
     const mobileQuery = window.matchMedia("(max-width: 720px)");
+    const menuBackdropParent = menuBackdrop?.parentElement ?? null;
+    const menuBackdropNextSibling = menuBackdrop?.nextSibling ?? null;
+    const menuPanelParent = menuPanel?.parentElement ?? null;
+    const menuPanelNextSibling = menuPanel?.nextSibling ?? null;
     const dialogs = new Map(
       Array.from(root.querySelectorAll<HTMLDialogElement>("[data-drink-dialog]")).map((dialog) => [
         dialog.dataset.drinkDialog ?? "",
@@ -298,14 +303,51 @@ function createSearchIndex(entry: DrinkEntry) {
     let activeSection = "all";
     let activeSpirit = "all";
 
+    const restoreNode = (
+      node: HTMLElement | null | undefined,
+      parent: HTMLElement | null,
+      nextSibling: ChildNode | null
+    ) => {
+      if (!node || !parent) {
+        return;
+      }
+
+      if (nextSibling?.parentNode === parent) {
+        parent.insertBefore(node, nextSibling);
+      } else {
+        parent.appendChild(node);
+      }
+    };
+
+    const syncFloatingLayers = () => {
+      if (mobileQuery.matches) {
+        if (menuBackdrop && menuBackdrop.parentElement !== document.body) {
+          document.body.append(menuBackdrop);
+        }
+
+        if (menuPanel && menuPanel.parentElement !== document.body) {
+          document.body.append(menuPanel);
+        }
+
+        return;
+      }
+
+      restoreNode(menuBackdrop, menuBackdropParent, menuBackdropNextSibling);
+      restoreNode(menuPanel, menuPanelParent, menuPanelNextSibling);
+    };
+
     const syncActiveFilterButtons = () => {
-      root
+      if (!menuPanel) {
+        return;
+      }
+
+      menuPanel
         .querySelectorAll<HTMLButtonElement>('button[data-filter-group="section"]')
         .forEach((button) => {
           button.classList.toggle("is-active", (button.dataset.filterValue ?? "all") === activeSection);
         });
 
-      root
+      menuPanel
         .querySelectorAll<HTMLButtonElement>('button[data-filter-group="spirit"]')
         .forEach((button) => {
           button.classList.toggle("is-active", (button.dataset.filterValue ?? "all") === activeSpirit);
@@ -324,6 +366,8 @@ function createSearchIndex(entry: DrinkEntry) {
     };
 
     const syncMenuState = () => {
+      syncFloatingLayers();
+
       const isMobile = mobileQuery.matches;
       const isOpen = isMobile && root.hasAttribute("data-menu-open");
 
@@ -528,6 +572,28 @@ function createSearchIndex(entry: DrinkEntry) {
         return;
       }
 
+      const openButton = target.closest<HTMLButtonElement>("button[data-open-drink]");
+
+      if (openButton) {
+        openDialog(openButton.dataset.openDrink);
+        return;
+      }
+
+      const closeButton = target.closest<HTMLButtonElement>("button[data-close-drink]");
+
+      if (closeButton) {
+        const slug = closeButton.dataset.closeDrinkSlug;
+        closeDialog(slug ? dialogs.get(slug) : undefined);
+      }
+    });
+
+    menuPanel?.addEventListener("click", (event) => {
+      const target = event.target;
+
+      if (!(target instanceof Element)) {
+        return;
+      }
+
       const closeMenuButton = target.closest<HTMLElement>("[data-close-drink-menu]");
 
       if (closeMenuButton) {
@@ -562,22 +628,11 @@ function createSearchIndex(entry: DrinkEntry) {
 
         syncActiveFilterButtons();
         refresh();
-        return;
       }
+    });
 
-      const openButton = target.closest<HTMLButtonElement>("button[data-open-drink]");
-
-      if (openButton) {
-        openDialog(openButton.dataset.openDrink);
-        return;
-      }
-
-      const closeButton = target.closest<HTMLButtonElement>("button[data-close-drink]");
-
-      if (closeButton) {
-        const slug = closeButton.dataset.closeDrinkSlug;
-        closeDialog(slug ? dialogs.get(slug) : undefined);
-      }
+    menuBackdrop?.addEventListener("click", () => {
+      closeMobileMenu();
     });
 
     input?.addEventListener("input", refresh);

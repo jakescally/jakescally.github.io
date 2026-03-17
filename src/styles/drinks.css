@@ -933,6 +933,7 @@ html.has-drink-modal .bar-home-link {
     background:
       radial-gradient(circle at top, rgba(156, 101, 63, 0.14), transparent 32%),
       rgba(10, 7, 6, 0.58);
+    backdrop-filter: blur(6px);
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
@@ -1030,14 +1031,14 @@ html.has-drink-modal .bar-home-link {
     gap: 0.75rem;
   }
 
-  .drink-browser[data-menu-open] .drink-browser__menu-backdrop {
+  html.has-drink-menu .drink-browser__menu-backdrop {
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
     transition: opacity 220ms ease;
   }
 
-  .drink-browser[data-menu-open] .drink-browser__panel-shell {
+  html.has-drink-menu .drink-browser__panel-shell {
     opacity: 1;
     pointer-events: auto;
     transform: translate3d(0, 0, 0);

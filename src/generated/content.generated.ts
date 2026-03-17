@@ -16,10 +16,10 @@ import photoSets_canon_powershot_g2_camera, { frontmatter as photoSets_canon_pow
 import photoSets_canon_powershot_g2_macro, { frontmatter as photoSets_canon_powershot_g2_macro_frontmatter } from "../content/photoSets/canon-powershot-g2-macro.md";
 import photoSets_canon_powershot_g2_shots, { frontmatter as photoSets_canon_powershot_g2_shots_frontmatter } from "../content/photoSets/canon-powershot-g2-shots.md";
 import photoSets_japan_field_notes, { frontmatter as photoSets_japan_field_notes_frontmatter } from "../content/photoSets/japan-field-notes.md";
-import drinks_amaretto_sidecar, { frontmatter as drinks_amaretto_sidecar_frontmatter } from "../content/drinks/amaretto-sidecar.md";
 import drinks_blueberry_martini, { frontmatter as drinks_blueberry_martini_frontmatter } from "../content/drinks/blueberry-martini.md";
-import drinks_example_negroni, { frontmatter as drinks_example_negroni_frontmatter } from "../content/drinks/example-negroni.md";
 import drinks_old_fashioned, { frontmatter as drinks_old_fashioned_frontmatter } from "../content/drinks/old-fashioned.md";
+import drinks_pistacio_martini, { frontmatter as drinks_pistacio_martini_frontmatter } from "../content/drinks/pistacio-martini.md";
+import drinks_whisky_sour, { frontmatter as drinks_whisky_sour_frontmatter } from "../content/drinks/whisky-sour.md";
 
 export const blogModules = [
   { id: "canon-powershot-g2-2001-review", default: blog_canon_powershot_g2_2001_review, frontmatter: blog_canon_powershot_g2_2001_review_frontmatter },
@@ -48,8 +48,8 @@ export const photoSetsModules = [
 ];
 
 export const drinksModules = [
-  { id: "amaretto-sidecar", default: drinks_amaretto_sidecar, frontmatter: drinks_amaretto_sidecar_frontmatter },
   { id: "blueberry-martini", default: drinks_blueberry_martini, frontmatter: drinks_blueberry_martini_frontmatter },
-  { id: "example-negroni", default: drinks_example_negroni, frontmatter: drinks_example_negroni_frontmatter },
   { id: "old-fashioned", default: drinks_old_fashioned, frontmatter: drinks_old_fashioned_frontmatter },
+  { id: "pistacio-martini", default: drinks_pistacio_martini, frontmatter: drinks_pistacio_martini_frontmatter },
+  { id: "whisky-sour", default: drinks_whisky_sour, frontmatter: drinks_whisky_sour_frontmatter },
 ];
