@@ -20,6 +20,7 @@ const navItems = [
 ---
 
 <header class="site-header" data-site-header>
+  <div class="site-header__backdrop" data-site-header-backdrop></div>
   <div class="site-header__inner frame">
     <div class="site-header__bar">
       <a class="site-header__brand" href="/" aria-label="Scally Network home">
@@ -69,26 +70,41 @@ const navItems = [
   const header = document.querySelector("[data-site-header]");
   const toggle = header?.querySelector<HTMLButtonElement>("[data-site-header-toggle]");
   const nav = header?.querySelector<HTMLElement>(".site-header__nav");
+  const backdrop = header?.querySelector<HTMLElement>("[data-site-header-backdrop]");
   const mobileQuery = window.matchMedia("(max-width: 720px)");
+  const root = document.documentElement;
+
+  const syncMobileMenuState = () => {
+    const isOpen = Boolean(header?.hasAttribute("data-mobile-open"));
+    const isMobile = mobileQuery.matches;
+
+    toggle?.setAttribute("aria-expanded", String(isMobile && isOpen));
+
+    if (toggle) {
+      toggle.textContent = isMobile && isOpen ? "Close" : "Menu";
+    }
+
+    nav?.toggleAttribute("inert", isMobile && !isOpen);
+    nav?.setAttribute("aria-hidden", String(isMobile && !isOpen));
+    root.toggleAttribute("data-mobile-menu-open", isMobile && isOpen);
+  };
 
   const closeMobileMenu = () => {
-    if (!header || !toggle) {
+    if (!header) {
       return;
     }
 
     header.removeAttribute("data-mobile-open");
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.textContent = "Menu";
+    syncMobileMenuState();
   };
 
   const openMobileMenu = () => {
-    if (!header || !toggle) {
+    if (!header || !mobileQuery.matches) {
       return;
     }
 
     header.setAttribute("data-mobile-open", "");
-    toggle.setAttribute("aria-expanded", "true");
-    toggle.textContent = "Close";
+    syncMobileMenuState();
   };
 
   const syncHeaderState = () => {
@@ -100,7 +116,10 @@ const navItems = [
 
     if (!mobileQuery.matches) {
       closeMobileMenu();
+      return;
     }
+
+    syncMobileMenuState();
   };
 
   toggle?.addEventListener("click", () => {
@@ -125,6 +144,10 @@ const navItems = [
     if (event.target.closest("a, button")) {
       closeMobileMenu();
     }
+  });
+
+  backdrop?.addEventListener("click", () => {
+    closeMobileMenu();
   });
 
   window.addEventListener("keydown", (event) => {

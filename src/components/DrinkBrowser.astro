@@ -44,68 +44,104 @@ function createSearchIndex(entry: DrinkEntry) {
 ---
 
 <section class="drink-browser" data-drink-browser>
+  <button
+    class="drink-browser__menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="drink-browser-menu-panel"
+    data-drink-menu-toggle
+  >
+    Menu
+  </button>
+
+  <button
+    class="drink-browser__menu-backdrop"
+    type="button"
+    tabindex="-1"
+    aria-label="Close menu"
+    data-drink-menu-backdrop
+    data-close-drink-menu
+  ></button>
+
   <div class="menu-book">
-    <section class="menu-sheet menu-sheet--overview">
-      <div class="menu-sheet__inner">
-        <div class="drink-browser__controls">
-          <label class="drink-browser__search-label" for="drink-menu-search">
-            Search the menu
-          </label>
-          <input
-            class="drink-browser__search-input"
-            id="drink-menu-search"
-            name="drink-menu-search"
-            placeholder='Search by spirit, ingredient, or tag'
-            type="search"
-            autocomplete="off"
-            data-drink-search
-          />
-          <p class="drink-browser__status" data-drink-status>
-            {drinks.length
-              ? `Browsing ${drinks.length} drink${drinks.length === 1 ? "" : "s"}.`
-              : "No house drinks are published yet."}
-          </p>
-        </div>
+    <aside
+      class="drink-browser__panel-shell"
+      id="drink-browser-menu-panel"
+      aria-label="Menu controls"
+      tabindex="-1"
+      data-drink-menu-panel
+    >
+      <section class="menu-sheet menu-sheet--overview">
+        <div class="menu-sheet__inner">
+          <div class="drink-browser__panel-masthead">
+            <a class="drink-browser__panel-home" href="/" aria-label="Back to Scally Network home">
+              Home
+            </a>
+            <button class="drink-browser__panel-close" type="button" data-close-drink-menu>
+              Close
+            </button>
+          </div>
 
-        <div class="drink-browser__filters" aria-label="Drink filters">
-          <div class="drink-browser__filter-group" data-filter-group="section">
-            <p>Sections</p>
-            <div class="drink-browser__chip-row">
-              <button class="filter-chip is-active" data-filter-group="section" data-filter-value="all" type="button">
-                All sections
-              </button>
-              {sections.map((section) => (
-                <button class="filter-chip" data-filter-group="section" data-filter-value={section} type="button">
-                  {section}
+          <div class="drink-browser__controls">
+            <label class="drink-browser__search-label" for="drink-menu-search">
+              Search the menu
+            </label>
+            <input
+              class="drink-browser__search-input"
+              id="drink-menu-search"
+              name="drink-menu-search"
+              placeholder='Search by spirit, ingredient, or tag'
+              type="search"
+              autocomplete="off"
+              data-drink-search
+            />
+            <p class="drink-browser__status" data-drink-status>
+              {drinks.length
+                ? `Browsing ${drinks.length} drink${drinks.length === 1 ? "" : "s"}.`
+                : "No house drinks are published yet."}
+            </p>
+          </div>
+
+          <div class="drink-browser__filters" aria-label="Drink filters">
+            <div class="drink-browser__filter-group" data-filter-group="section">
+              <p>Sections</p>
+              <div class="drink-browser__chip-row">
+                <button class="filter-chip is-active" data-filter-group="section" data-filter-value="all" type="button">
+                  All sections
                 </button>
-              ))}
+                {sections.map((section) => (
+                  <button class="filter-chip" data-filter-group="section" data-filter-value={section} type="button">
+                    {section}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div class="drink-browser__filter-group" data-filter-group="spirit">
+              <p>Base spirit</p>
+              <div class="drink-browser__chip-row">
+                <button class="filter-chip is-active" data-filter-group="spirit" data-filter-value="all" type="button">
+                  All spirits
+                </button>
+                {baseSpirits.map((spirit) => (
+                  <button class="filter-chip" data-filter-group="spirit" data-filter-value={spirit} type="button">
+                    {spirit}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div class="drink-browser__filter-group" data-filter-group="spirit">
-            <p>Base spirit</p>
-            <div class="drink-browser__chip-row">
-              <button class="filter-chip is-active" data-filter-group="spirit" data-filter-value="all" type="button">
-                All spirits
-              </button>
-              {baseSpirits.map((spirit) => (
-                <button class="filter-chip" data-filter-group="spirit" data-filter-value={spirit} type="button">
-                  {spirit}
-                </button>
-              ))}
-            </div>
-          </div>
+          <aside class="drink-browser__sidebar-note">
+            <p class="drink-browser__sidebar-title">Menu notes</p>
+            <p>
+              The landing page reads like a menu. Open a drink to see the full recipe card, service
+              notes, and direct link.
+            </p>
+          </aside>
         </div>
-
-        <aside class="drink-browser__sidebar-note">
-          <p class="drink-browser__sidebar-title">Menu notes</p>
-          <p>
-            The landing page reads like a menu. Open a drink to see the full recipe card, service
-            notes, and direct link.
-          </p>
-        </aside>
-      </div>
-    </section>
+      </section>
+    </aside>
 
     <section class="menu-sheet menu-sheet--menu">
       <div class="menu-sheet__inner">
@@ -245,10 +281,13 @@ function createSearchIndex(entry: DrinkEntry) {
     root.dataset.bound = "true";
 
     const input = root.querySelector<HTMLInputElement>("[data-drink-search]");
+    const menuToggle = root.querySelector<HTMLButtonElement>("[data-drink-menu-toggle]");
+    const menuPanel = root.querySelector<HTMLElement>("[data-drink-menu-panel]");
     const status = root.querySelector<HTMLElement>("[data-drink-status]");
     const noResults = root.querySelector<HTMLElement>("[data-drink-no-results]");
     const cards = root.querySelectorAll<HTMLElement>("[data-drink-card]");
     const sections = root.querySelectorAll<HTMLElement>("[data-drink-section]");
+    const mobileQuery = window.matchMedia("(max-width: 720px)");
     const dialogs = new Map(
       Array.from(root.querySelectorAll<HTMLDialogElement>("[data-drink-dialog]")).map((dialog) => [
         dialog.dataset.drinkDialog ?? "",
@@ -258,6 +297,55 @@ function createSearchIndex(entry: DrinkEntry) {
 
     let activeSection = "all";
     let activeSpirit = "all";
+
+    const syncMenuState = () => {
+      const isMobile = mobileQuery.matches;
+      const isOpen = isMobile && root.hasAttribute("data-menu-open");
+
+      if (menuToggle) {
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+        menuToggle.textContent = isOpen ? "Close" : "Menu";
+      }
+
+      if (menuPanel) {
+        if (isMobile) {
+          menuPanel.setAttribute("aria-hidden", String(!isOpen));
+
+          if (isOpen) {
+            menuPanel.removeAttribute("inert");
+          } else {
+            menuPanel.setAttribute("inert", "");
+          }
+        } else {
+          menuPanel.setAttribute("aria-hidden", "false");
+          menuPanel.removeAttribute("inert");
+        }
+      }
+
+      document.documentElement.classList.toggle(
+        "has-drink-menu",
+        isMobile && Boolean(document.querySelector("[data-drink-browser][data-menu-open]"))
+      );
+    };
+
+    const closeMobileMenu = () => {
+      if (!root.hasAttribute("data-menu-open")) {
+        syncMenuState();
+        return;
+      }
+
+      root.removeAttribute("data-menu-open");
+      syncMenuState();
+    };
+
+    const openMobileMenu = () => {
+      if (!mobileQuery.matches) {
+        return;
+      }
+
+      root.setAttribute("data-menu-open", "");
+      syncMenuState();
+    };
 
     const syncModalState = () => {
       const anyOpen = [...dialogs.values()].some((dialog) => dialog.open);
@@ -307,6 +395,7 @@ function createSearchIndex(entry: DrinkEntry) {
       }
 
       closeAllDialogs(false);
+      closeMobileMenu();
 
       if (!dialog.open) {
         dialog.showModal();
@@ -403,6 +492,25 @@ function createSearchIndex(entry: DrinkEntry) {
         return;
       }
 
+      const menuToggleButton = target.closest<HTMLButtonElement>("[data-drink-menu-toggle]");
+
+      if (menuToggleButton) {
+        if (root.hasAttribute("data-menu-open")) {
+          closeMobileMenu();
+        } else {
+          openMobileMenu();
+        }
+
+        return;
+      }
+
+      const closeMenuButton = target.closest<HTMLElement>("[data-close-drink-menu]");
+
+      if (closeMenuButton) {
+        closeMobileMenu();
+        return;
+      }
+
       const filterButton = target.closest<HTMLButtonElement>("button[data-filter-group]");
 
       if (filterButton) {
@@ -447,8 +555,21 @@ function createSearchIndex(entry: DrinkEntry) {
     });
 
     input?.addEventListener("input", refresh);
+    mobileQuery.addEventListener("change", () => {
+      if (!mobileQuery.matches) {
+        closeMobileMenu();
+      } else {
+        syncMenuState();
+      }
+    });
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMobileMenu();
+      }
+    });
     window.addEventListener("hashchange", syncFromHash);
     refresh();
+    syncMenuState();
     syncFromHash();
   }
 </script>

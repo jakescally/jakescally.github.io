@@ -17,7 +17,8 @@ Astro rebuild of Jake Scally's personal site and archive for [https://jakescally
 - Photo sets live in `src/content/photoSets`
 - Drink recipes live in `src/content/drinks`
 - Static page content lives in `src/content/sitePages`
-- Authoring workflow is documented in `AUTHORING_GUIDE.md`
+- Main site content workflow is documented in `AUTHORING_GUIDE.md`
+- Drink menu workflow is documented in `DRINK_MENU_AUTHORING_GUIDE.md`
 
 ## Deployment
 

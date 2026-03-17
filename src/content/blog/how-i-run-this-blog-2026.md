@@ -21,4 +21,4 @@ Image viewing is also revamped. Images are now separate mini galleries ("photo s
 
 Once the markdown files are updated, all I do is `npm run build` (which will also run the node scripts to find and link new articles) and `npm run preview` to view it locally. Pushing to GitHub is exactly as you'd expect.
 
-Anyways, this is a huge improvement for usability. And the UI looks nicer too!
+Anyways, this is a huge improvement for usability. And the UI looks nicer too

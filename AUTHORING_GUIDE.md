@@ -1,158 +1,235 @@
-# Scally Network Authoring Guide
+# Scally Network Site Content Guide
 
-This site is an Astro-based static site. Content is file-driven. You add Markdown, MDX, and images to the repo, preview locally, then build and deploy.
+This guide is for updating the main site content: images, blog posts, photo sets, projects, and the About page.
 
-## Quick Start
+Use `DRINK_MENU_AUTHORING_GUIDE.md` for the apartment bar menu. The drink workflow is separate enough that it has its own guide.
 
-From the project root:
+## What This Site Is
+
+- The site is an Astro static site.
+- Content is file-driven. Most updates are made by editing Markdown or MDX in `src/content/` and images in `src/assets/`.
+- The live site is deployed by GitHub Actions from pushes to `main`.
+- You do not hand-edit generated registries or the built `dist/` output.
+
+## One-Time Setup
+
+If you are returning after a long break, start here:
 
 ```bash
+nvm use 20
 npm install
+```
+
+If you do not use `nvm`, the important part is using a Node version compatible with Node 20, because the deploy workflow runs on Node 20.
+
+## The Only Commands You Normally Need
+
+From the repo root:
+
+```bash
 npm run dev
 ```
 
-Open `http://localhost:4321`.
-
-Before committing:
+- Starts the local dev server at `http://localhost:4321`
+- Rebuilds the generated content and asset registries first
 
 ```bash
 npm run build
 ```
 
-That runs Astro checks, builds the static site, and generates the Pagefind search index.
+- Rebuilds generated registries
+- Runs Astro checks
+- Builds the production site into `dist/`
+- Generates the Pagefind search index used by `/search/`
 
-## Content Locations
+```bash
+npm run preview
+```
 
-- Blog posts: `src/content/blog`
-- Projects: `src/content/projects`
-- Photo sets: `src/content/photoSets`
-- Drink recipes: `src/content/drinks`
-- Static page content: `src/content/sitePages`
-- Images and graphics: `src/assets`
+- Serves the built site from `dist/`
+- Use this if you want to test site search locally after `npm run build`
 
-## What Is Automatic Now
+Optional extra validation:
 
-You no longer need to register new content in `src/lib/content.ts`.
+```bash
+npm run test:e2e
+```
 
-You no longer need to register new images in `src/lib/assets.ts`.
+## How Publishing Works
 
-The generated registries are rebuilt automatically whenever you run:
+`main` is the publish branch.
+
+The live deploy happens when:
+
+1. You commit your changes.
+2. You push them to `origin/main`, or merge a branch into `main`.
+3. GitHub Actions runs `.github/workflows/deploy.yml`.
+4. That workflow runs `npm ci` and `npm run build`.
+5. The built `dist/` folder is deployed to GitHub Pages at `https://jakescally.com`.
+
+Important:
+
+- Pushing to a branch other than `main` does not publish the site.
+- You do not need to edit `dist/`.
+- You do not need to trigger deployment manually unless you want to rerun the workflow with no new commit.
+
+## Where Everything Lives
+
+| What you are adding | Folder | What it creates |
+| --- | --- | --- |
+| Blog posts | `src/content/blog` | `/writing/<slug>/`, writing archive entries, RSS feed items, sitemap entries |
+| Projects | `src/content/projects` | `/projects/` cards, and optionally `/projects/<slug>/` if `detailMode: case-study` |
+| Photo sets | `src/content/photoSets` | `/photography/<slug>/`, photography archive cards, optional gallery embeds in posts |
+| About page content | `src/content/sitePages/about.md` | `/about/` page content |
+| Images | `src/assets` | Source images used throughout the site |
+
+There is not a generic "drop a Markdown file here and get a new page" system for `src/content/sitePages`.
+
+Right now, `about.md` is the only static page content file wired into the site. If you want a brand new top-level page such as `/talks/` or `/resume/`, that is a code change in `src/pages/`, not just a content change.
+
+## Rules That Matter Everywhere
+
+### 1. Image paths are always relative to `src/assets`
+
+Correct:
+
+- `editorial/github-image.png`
+- `photos/powershotG2camera/front.jpg`
+- `drinks/my-cocktail.jpg`
+
+Wrong:
+
+- `/src/assets/editorial/github-image.png`
+- `./front.jpg`
+- `/photos/powershotG2camera/front.jpg`
+
+### 2. Supported image formats
+
+The asset generator picks up these file types anywhere under `src/assets/`:
+
+- `.avif`
+- `.gif`
+- `.jpeg`
+- `.jpg`
+- `.png`
+- `.webp`
+
+You can create new folders under `src/assets/` whenever you want. The generator walks the whole tree.
+
+### 3. Do not edit generated files by hand
+
+These are generated automatically:
+
+- `src/generated/assets.generated.ts`
+- `src/generated/content.generated.ts`
+
+These are rebuilt whenever you run:
 
 - `npm run dev`
 - `npm run check`
 - `npm run build`
 - `npm run preview`
 
-Relevant scripts:
+If those generated files changed because you added content or images, that is expected. Do not hand-edit them.
 
-- `scripts/generate-asset-map.mjs`
-- `scripts/generate-content-registry.mjs`
+### 4. Keep file names and slugs aligned
 
-Anything added to the content folders and `src/assets` is discovered automatically as long as:
+Best practice:
 
-- the frontmatter is valid
-- image paths point to files inside `src/assets`
-- slugs are unique
+- file name: `my-new-post.md`
+- frontmatter slug: `my-new-post`
 
-## Image Paths
+This is especially important for photo sets, because collection IDs come from file names and gallery references are easier to reason about when the file stem and slug match.
 
-All content files reference images relative to `src/assets`, without the `src/assets/` prefix.
+### 5. Slugs must be unique within their content type
 
-Examples:
+If two blog posts share a slug, or two projects share a slug, routing becomes ambiguous. Pick a new slug instead of reusing an old one.
 
-- `editorial/github-image.png`
-- `photos/japanPictures1/P1010602.jpg`
-- `photos/powershotG2shots/firetower.jpg`
+## Adding Images
 
-Do not write paths like:
+If all you need is a new image asset:
 
-- `/src/assets/photos/example.jpg`
-- `./image.jpg`
+1. Put the file somewhere under `src/assets/`.
+2. Use an image path relative to `src/assets/` when you reference it from frontmatter or MDX.
+3. Run `npm run dev` or `npm run build` so the asset registry is regenerated.
 
-## Blog Posts
+Recommended folders:
+
+- `src/assets/editorial` for article/project graphics, screenshots, or diagrams
+- `src/assets/photos/<set-name>` for photo-set image groups
+- `src/assets/drinks` for bar menu images
+- `src/assets/brand` for logos, icons, or site identity assets
+
+If you want the image to have its own public page, that is not just an image upload. Create a photo set, or embed it inside a blog post.
+
+## Adding a Blog Post
 
 Blog posts live in `src/content/blog`.
 
-Use `.md` for normal posts.
+### When to use `.md` vs `.mdx`
 
-Use `.mdx` when you need embedded galleries or inline images.
+Use `.md` when the post is normal text content.
 
-### Required Frontmatter
+Use `.mdx` when you need custom embedded media inside the article body, especially:
+
+- `<InlineImage ... />`
+- `<GalleryEmbed set="..." />`
+
+### Copy-Paste Blog Template
 
 ```md
 ---
 title: My New Post
 slug: my-new-post
-description: Short summary for cards, archive pages, and SEO.
-publishedAt: 2025-03-11
-topics:
-  - Photography
-  - Cameras
-heroImage: photos/example/hero.jpg
-featured: false
-legacyPaths: []
----
-```
-
-### Optional Fields
-
-- `updatedAt`
-- `draft`
-- `photoSetIds`
-
-### Example Markdown Post
-
-```md
----
-title: Example Post
-slug: example-post
-description: A short summary.
-publishedAt: 2025-03-11
+description: Short summary for archive cards, social previews, and SEO.
+publishedAt: 2025-03-17
+updatedAt: 2025-03-17
 topics:
   - Notes
+  - Development
 heroImage: editorial/example.png
 featured: false
+draft: false
 legacyPaths: []
+photoSetIds: []
 ---
 
-This is a normal Markdown post.
+Write the post here.
 ```
 
-### Example MDX Post
+If you want no hero image, leave `heroImage:` blank.
 
-```mdx
----
-title: Example MDX Post
-slug: example-mdx-post
-description: A post with richer media.
-publishedAt: 2025-03-11
-topics:
-  - Photography
-heroImage: photos/example/hero.jpg
-featured: false
-legacyPaths: []
-photoSetIds:
-  - my-photo-set
----
+### Blog Fields Explained
 
-This post includes an inline image:
+- `title`: shown on the article page, cards, home page, feed, and metadata.
+- `slug`: creates the URL at `/writing/<slug>/`.
+- `description`: shown on cards and article headers; also used for feed and metadata.
+- `publishedAt`: controls archive ordering. Newer dates appear first.
+- `updatedAt`: currently used for sitemap `lastmod`; it is not shown on the article page.
+- `topics`: creates the filter chips on `/writing/` and powers related-post matching.
+- `heroImage`: optional display image for the article card and hero. Path is relative to `src/assets/`.
+- `featured`: if `true`, the newest featured post becomes the home page lead story.
+- `draft`: if `true`, the post is hidden from the site.
+- `legacyPaths`: keep this as `[]` unless you want to record old URLs for yourself. This field does not create redirects.
+- `photoSetIds`: use this when a post is tied to one or more photo sets. The photography landing page only checks whether this array has values, but you should still keep the values accurate.
 
-<InlineImage
-  asset="photos/example/detail.jpg"
-  alt="A detailed view of the subject."
-  caption="Optional caption."
-/>
+### What Happens When You Publish a Blog Post
 
-And an embedded gallery:
+If `draft: false`, the post appears in:
 
-<GalleryEmbed set="my-photo-set" />
-```
+- `/writing/`
+- `/writing/<slug>/`
+- `feed.xml`
+- `sitemap.xml`
 
-## Inline Images
+It may also appear on the home page:
 
-Inline images are available in blog posts automatically through the writing layout.
+- The home page lead article is the newest post with `featured: true`.
+- If no posts are featured, the newest published post becomes the lead.
 
-Use:
+### MDX Components Available in Blog Posts
+
+Inside blog post MDX, these are already wired in:
 
 ```mdx
 <InlineImage
@@ -162,60 +239,85 @@ Use:
 />
 ```
 
-Behavior:
+```mdx
+<GalleryEmbed set="my-photo-set" />
+```
 
-- scales to the article width
-- preserves original proportions
-- opens in a fullscreen lightbox on click
+Use `set` as the photo set slug or file stem. Keeping the file stem and slug identical avoids mistakes.
 
-## Photo Sets
+## Adding a Photo Set
 
 Photo sets live in `src/content/photoSets`.
 
-These power:
+Use a photo set when:
 
-- the Photography index
-- standalone photo-set pages
-- embedded galleries inside blog posts
+- you want a standalone gallery page under `/photography/`
+- you want to group many related images together
+- you want to embed a gallery into a blog post
 
-### Photo Set Template
+### Copy-Paste Photo Set Template
 
 ```md
 ---
 title: My Photo Set
 slug: my-photo-set
 description: Short gallery description.
-coverImage: photos/example/cover.jpg
+date: 2025-03-17
+location: Tokyo, Japan
+camera: Canon PowerShot G2
+coverImage: photos/my-photo-set/cover.jpg
 featured: false
 legacyPaths: []
 images:
-  - src: photos/example/cover.jpg
+  - src: photos/my-photo-set/cover.jpg
     alt: Cover image description.
-  - src: photos/example/second.jpg
-    alt: Second image description.
     caption: Optional caption.
+  - src: photos/my-photo-set/detail.jpg
+    alt: Detail image description.
+    exif: Optional EXIF or capture note.
 ---
 
-Optional intro text for the standalone photo-set page.
+Optional intro text for the photo-set page.
 ```
 
-### Notes
+### Photo Set Fields Explained
 
-- `featured: true` lets a photo set appear on the home page
-- `slug` becomes the URL at `/photography/<slug>/`
-- `images` is the gallery content
+- `title`: shown on the photography page and the photo-set page.
+- `slug`: creates the URL at `/photography/<slug>/`.
+- `description`: shown on cards and in the photo-set header.
+- `date`: optional, but affects sorting and sitemap `lastmod`.
+- `location`: shown on the photography card.
+- `camera`: shown on the photography card.
+- `coverImage`: required hero image for the card and page.
+- `featured`: if any photo sets are featured, the home page photography section shows featured sets only.
+- `legacyPaths`: informational only; it does not create redirects.
+- `images`: the actual gallery. Every image needs at least `src` and `alt`.
+- body content below the frontmatter: shown above the gallery on the standalone photo-set page.
 
-## Projects
+### Embedding a Photo Set Into a Blog Post
+
+1. Create the photo set file first.
+2. In the blog post MDX body, add:
+
+```mdx
+<GalleryEmbed set="my-photo-set" />
+```
+
+3. Add `photoSetIds` to the blog post frontmatter if you want that post to be treated as a photo-heavy article on `/photography/`.
+
+## Adding a Project
 
 Projects live in `src/content/projects`.
 
-### Project Template
+Projects do not support drafts right now. If a project file exists in the repo, it is live.
+
+### Copy-Paste Project Template
 
 ```md
 ---
 title: My Project
 slug: my-project
-summary: Short project summary.
+summary: Short project summary for cards and metadata.
 year: 2025
 status: shipping
 stack:
@@ -224,196 +326,172 @@ stack:
 links:
   github: https://github.com/yourname/project
   demo: https://example.com
+  writeup: /writing/some-article/
 heroImage: editorial/example.png
-featured: true
+featured: false
 detailMode: case-study
 ---
 
-Project write-up content goes here.
+Project write-up body goes here.
 ```
 
-### Important Fields
+### Allowed Project Status Values
 
-- `featured: true` surfaces it more prominently
-- `detailMode: case-study` gives it a standalone detail page
-- `detailMode: card` keeps it as a lighter project card entry
+- `building`
+- `shipping`
+- `documenting`
+- `archived`
 
-## About Page
+### The Most Important Project Choice: `detailMode`
 
-The About page content lives in:
+`detailMode: case-study`
 
-- `src/content/sitePages/about.md`
+- creates an internal page at `/projects/<slug>/`
+- renders the Markdown body on that page
+- uses the project card to link to that internal page
 
-Edit that file directly.
+`detailMode: card`
 
-## Slugs And URLs
+- does not create an internal project page
+- uses `links.writeup`, then `links.github`, then `links.demo` for the card link
+- does not render the Markdown body anywhere on the live site
 
-Each content type uses its `slug` for URLs:
+If you choose `card` and provide no link fields, the project still appears in `/projects/`, but it will not have a clickable title.
 
-- blog post: `/writing/<slug>/`
-- project: `/projects/<slug>/`
-- photo set: `/photography/<slug>/`
+### Project Fields Explained
 
-Keep slugs stable after publishing unless you also add redirects.
+- `title`: shown on cards and case-study pages.
+- `slug`: only matters for `case-study` projects.
+- `summary`: shown on cards and case-study headers.
+- `year`: displayed on cards and used for sorting.
+- `status`: displayed on cards and case-study headers.
+- `stack`: shown as pills on project cards.
+- `links.github`: optional external GitHub link.
+- `links.demo`: optional external demo link.
+- `links.writeup`: optional link to a write-up, often one of your `/writing/.../` URLs.
+- `heroImage`: required.
+- `featured`: featured projects are prioritized on `/projects/` and the home page.
+- `detailMode`: decides whether the project is a case study or a link-out card.
 
-## Redirects For Old URLs
+### Project Sorting
 
-Legacy redirects are defined in:
+Projects are sorted by:
 
-- `src/lib/legacy-redirects.ts`
+1. `featured: true` first
+2. newer `year` first
+3. title alphabetically
 
-If you rename a published route and want the old path to keep working, add a redirect there.
+There is no manual `sortOrder` field for projects.
 
-## Homepage Surfacing
+## Updating the About Page
 
-Homepage visibility is controlled by frontmatter:
+The About page content lives in `src/content/sitePages/about.md`.
 
-- blog posts: `featured: true` marks the lead article candidate
-- projects: `featured: true` surfaces them in selected work
-- photo sets: `featured: true` surfaces them in the Photography section
-
-## Drafts
-
-For blog posts, use:
-
-```md
-draft: true
-```
-
-Draft posts stay out of the published archive.
-
-For drink recipes, use:
-
-```md
-draft: true
-```
-
-Draft drinks stay out of `/bar/`.
-
-## Drinks
-
-Drink recipes live in `src/content/drinks`.
-
-They power:
-
-- the `/bar/` menu landing page
-- recipe modals opened from the menu
-
-### Drink Template
+Template:
 
 ```md
 ---
-title: Example Negroni
-slug: example-negroni
-description: Bitter, bright, and stirred cold for anyone who likes a classic aperitivo profile.
-menuSection: House Standards
-baseSpirit: Gin
-tags:
-  - Bitter
-  - Stirred
-  - Aperitif
-heroImage: drinks/example-negroni.jpg
-glassware: Double rocks
-garnish: Orange twist
-method: Stir
-ingredients:
-  - amount: 1 oz
-    ingredient: London dry gin
-  - amount: 1 oz
-    ingredient: Campari
-  - amount: 1 oz
-    ingredient: Sweet vermouth
-instructions:
-  - Add all ingredients to a mixing glass with ice.
-  - Stir until cold and properly diluted.
-  - Strain over a large cube and express an orange twist.
-searchTerms:
-  - classic
-  - equal parts
-sortOrder: 10
-inStock: true
-draft: false
+title: About Scally Network
+description: Short description for the page header.
+heroImage: editorial/example.png
 ---
 
-Optional notes can live here in normal Markdown.
+Full About page body goes here.
 ```
 
-### Notes
+Important:
 
-- Put drink images under `src/assets/drinks`
-- `menuSection` controls grouping on `/bar/`
-- `baseSpirit`, `tags`, `ingredients`, `description`, and `searchTerms` are all searchable
-- `sortOrder` controls order within and across sections
-- `inStock: false` adds an out-of-stock marker to the menu item without hiding the recipe
-- `heroImage` is optional
-- the Markdown body is optional and can hold your own notes for authoring
+- The `/about/` page uses this file directly.
+- The home page only uses the `title` and `description` from this file.
+- The body text in the home page About section is hardcoded in `src/pages/index.astro`.
 
-## Recommended Workflow For A New Post
+So:
 
-1. Add any new images to `src/assets/editorial` or `src/assets/photos/...`.
-2. Create a new file in `src/content/blog`.
-3. Add frontmatter and body content.
-4. If needed, create a related photo set in `src/content/photoSets`.
-5. Run `npm run dev` and review the page locally.
-6. Run `npm run build`.
-7. Commit and push.
+- edit `src/content/sitePages/about.md` to change the actual About page
+- edit `src/pages/index.astro` only if you also want to change the home page teaser copy
 
-## Recommended Workflow For A New Gallery
+## Renaming Something That Is Already Live
 
-1. Add the image files under `src/assets/photos/...`.
-2. Create a new file in `src/content/photoSets`.
-3. Fill in the frontmatter and image list.
-4. Optionally embed it into a blog post with `<GalleryEmbed set="your-slug-or-id" />`.
-5. Preview with `npm run dev`.
-6. Verify with `npm run build`.
+If you rename a published slug, do not just change the frontmatter and walk away.
 
-## Recommended Workflow For A New Drink
+Do this instead:
 
-1. Add any recipe image to `src/assets/drinks`.
-2. Create a new file in `src/content/drinks`.
-3. Fill in the frontmatter for metadata, ingredients, and instructions.
-4. Add optional Markdown notes below the frontmatter if useful.
-5. Preview locally with `npm run dev`.
-6. Verify the menu at `/bar/` and open the recipe modal from the drink entry.
-7. Run `npm run build`.
+1. Update the content file's `slug`.
+2. Add a redirect entry to `src/lib/legacy-redirects.ts`.
+3. Run `npm run build`.
+4. Test the old URL locally if it matters.
+
+Important:
+
+- `legacyPaths` in frontmatter does not create redirects.
+- Actual redirects only come from `src/lib/legacy-redirects.ts`.
+
+## Exact Publish Checklist
+
+When you are done authoring, do this every time:
+
+1. Run `npm run dev`.
+2. Open the relevant page locally and confirm the content appears where you expect.
+3. Run `npm run build`.
+4. If you need to test site search, run `npm run preview` and check `/search/`.
+5. Run `git status`.
+6. Review the changed files. Expect to see your content file, any new images, and possibly the generated files in `src/generated/`.
+7. Commit all relevant changes, including generated file updates if they changed.
+8. Push to `main`, or merge into `main`.
+9. Wait for the GitHub Pages deploy workflow to finish.
+
+## What You Never Need to Touch for Normal Content Updates
+
+- `dist/`
+- `.astro/`
+- `src/generated/assets.generated.ts`
+- `src/generated/content.generated.ts`
+- `.github/workflows/deploy.yml`
 
 ## Troubleshooting
 
-### Build fails with "Missing image asset"
+### The build says `Missing image asset`
 
-One of your frontmatter or MDX image paths does not match a file under `src/assets`.
-
-Check for:
-
-- wrong folder name
-- wrong capitalization
-- wrong file extension
-- a leading slash you did not intend
-
-### A post does not appear
+One of your image paths does not match a real file under `src/assets/`.
 
 Check:
 
-- frontmatter syntax
+- folder name
+- file name capitalization
+- file extension
+- whether you accidentally included a leading slash
+
+### A blog post does not appear
+
+Check:
+
 - `draft: true`
+- invalid frontmatter syntax
 - duplicate slug
-- invalid date
+- bad date value
 
-### Search does not work in dev
+### A project does not get its own page
 
-That is expected. Pagefind is generated during `npm run build`.
+That project is probably using `detailMode: card`.
 
-To test search locally:
+Only `detailMode: case-study` creates `/projects/<slug>/`.
+
+### A photo set is not on the home page
+
+Home page photography cards show:
+
+- featured photo sets, if any exist
+- otherwise the first three photo sets from the normal sort order
+
+If you want a set on the home page reliably, mark it `featured: true`.
+
+### Search looks empty during `npm run dev`
+
+That is expected for the global site search page.
+
+The site search index is only generated during `npm run build`. To test it locally:
 
 ```bash
 npm run build
 npm run preview
 ```
-
-## Current Command Reference
-
-- `npm run dev`: local development server
-- `npm run check`: Astro validation
-- `npm run build`: production build plus search index
-- `npm run preview`: preview the built site locally
-- `npm run test:e2e`: Playwright smoke tests

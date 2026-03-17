@@ -41,6 +41,32 @@ test("bar menu shell renders with local controls and published drinks", async ({
   await expect(page.getByRole("link", { name: /back to scally network home/i })).toHaveCount(1);
 });
 
+test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/bar/");
+
+  const menuToggle = page.locator("[data-drink-browser]").getByRole("button", { name: "Menu" });
+  const searchInput = page.getByLabel("Search the menu");
+
+  await expect(menuToggle).toBeVisible();
+  await expect(page.getByRole("link", { name: /back to scally network home/i })).toHaveCount(0);
+  await expect(searchInput).not.toBeVisible();
+
+  await menuToggle.click();
+  await expect(searchInput).toBeVisible();
+  await expect(page.getByRole("link", { name: /back to scally network home/i })).toBeVisible();
+
+  const openMetrics = await page.evaluate(() => ({
+    innerWidth: window.innerWidth,
+    scrollWidth: document.documentElement.scrollWidth
+  }));
+
+  expect(openMetrics.scrollWidth).toBeLessThanOrEqual(openMetrics.innerWidth);
+
+  await menuToggle.click();
+  await expect(searchInput).not.toBeVisible();
+});
+
 test("home page stays compact and overflow-free on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
