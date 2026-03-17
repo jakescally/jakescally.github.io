@@ -1,6 +1,7 @@
 ---
 import "@/styles/drinks.css";
 
+import HomeIcon from "@/components/HomeIcon.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { barMeta } from "@/lib/bar";
 
@@ -31,5 +32,8 @@ const combinedBodyClass = ["page-bar", bodyClass].filter(Boolean).join(" ");
   showFooter={false}
   themeColor="#5d3a29"
 >
+  <a class="bar-home-link" href="/" aria-label="Back to Scally Network home">
+    <HomeIcon className="bar-home-link__icon" />
+  </a>
   <slot />
 </BaseLayout>

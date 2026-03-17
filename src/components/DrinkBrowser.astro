@@ -47,14 +47,6 @@ function createSearchIndex(entry: DrinkEntry) {
   <div class="menu-book">
     <section class="menu-sheet menu-sheet--overview">
       <div class="menu-sheet__inner">
-        <div class="menu-sheet__header">
-          <p class="menu-sheet__eyebrow">House selection</p>
-          <h2 class="menu-sheet__title">Cocktail menu</h2>
-          <p class="menu-sheet__lede">
-            Search by ingredient, spirit, or tag, then open any listing for the full build.
-          </p>
-        </div>
-
         <div class="drink-browser__controls">
           <label class="drink-browser__search-label" for="drink-menu-search">
             Search the menu
@@ -117,9 +109,8 @@ function createSearchIndex(entry: DrinkEntry) {
 
     <section class="menu-sheet menu-sheet--menu">
       <div class="menu-sheet__inner">
-        <div class="menu-sheet__header menu-sheet__header--menu">
-          <p class="menu-sheet__eyebrow">Tonight's list</p>
-          <p class="menu-sheet__instruction">Tap a drink for the full recipe.</p>
+        <div class="menu-sheet__header menu-sheet__header--title-only">
+          <h2 class="menu-sheet__title">Cocktail menu</h2>
         </div>
 
         <p class="drink-browser__no-results" data-drink-no-results hidden>
@@ -195,19 +186,14 @@ function createSearchIndex(entry: DrinkEntry) {
           <div class="drink-modal__paper">
             <div class="drink-modal__masthead">
               <p class="drink-modal__eyebrow">{entry.data.menuSection}</p>
-              <div class="drink-modal__actions">
-                <a class="drink-modal__page-link" href={`/bar/${entry.data.slug}/`}>
-                  Open recipe page
-                </a>
-                <button
-                  class="drink-modal__close"
-                  data-close-drink
-                  data-close-drink-slug={entry.data.slug}
-                  type="button"
-                >
-                  Close
-                </button>
-              </div>
+              <button
+                class="drink-modal__close"
+                data-close-drink
+                data-close-drink-slug={entry.data.slug}
+                type="button"
+              >
+                Close
+              </button>
             </div>
 
             <div class="drink-modal__hero">

@@ -253,7 +253,6 @@ Each content type uses its `slug` for URLs:
 - blog post: `/writing/<slug>/`
 - project: `/projects/<slug>/`
 - photo set: `/photography/<slug>/`
-- drink recipe: `/bar/<slug>/`
 
 Keep slugs stable after publishing unless you also add redirects.
 
@@ -289,7 +288,7 @@ For drink recipes, use:
 draft: true
 ```
 
-Draft drinks stay out of `/bar/` and do not get detail pages.
+Draft drinks stay out of `/bar/`.
 
 ## Drinks
 
@@ -298,7 +297,7 @@ Drink recipes live in `src/content/drinks`.
 They power:
 
 - the `/bar/` menu landing page
-- individual recipe pages under `/bar/<slug>/`
+- recipe modals opened from the menu
 
 ### Drink Template
 
@@ -347,7 +346,7 @@ Optional notes can live here in normal Markdown.
 - `sortOrder` controls order within and across sections
 - `inStock: false` adds an out-of-stock marker to the menu item without hiding the recipe
 - `heroImage` is optional
-- the Markdown body is optional and renders on the recipe detail page
+- the Markdown body is optional and can hold your own notes for authoring
 
 ## Recommended Workflow For A New Post
 
@@ -375,7 +374,7 @@ Optional notes can live here in normal Markdown.
 3. Fill in the frontmatter for metadata, ingredients, and instructions.
 4. Add optional Markdown notes below the frontmatter if useful.
 5. Preview locally with `npm run dev`.
-6. Verify the menu at `/bar/` and the recipe page at `/bar/<slug>/`.
+6. Verify the menu at `/bar/` and open the recipe modal from the drink entry.
 7. Run `npm run build`.
 
 ## Troubleshooting

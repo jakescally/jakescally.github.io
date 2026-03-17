@@ -1,5 +1,4 @@
 import { getCaseStudyProjects, getPhotoSets, getPublishedPosts } from "@/lib/content";
-import { getPublishedDrinks } from "@/lib/drinks";
 import { siteMeta } from "@/lib/site";
 
 interface SitemapEntry {
@@ -34,10 +33,6 @@ export function GET() {
     ...getPhotoSets().map((entry) => ({
       path: `/photography/${entry.data.slug}/`,
       lastmod: entry.data.date
-    })),
-    ...getPublishedDrinks().map((entry) => ({
-      path: `/bar/${entry.data.slug}/`,
-      lastmod: entry.data.updatedAt
     }))
   ];
 

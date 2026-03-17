@@ -38,21 +38,34 @@ test("bar menu shell renders with local controls and published drinks", async ({
   await expect(page.locator("[data-drink-card]").first()).toBeVisible();
   await expect(page.locator("[data-drink-card]").first()).toContainText("Old Fashioned");
   await expect(page.getByRole("button", { name: "Search" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Home" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: /back to scally network home/i })).toHaveCount(1);
 });
 
 test("home page stays compact and overflow-free on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
+  await expect(page.getByRole("heading", { name: /a resource for my work in tech/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Menu" })).toBeVisible();
 
-  const metrics = await page.evaluate(() => ({
+  const closedMetrics = await page.evaluate(() => ({
     innerWidth: window.innerWidth,
     scrollWidth: document.documentElement.scrollWidth,
-    headerHeight: Math.round(document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0)
+    headerHeight: Math.round(document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0),
+    viewport: document.querySelector('meta[name="viewport"]')?.getAttribute("content") ?? ""
   }));
 
-  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth);
-  expect(metrics.headerHeight).toBeLessThan(220);
+  expect(closedMetrics.scrollWidth).toBeLessThanOrEqual(closedMetrics.innerWidth);
+  expect(closedMetrics.headerHeight).toBeLessThan(120);
+  expect(closedMetrics.viewport).toContain("viewport-fit=cover");
+
+  const writingLink = page.getByRole("link", { name: "Writing" });
+  const menuToggle = page.getByRole("button", { name: "Menu" });
+
+  await expect(menuToggle).toBeVisible();
+  await expect(writingLink).not.toBeVisible();
+  await menuToggle.click();
+  await expect(page.getByRole("button", { name: "Close" })).toBeVisible();
+  await expect(writingLink).toBeVisible();
 });
 
 test("bar modal stays within the mobile viewport", async ({ page }) => {
@@ -88,20 +101,6 @@ test("bar modal stays within the mobile viewport", async ({ page }) => {
   expect(metrics.paperScrollHeight).toBeGreaterThan(metrics.paperClientHeight ?? 0);
 });
 
-test("drink detail page avoids horizontal overflow on mobile", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/bar/old-fashioned/");
-
-  await expect(page.getByRole("heading", { name: "Old Fashioned" })).toBeVisible();
-
-  const metrics = await page.evaluate(() => ({
-    innerWidth: window.innerWidth,
-    scrollWidth: document.documentElement.scrollWidth
-  }));
-
-  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth);
-});
-
 test("sitemap includes the bar landing page", async ({ page }) => {
   await page.goto("/sitemap.xml/");
   await expect(page.locator("body")).toContainText("https://jakescally.com/bar/");
@@ -111,8 +110,4 @@ test("legacy redirects still land in the new archive", async ({ page }) => {
   await page.goto("/my-crt-history/");
   await page.waitForURL("**/writing/crt-stash-2024/");
   await expect(page).toHaveURL(/\/writing\/crt-stash-2024\/$/);
-});
-
-test.skip("drink detail page renders once a published recipe exists", async () => {
-  test.skip(true, "Publish a drink in src/content/drinks to enable this smoke test.");
 });

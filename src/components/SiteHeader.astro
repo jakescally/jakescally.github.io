@@ -21,10 +21,21 @@ const navItems = [
 
 <header class="site-header" data-site-header>
   <div class="site-header__inner frame">
-    <a class="site-header__brand" href="/" aria-label="Scally Network home">
-      <img src={wordmark.src} alt="Scally Network" />
-    </a>
-    <nav class="site-header__nav" aria-label="Primary">
+    <div class="site-header__bar">
+      <a class="site-header__brand" href="/" aria-label="Scally Network home">
+        <img src={wordmark.src} alt="Scally Network" />
+      </a>
+      <button
+        class="site-header__toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-header-nav"
+        data-site-header-toggle
+      >
+        Menu
+      </button>
+    </div>
+    <nav class="site-header__nav" id="site-header-nav" aria-label="Primary">
       {navItems.map((item) => (
         <a
           href={item.href}
@@ -43,6 +54,7 @@ const navItems = [
         ]}
       >
         <WhiskyGlassIcon className="site-header__icon" />
+        <span class="site-header__icon-label">Bar</span>
       </a>
       {showSearch && (
         <button class="site-header__search" type="button" data-open-search>
@@ -55,6 +67,29 @@ const navItems = [
 
 <script>
   const header = document.querySelector("[data-site-header]");
+  const toggle = header?.querySelector<HTMLButtonElement>("[data-site-header-toggle]");
+  const nav = header?.querySelector<HTMLElement>(".site-header__nav");
+  const mobileQuery = window.matchMedia("(max-width: 720px)");
+
+  const closeMobileMenu = () => {
+    if (!header || !toggle) {
+      return;
+    }
+
+    header.removeAttribute("data-mobile-open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = "Menu";
+  };
+
+  const openMobileMenu = () => {
+    if (!header || !toggle) {
+      return;
+    }
+
+    header.setAttribute("data-mobile-open", "");
+    toggle.setAttribute("aria-expanded", "true");
+    toggle.textContent = "Close";
+  };
 
   const syncHeaderState = () => {
     if (!header) {
@@ -62,8 +97,43 @@ const navItems = [
     }
 
     header.toggleAttribute("data-condensed", window.scrollY > 20);
+
+    if (!mobileQuery.matches) {
+      closeMobileMenu();
+    }
   };
+
+  toggle?.addEventListener("click", () => {
+    if (!header) {
+      return;
+    }
+
+    const isOpen = header.hasAttribute("data-mobile-open");
+
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  });
+
+  nav?.addEventListener("click", (event) => {
+    if (!(event.target instanceof Element) || !mobileQuery.matches) {
+      return;
+    }
+
+    if (event.target.closest("a, button")) {
+      closeMobileMenu();
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileMenu();
+    }
+  });
 
   syncHeaderState();
   window.addEventListener("scroll", syncHeaderState, { passive: true });
+  mobileQuery.addEventListener("change", syncHeaderState);
 </script>

@@ -124,10 +124,6 @@ export function getPublishedDrinks() {
   return sortDrinks(drinks.filter((entry) => !entry.data.draft));
 }
 
-export function getDrinkBySlug(slug?: string) {
-  return getPublishedDrinks().find((entry) => entry.data.slug === slug);
-}
-
 export function collectDrinkSections(entries: DrinkEntry[]) {
   return [...new Set(sortDrinks(entries).map((entry) => entry.data.menuSection))];
 }
