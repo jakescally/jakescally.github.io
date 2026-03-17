@@ -42,7 +42,7 @@ const logoImage = requireImage("brand/logo.png");
 ---
 
 <BaseLayout image={leadPost.data.heroImage}>
-  <section class="frame home-hero">
+  <section class="frame home-hero" data-tone="brass">
     <div class="hero-grid">
       <div>
         <p class="eyebrow">The Archive</p>
@@ -80,7 +80,7 @@ const logoImage = requireImage("brand/logo.png");
     </div>
   </section>
 
-  <section class="frame section-stack">
+  <section class="frame section-stack" data-tone="slate">
     <div class="section-heading">
       <p class="section-heading__eyebrow">Selected work</p>
       <h2>Recent projects I've worked on</h2>
@@ -92,7 +92,7 @@ const logoImage = requireImage("brand/logo.png");
     </div>
   </section>
 
-  <section class="frame section-stack">
+  <section class="frame section-stack" data-tone="rust">
     <div class="section-heading">
       <p class="section-heading__eyebrow">Recent writing</p>
       <h2>Articles and notes</h2>
@@ -104,7 +104,7 @@ const logoImage = requireImage("brand/logo.png");
     </div>
   </section>
 
-  <section class="frame section-stack section-stack--offset">
+  <section class="frame section-stack section-stack--offset" data-tone="moss">
     <div class="section-heading">
       <p class="section-heading__eyebrow">Photography</p>
       <h2>Astrophotography, travel photos, camera reviews, and more</h2>
@@ -116,7 +116,7 @@ const logoImage = requireImage("brand/logo.png");
     </div>
   </section>
 
-  <section class="frame about-slice">
+  <section class="frame about-slice" data-tone="brass">
     <PageHeading
       eyebrow="About the site"
       title={about.title}

@@ -35,7 +35,7 @@ const hasHeroImage = Boolean(entry.data.heroImage);
   image={entry.data.heroImage}
   bodyClass="page-article"
 >
-  <article class="frame article-shell article-shell--writing">
+  <article class="frame article-shell article-shell--writing" data-tone="rust">
     <header class:list={["article-hero", !hasHeroImage && "article-hero--text-only"]}>
       <div class="article-hero__copy">
         <p class="eyebrow">Writing</p>
@@ -68,7 +68,7 @@ const hasHeroImage = Boolean(entry.data.heroImage);
     </div>
   </article>
 
-  <div class="frame">
+  <div class="frame" data-tone="rust">
     <RelatedPosts entries={relatedPosts} />
   </div>
 </BaseLayout>

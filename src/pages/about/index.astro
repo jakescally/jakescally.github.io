@@ -9,7 +9,7 @@ const heroImage = about.heroImage ? requireImage(about.heroImage) : undefined;
 ---
 
 <BaseLayout title="About" description={about.description} image={about.heroImage}>
-  <section class="frame about-page">
+  <section class="frame about-page" data-tone="brass">
     <header class="page-heading">
       <p class="page-heading__eyebrow">About</p>
       <h1 class="page-heading__title">{about.title}</h1>

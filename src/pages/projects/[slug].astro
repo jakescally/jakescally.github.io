@@ -24,7 +24,7 @@ const hasHeroImage = Boolean(entry.data.heroImage);
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.summary} image={entry.data.heroImage}>
-  <article class="frame article-shell">
+  <article class="frame article-shell" data-tone="slate">
     <header class:list={["article-hero", !hasHeroImage && "article-hero--text-only"]}>
       <div class="article-hero__copy">
         <p class="eyebrow">Project</p>

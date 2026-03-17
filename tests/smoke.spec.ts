@@ -146,7 +146,8 @@ test("home page stays compact and overflow-free on mobile", async ({ page }) => 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /a resource for my work in tech/i })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Menu" })).toBeVisible();
+  const menuToggle = page.getByRole("banner").getByRole("button", { name: "Menu" });
+  await expect(menuToggle).toBeVisible();
 
   const closedMetrics = await page.evaluate(() => ({
     innerWidth: window.innerWidth,
@@ -160,13 +161,46 @@ test("home page stays compact and overflow-free on mobile", async ({ page }) => 
   expect(closedMetrics.viewport).toContain("viewport-fit=cover");
 
   const writingLink = page.getByRole("link", { name: "Writing" });
-  const menuToggle = page.getByRole("button", { name: "Menu" });
 
   await expect(menuToggle).toBeVisible();
   await expect(writingLink).not.toBeVisible();
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, document.documentElement.scrollHeight);
+  });
   await menuToggle.click();
   await expect(page.getByRole("button", { name: "Close" })).toBeVisible();
   await expect(writingLink).toBeVisible();
+
+  const openMetrics = await page.evaluate(() => {
+    const nav = document.querySelector<HTMLElement>(".site-header__nav");
+    const backdrop = document.querySelector<HTMLElement>("[data-site-header-backdrop]");
+    const navRect = nav?.getBoundingClientRect();
+    const backdropRect = backdrop?.getBoundingClientRect();
+
+    return {
+      innerHeight: window.innerHeight,
+      navRect: navRect
+        ? {
+            top: Math.round(navRect.top),
+            bottom: Math.round(navRect.bottom)
+          }
+        : null,
+      backdropRect: backdropRect
+        ? {
+            top: Math.round(backdropRect.top),
+            bottom: Math.round(backdropRect.bottom)
+          }
+        : null
+    };
+  });
+
+  expect(openMetrics.navRect).not.toBeNull();
+  expect(openMetrics.backdropRect).not.toBeNull();
+  expect(openMetrics.navRect!.top).toBeGreaterThanOrEqual(0);
+  expect(openMetrics.navRect!.bottom).toBeLessThanOrEqual(openMetrics.innerHeight);
+  expect(openMetrics.backdropRect!.top).toBe(0);
+  expect(openMetrics.backdropRect!.bottom).toBe(openMetrics.innerHeight);
 });
 
 test("bar modal stays within the mobile viewport", async ({ page }) => {
