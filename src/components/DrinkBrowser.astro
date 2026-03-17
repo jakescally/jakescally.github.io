@@ -95,11 +95,11 @@ function createSearchIndex(entry: DrinkEntry) {
               autocomplete="off"
               data-drink-search
             />
-            <p class="drink-browser__status" data-drink-status>
-              {drinks.length
-                ? `Browsing ${drinks.length} drink${drinks.length === 1 ? "" : "s"}.`
-                : "No house drinks are published yet."}
-            </p>
+            <div class="drink-browser__actions">
+              <button class="drink-browser__clear-button" type="button" data-clear-drink-filters>
+                Clear filters
+              </button>
+            </div>
           </div>
 
           <div class="drink-browser__filters" aria-label="Drink filters">
@@ -283,7 +283,7 @@ function createSearchIndex(entry: DrinkEntry) {
     const input = root.querySelector<HTMLInputElement>("[data-drink-search]");
     const menuToggle = root.querySelector<HTMLButtonElement>("[data-drink-menu-toggle]");
     const menuPanel = root.querySelector<HTMLElement>("[data-drink-menu-panel]");
-    const status = root.querySelector<HTMLElement>("[data-drink-status]");
+    const clearFiltersButton = root.querySelector<HTMLButtonElement>("[data-clear-drink-filters]");
     const noResults = root.querySelector<HTMLElement>("[data-drink-no-results]");
     const cards = root.querySelectorAll<HTMLElement>("[data-drink-card]");
     const sections = root.querySelectorAll<HTMLElement>("[data-drink-section]");
@@ -297,6 +297,31 @@ function createSearchIndex(entry: DrinkEntry) {
 
     let activeSection = "all";
     let activeSpirit = "all";
+
+    const syncActiveFilterButtons = () => {
+      root
+        .querySelectorAll<HTMLButtonElement>('button[data-filter-group="section"]')
+        .forEach((button) => {
+          button.classList.toggle("is-active", (button.dataset.filterValue ?? "all") === activeSection);
+        });
+
+      root
+        .querySelectorAll<HTMLButtonElement>('button[data-filter-group="spirit"]')
+        .forEach((button) => {
+          button.classList.toggle("is-active", (button.dataset.filterValue ?? "all") === activeSpirit);
+        });
+    };
+
+    const syncClearFiltersState = () => {
+      if (!clearFiltersButton) {
+        return;
+      }
+
+      const hasSearch = Boolean(input?.value.trim());
+      const hasFilters = activeSection !== "all" || activeSpirit !== "all";
+
+      clearFiltersButton.disabled = !hasSearch && !hasFilters;
+    };
 
     const syncMenuState = () => {
       const isMobile = mobileQuery.matches;
@@ -425,10 +450,7 @@ function createSearchIndex(entry: DrinkEntry) {
       const term = input?.value.trim().toLowerCase() ?? "";
 
       if (!cards.length) {
-        if (status) {
-          status.textContent = "No house drinks are published yet.";
-        }
-
+        syncClearFiltersState();
         return;
       }
 
@@ -455,21 +477,23 @@ function createSearchIndex(entry: DrinkEntry) {
         section.toggleAttribute("hidden", visibleCards === 0);
       });
 
-      if (status) {
-        if (!visibleCount) {
-          status.textContent = term
-            ? `No drinks match "${input?.value.trim() ?? ""}".`
-            : "No drinks match the selected filters.";
-        } else if (term) {
-          status.textContent = `${visibleCount} drink${visibleCount === 1 ? "" : "s"} match "${input?.value.trim()}".`;
-        } else {
-          status.textContent = `Browsing ${visibleCount} drink${visibleCount === 1 ? "" : "s"}.`;
-        }
-      }
-
       if (noResults) {
         noResults.hidden = visibleCount !== 0;
       }
+
+      syncClearFiltersState();
+    };
+
+    const clearFilters = () => {
+      activeSection = "all";
+      activeSpirit = "all";
+
+      if (input) {
+        input.value = "";
+      }
+
+      syncActiveFilterButtons();
+      refresh();
     };
 
     dialogs.forEach((dialog) => {
@@ -511,6 +535,13 @@ function createSearchIndex(entry: DrinkEntry) {
         return;
       }
 
+      const clearFiltersControl = target.closest<HTMLButtonElement>("[data-clear-drink-filters]");
+
+      if (clearFiltersControl) {
+        clearFilters();
+        return;
+      }
+
       const filterButton = target.closest<HTMLButtonElement>("button[data-filter-group]");
 
       if (filterButton) {
@@ -529,12 +560,7 @@ function createSearchIndex(entry: DrinkEntry) {
           activeSpirit = value;
         }
 
-        root
-          .querySelectorAll<HTMLButtonElement>(`button[data-filter-group="${group}"]`)
-          .forEach((button) => {
-            button.classList.toggle("is-active", button === filterButton);
-          });
-
+        syncActiveFilterButtons();
         refresh();
         return;
       }
@@ -568,6 +594,7 @@ function createSearchIndex(entry: DrinkEntry) {
       }
     });
     window.addEventListener("hashchange", syncFromHash);
+    syncActiveFilterButtons();
     refresh();
     syncMenuState();
     syncFromHash();

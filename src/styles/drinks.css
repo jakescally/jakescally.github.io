@@ -292,6 +292,11 @@ html.has-drink-modal .bar-home-link {
   gap: 0.9rem;
 }
 
+.drink-browser__actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .drink-browser__search-label {
   font-family: var(--mono);
   font-size: 0.78rem;
@@ -335,6 +340,38 @@ html.has-drink-modal .bar-home-link {
   background:
     linear-gradient(180deg, #6a4531, #4c2f24);
   color: #f8eddf;
+}
+
+.drink-browser__clear-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.2rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid rgba(106, 79, 59, 0.24);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 238, 0.96), rgba(239, 224, 205, 0.92));
+  color: #4f3628;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease,
+    background 180ms ease, opacity 180ms ease;
+}
+
+.drink-browser__clear-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(140, 102, 74, 0.32);
+  background:
+    linear-gradient(180deg, rgba(250, 240, 226, 0.98), rgba(233, 214, 191, 0.94));
+}
+
+.drink-browser__clear-button:disabled {
+  opacity: 0.52;
+  cursor: default;
 }
 
 .drink-browser__sidebar-note {
@@ -910,7 +947,9 @@ html.has-drink-modal .bar-home-link {
     bottom: 0.65rem;
     z-index: 31;
     display: grid;
+    grid-template-rows: minmax(0, 1fr);
     width: min(24rem, calc(100vw - 3rem + var(--drink-drawer-overhang)));
+    max-height: calc(100dvh - 1.3rem);
     padding: 0.7rem var(--drink-drawer-overhang) 0.7rem 0.7rem;
     border-radius: 28px 0 0 28px;
     border: 1px solid rgba(168, 121, 83, 0.28);
@@ -921,6 +960,7 @@ html.has-drink-modal .bar-home-link {
       0 34px 76px rgba(0, 0, 0, 0.42),
       inset 0 1px 0 rgba(255, 232, 202, 0.12);
     opacity: 0;
+    overflow: hidden;
     pointer-events: none;
     transform: translate3d(calc(100% - var(--drink-drawer-overhang)), 0, 0);
     visibility: hidden;
@@ -965,14 +1005,21 @@ html.has-drink-modal .bar-home-link {
   }
 
   .drink-browser__panel-shell .menu-sheet--overview {
+    display: flex;
+    flex-direction: column;
     z-index: 1;
-    min-height: 100%;
+    min-height: 0;
+    height: 100%;
     padding: 0.8rem;
+    overflow: hidden;
   }
 
   .drink-browser__panel-shell .menu-sheet__inner {
-    min-height: 100%;
-    overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
     overscroll-behavior: contain;
   }
 

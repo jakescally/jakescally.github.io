@@ -1,32 +1,30 @@
 ---
 title: Old Fashioned
 slug: old-fashioned
-description: Spirit-forward, bitter, and simple in the way a house old fashioned should be.
+description: Classic old fashioned recipe with aromatic orange peel and bitters
 menuSection: House Standards
-baseSpirit: Bourbon
+baseSpirit: Rye
 tags:
-  - Stirred
   - Classic
   - Spirit-forward
-glassware: Double rocks
+glassware: Whisky glass
 garnish: Orange twist
 method: Stir
 ingredients:
   - amount: 2 oz
-    ingredient: Bourbon
-  - amount: 1/4 oz
-    ingredient: Demerara syrup
-  - amount: 2 dashes
+    ingredient: Rye
+  - amount: 1/2 oz
+    ingredient: Simple syrup
+  - amount: 3 dashes
     ingredient: Angostura bitters
-  - amount: 1 dash
-    ingredient: Orange bitters
+  - amount: 1 twist
+    ingredient: Orange peel
 instructions:
-  - Add bourbon, syrup, and bitters to a mixing glass with ice.
-  - Stir until chilled and lightly diluted.
-  - Strain over a large cube in a double rocks glass.
+  - Add rye, syrup, and bitters to a whisky glass with ice.
+  - Stir until chilled.
   - Express an orange twist over the drink and drop it in.
 searchTerms:
-  - whiskey
+  - whisky
   - brown spirit
   - large cube
 sortOrder: 10

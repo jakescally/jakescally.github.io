@@ -42,11 +42,16 @@ test("bar menu shell renders with local controls and published drinks", async ({
 });
 
 test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+  await page.setViewportSize({ width: 390, height: 640 });
   await page.goto("/bar/");
 
-  const menuToggle = page.locator("[data-drink-browser]").getByRole("button", { name: "Menu" });
+  const browser = page.locator("[data-drink-browser]");
+  const menuToggle = browser.getByRole("button", { name: "Menu" });
   const searchInput = page.getByLabel("Search the menu");
+  const clearFiltersButton = browser.getByRole("button", { name: "Clear filters" });
+  const sectionButtons = browser.locator('[data-filter-group="section"] button');
+  const allSectionsButton = sectionButtons.first();
+  const filteredSectionButton = sectionButtons.nth(1);
 
   await expect(menuToggle).toBeVisible();
   await expect(page.getByRole("link", { name: /back to scally network home/i })).toHaveCount(0);
@@ -55,13 +60,63 @@ test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
   await menuToggle.click();
   await expect(searchInput).toBeVisible();
   await expect(page.getByRole("link", { name: /back to scally network home/i })).toBeVisible();
+  await expect(clearFiltersButton).toBeDisabled();
+
+  await filteredSectionButton.click();
+  await searchInput.fill("martini");
+  await expect(clearFiltersButton).toBeEnabled();
+  await expect(filteredSectionButton).toHaveClass(/is-active/);
 
   const openMetrics = await page.evaluate(() => ({
     innerWidth: window.innerWidth,
-    scrollWidth: document.documentElement.scrollWidth
+    innerHeight: window.innerHeight,
+    scrollWidth: document.documentElement.scrollWidth,
+    panelRect: (() => {
+      const panel = document.querySelector<HTMLElement>("[data-drink-menu-panel]");
+
+      if (!panel) {
+        return null;
+      }
+
+      const rect = panel.getBoundingClientRect();
+      return {
+        top: Math.round(rect.top),
+        bottom: Math.round(rect.bottom),
+        height: Math.round(rect.height)
+      };
+    })(),
+    panelScrollState: (() => {
+      const panelInner = document.querySelector<HTMLElement>(
+        "[data-drink-menu-panel] .menu-sheet__inner"
+      );
+
+      if (!panelInner) {
+        return null;
+      }
+
+      return {
+        clientHeight: panelInner.clientHeight,
+        scrollHeight: panelInner.scrollHeight,
+        overflowY: getComputedStyle(panelInner).overflowY
+      };
+    })()
   }));
 
   expect(openMetrics.scrollWidth).toBeLessThanOrEqual(openMetrics.innerWidth);
+  expect(openMetrics.panelRect).not.toBeNull();
+  expect(openMetrics.panelScrollState).not.toBeNull();
+  expect(openMetrics.panelRect!.top).toBeGreaterThanOrEqual(0);
+  expect(openMetrics.panelRect!.bottom).toBeLessThanOrEqual(openMetrics.innerHeight);
+  expect(openMetrics.panelScrollState!.overflowY).toBe("auto");
+  expect(openMetrics.panelScrollState!.scrollHeight).toBeGreaterThan(
+    openMetrics.panelScrollState!.clientHeight
+  );
+
+  await clearFiltersButton.click();
+  await expect(searchInput).toHaveValue("");
+  await expect(clearFiltersButton).toBeDisabled();
+  await expect(allSectionsButton).toHaveClass(/is-active/);
+  await expect(filteredSectionButton).not.toHaveClass(/is-active/);
 
   await menuToggle.click();
   await expect(searchInput).not.toBeVisible();
