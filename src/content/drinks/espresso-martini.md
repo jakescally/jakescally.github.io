@@ -13,6 +13,8 @@ method: Shaken
 ingredients:
   - amount: 2 oz
     ingredient: Ketel One Vodka
+  - amount: 1 oz
+    ingredient: Kahlua
   - amount: Double shot
     ingredient: Espresso
   - amount: 1/2 oz
