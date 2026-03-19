@@ -13,7 +13,7 @@ method: Stirred
 ingredients:
   - amount: 2 oz
     ingredient: Rye
-  - amount: 1/2 oz
+  - amount: 1/4 oz
     ingredient: Simple syrup
   - amount: 3 dashes
     ingredient: Angostura bitters

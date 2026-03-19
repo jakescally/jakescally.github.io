@@ -32,13 +32,13 @@
   --radius-sm: 12px;
   --frame: min(1440px, calc(100vw - 3rem));
   --surface-paper:
-    linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(239, 228, 212, 0.95));
+    linear-gradient(180deg, rgba(255, 254, 250, 0.99), rgba(246, 238, 227, 0.97));
   --surface-paper-strong:
-    linear-gradient(180deg, rgba(250, 246, 239, 0.98), rgba(231, 220, 203, 0.96));
+    linear-gradient(180deg, rgba(255, 252, 247, 0.99), rgba(241, 232, 219, 0.97));
   --surface-panel:
-    linear-gradient(180deg, rgba(255, 252, 248, 0.84), rgba(242, 233, 219, 0.94));
+    linear-gradient(180deg, rgba(255, 253, 249, 0.92), rgba(246, 238, 227, 0.96));
   --image-mat:
-    linear-gradient(180deg, rgba(251, 248, 242, 0.98), rgba(233, 224, 210, 0.94));
+    linear-gradient(180deg, rgba(255, 252, 247, 0.99), rgba(240, 232, 220, 0.96));
   --section-accent: var(--brass);
   --section-accent-rgb: var(--brass-rgb);
   --serif: "Bodoni Moda", "Iowan Old Style", "Palatino Linotype", serif;
