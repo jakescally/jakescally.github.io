@@ -20,6 +20,8 @@ import drinks_blueberry_martini, { frontmatter as drinks_blueberry_martini_front
 import drinks_elderflower_gin_fizz, { frontmatter as drinks_elderflower_gin_fizz_frontmatter } from "../content/drinks/elderflower-gin-fizz.md";
 import drinks_elderflower_martini, { frontmatter as drinks_elderflower_martini_frontmatter } from "../content/drinks/elderflower-martini.md";
 import drinks_espresso_martini, { frontmatter as drinks_espresso_martini_frontmatter } from "../content/drinks/espresso-martini.md";
+import drinks_gin_and_soda_collins, { frontmatter as drinks_gin_and_soda_collins_frontmatter } from "../content/drinks/gin-and-soda-collins.md";
+import drinks_gin_rickey, { frontmatter as drinks_gin_rickey_frontmatter } from "../content/drinks/gin-rickey.md";
 import drinks_lingonberry_martini, { frontmatter as drinks_lingonberry_martini_frontmatter } from "../content/drinks/lingonberry-martini.md";
 import drinks_old_fashioned, { frontmatter as drinks_old_fashioned_frontmatter } from "../content/drinks/old-fashioned.md";
 import drinks_pistacio_martini, { frontmatter as drinks_pistacio_martini_frontmatter } from "../content/drinks/pistacio-martini.md";
@@ -56,6 +58,8 @@ export const drinksModules = [
   { id: "elderflower-gin-fizz", default: drinks_elderflower_gin_fizz, frontmatter: drinks_elderflower_gin_fizz_frontmatter },
   { id: "elderflower-martini", default: drinks_elderflower_martini, frontmatter: drinks_elderflower_martini_frontmatter },
   { id: "espresso-martini", default: drinks_espresso_martini, frontmatter: drinks_espresso_martini_frontmatter },
+  { id: "gin-and-soda-collins", default: drinks_gin_and_soda_collins, frontmatter: drinks_gin_and_soda_collins_frontmatter },
+  { id: "gin-rickey", default: drinks_gin_rickey, frontmatter: drinks_gin_rickey_frontmatter },
   { id: "lingonberry-martini", default: drinks_lingonberry_martini, frontmatter: drinks_lingonberry_martini_frontmatter },
   { id: "old-fashioned", default: drinks_old_fashioned, frontmatter: drinks_old_fashioned_frontmatter },
   { id: "pistacio-martini", default: drinks_pistacio_martini, frontmatter: drinks_pistacio_martini_frontmatter },
