@@ -25,6 +25,7 @@ import drinks_gin_rickey, { frontmatter as drinks_gin_rickey_frontmatter } from 
 import drinks_lingonberry_martini, { frontmatter as drinks_lingonberry_martini_frontmatter } from "../content/drinks/lingonberry-martini.md";
 import drinks_old_fashioned, { frontmatter as drinks_old_fashioned_frontmatter } from "../content/drinks/old-fashioned.md";
 import drinks_pistacio_martini, { frontmatter as drinks_pistacio_martini_frontmatter } from "../content/drinks/pistacio-martini.md";
+import drinks_whisky_highball, { frontmatter as drinks_whisky_highball_frontmatter } from "../content/drinks/whisky-highball.md";
 import drinks_whisky_sour, { frontmatter as drinks_whisky_sour_frontmatter } from "../content/drinks/whisky-sour.md";
 
 export const blogModules = [
@@ -63,5 +64,6 @@ export const drinksModules = [
   { id: "lingonberry-martini", default: drinks_lingonberry_martini, frontmatter: drinks_lingonberry_martini_frontmatter },
   { id: "old-fashioned", default: drinks_old_fashioned, frontmatter: drinks_old_fashioned_frontmatter },
   { id: "pistacio-martini", default: drinks_pistacio_martini, frontmatter: drinks_pistacio_martini_frontmatter },
+  { id: "whisky-highball", default: drinks_whisky_highball, frontmatter: drinks_whisky_highball_frontmatter },
   { id: "whisky-sour", default: drinks_whisky_sour, frontmatter: drinks_whisky_sour_frontmatter },
 ];
