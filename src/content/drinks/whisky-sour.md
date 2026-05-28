@@ -2,6 +2,7 @@
 title: Whisky Sour
 slug: whisky-sour
 description: Classic tart whisky drink.
+heroImage: drinks/whisky-sour.jpg
 menuSection: Sours & Citrus
 baseSpirit: Whisky
 tags:

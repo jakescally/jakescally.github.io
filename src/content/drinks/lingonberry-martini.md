@@ -2,6 +2,7 @@
 title: Lingonberry Martini
 slug: lingonberry-martini
 description: A sweet-tart berry martini with a bright lingonberry edge.
+heroImage: drinks/lingonberry-martini.jpg
 menuSection: Martinis & More
 baseSpirit: Vodka
 tags:

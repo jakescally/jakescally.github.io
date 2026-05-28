@@ -2,6 +2,7 @@
 title: Whisky Highball
 slug: whisky-highball
 description: A simple, crisp highball with rye and club soda.
+heroImage: drinks/whisky-highball.jpg
 menuSection: Sours & Citrus
 baseSpirit: Whisky
 tags:

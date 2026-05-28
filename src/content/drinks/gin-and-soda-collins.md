@@ -2,6 +2,7 @@
 title: Gin and Soda Collins
 slug: gin-and-soda-collins
 description: A lighter, less sugary variation of the classic Tom Collins.
+heroImage: drinks/gin-and-soda-collins.jpg
 menuSection: Sours & Citrus
 baseSpirit: Gin
 tags:

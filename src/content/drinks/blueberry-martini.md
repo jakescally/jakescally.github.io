@@ -2,6 +2,7 @@
 title: Blueberry Martini
 slug: blueberry-martini
 description: A sweet or tart easy-drinking martini.
+heroImage: drinks/blueberry-martini.jpg
 menuSection: Martinis & More
 baseSpirit: Vodka
 tags:

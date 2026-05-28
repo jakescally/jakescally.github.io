@@ -2,6 +2,7 @@
 title: Old Fashioned
 slug: old-fashioned
 description: Classic old fashioned recipe with aromatic orange peel and bitters
+heroImage: drinks/old-fashioned.jpg
 menuSection: Classics
 baseSpirit: Rye
 tags:

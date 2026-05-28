@@ -2,6 +2,7 @@
 title: Elderflower Martini
 slug: elderflower-martini
 description: A light floral martini with elderflower sweetness and lemon.
+heroImage: drinks/elderflower-martini.jpg
 menuSection: Martinis & More
 baseSpirit: Vodka
 tags:

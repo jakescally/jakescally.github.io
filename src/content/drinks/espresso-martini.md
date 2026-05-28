@@ -2,6 +2,7 @@
 title: Espresso Martini
 slug: espresso-martini
 description: My go to. Fresh espresso shot and maple syrup for flavor.
+heroImage: drinks/espresso-martini.jpg
 menuSection: Martinis & More
 baseSpirit: Vodka
 tags:
@@ -31,6 +32,6 @@ searchTerms:
   - caffeine
   - maple
 sortOrder: 30
-inStock: false
+inStock: true
 draft: false
 ---

@@ -2,6 +2,7 @@
 title: Pistacio Martini
 slug: pistacio-martini
 description: Nutty, creamy, desceptively strong dessert drink.
+heroImage: drinks/pistacio-martini.jpg
 menuSection: Martinis & More
 baseSpirit: Vodka
 tags:

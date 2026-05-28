@@ -2,6 +2,7 @@
 title: Elderflower Gin Fizz
 slug: elderflower-gin-fizz
 description: Gin, elderflower, and lemon topped with bubbles.
+heroImage: drinks/elderflower-gin-fizz.jpg
 menuSection: Sours & Citrus
 baseSpirit: Gin
 tags:

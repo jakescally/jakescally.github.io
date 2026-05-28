@@ -2,6 +2,7 @@
 title: Gin Rickey
 slug: gin-rickey
 description: A historic, sugar-free classic that is tart, crisp, and incredibly refreshing.
+heroImage: drinks/gin-rickey.jpg
 menuSection: Sours & Citrus
 baseSpirit: Gin
 tags:
