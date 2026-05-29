@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QCortado User Guide</title>
+  <meta name="description" content="A complete setup and workflow guide for QCortado, a desktop interface for Quantum ESPRESSO.">
+  <link rel="icon" href="assets/qcortado-logo.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="QCortado guide home">
+      <img src="assets/qcortado-logo.png" alt="" class="brand-logo">
+      <span>
+        <strong>QCortado</strong>
+        <small>User guide</small>
+      </span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Guide navigation">
+      <a href="#setup">Setup</a>
+      <a href="#projects">Projects</a>
+      <a href="#wizards">Wizards</a>
+      <a href="#hpc">HPC</a>
+      <a href="#troubleshooting">Troubleshooting</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Static guide for the main QCortado application</p>
+        <h1>Run Quantum ESPRESSO workflows from CIF import to post-processing.</h1>
+        <p class="hero-text">
+          QCortado is a desktop interface for building, running, saving, and revisiting
+          Quantum ESPRESSO calculations. This guide covers local setup, project management,
+          every calculation wizard, HPC execution, storage, recovery, and result viewers.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#quickstart">Start with setup</a>
+          <a class="button secondary" href="#workflow-map">See workflow map</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-label="QCortado workflow overview">
+        <div class="window-frame">
+          <div class="window-title">
+            <span></span><span></span><span></span>
+            <strong>QCortado workflow</strong>
+          </div>
+          <div class="flow-grid">
+            <div>Project</div>
+            <div>CIF</div>
+            <div>SCF</div>
+            <div>Post-process</div>
+            <div>View</div>
+            <div>Archive</div>
+          </div>
+          <div class="mini-plot">
+            <i style="height: 42%"></i>
+            <i style="height: 70%"></i>
+            <i style="height: 54%"></i>
+            <i style="height: 82%"></i>
+            <i style="height: 62%"></i>
+            <i style="height: 74%"></i>
+            <i style="height: 46%"></i>
+            <i style="height: 66%"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <aside class="toc" aria-label="Table of contents">
+        <label for="guide-search">Search guide</label>
+        <input id="guide-search" type="search" placeholder="Filter sections">
+        <nav>
+          <a href="#quickstart">Quickstart</a>
+          <a href="#setup">First-time setup</a>
+          <a href="#projects">Projects and storage</a>
+          <a href="#workflow-map">Workflow map</a>
+          <a href="#scf">SCF and relax</a>
+          <a href="#bands">Band structure</a>
+          <a href="#dos">Electronic DOS</a>
+          <a href="#fermi">Fermi surface</a>
+          <a href="#hubbard">Hubbard LRT</a>
+          <a href="#phonons">Phonons</a>
+          <a href="#wannier">Wannier90</a>
+          <a href="#transport">BoltzWann transport</a>
+          <a href="#epw">EPW</a>
+          <a href="#viewers">Viewers</a>
+          <a href="#hpc">HPC guide</a>
+          <a href="#tool-matrix">QE tool matrix</a>
+          <a href="#troubleshooting">Troubleshooting</a>
+          <a href="#references">References</a>
+        </nav>
+      </aside>
+
+      <article class="content">
+        <section id="quickstart" class="guide-section">
+          <h2>Quickstart</h2>
+          <div class="checklist">
+            <div>
+              <span>1</span>
+              <p>Install Quantum ESPRESSO and make sure the selected bin directory contains at least <code>pw.x</code>.</p>
+            </div>
+            <div>
+              <span>2</span>
+              <p>Download pseudopotentials for every element you plan to study. SSSP-compatible UPF files are the default path QCortado tries to make easy.</p>
+            </div>
+            <div>
+              <span>3</span>
+              <p>Open QCortado, set the QE bin directory, choose local or HPC execution, and set optional MPI defaults.</p>
+            </div>
+            <div>
+              <span>4</span>
+              <p>Create a project, import a CIF, run a converged SCF or relax calculation, then launch downstream wizards from the project dashboard.</p>
+            </div>
+          </div>
+          <div class="callout">
+            <strong>Rule of thumb:</strong>
+            downstream calculations should start from the saved SCF or optimized structure that best matches the physics you want. For phonons, use a tight, phonon-ready SCF from a relaxed geometry. For Wannier and transport, use a scalar SCF that the Wannier wizard marks as compatible.
+          </div>
+        </section>
+
+        <section id="setup" class="guide-section">
+          <h2>First-time setup</h2>
+          <p>
+            QCortado stores global settings in the app data directory and applies them to new wizard runs.
+            The settings panel controls local QE paths, MPI defaults, save-size policy, FermiSurfer, Wannier90,
+            and HPC profiles.
+          </p>
+
+          <h3>Install or build QCortado</h3>
+          <div class="two-column">
+            <div class="card">
+              <h4>Packaged app</h4>
+              <p>Use a released QCortado desktop build when available. The app is a Tauri desktop application, so it runs as a local GUI and launches QE executables from paths you configure.</p>
+            </div>
+            <div class="card">
+              <h4>Developer build</h4>
+              <pre><code>npm install
+npm run tauri dev</code></pre>
+              <p>Building from source also requires Rust and the Tauri prerequisites for your OS.</p>
+            </div>
+          </div>
+
+          <h3>Configure local executables</h3>
+          <table>
+            <thead>
+              <tr><th>Setting</th><th>What QCortado expects</th><th>Used by</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>QE bin directory</td>
+                <td>A directory containing <code>pw.x</code>. QCortado also checks for <code>bands.x</code>, <code>dos.x</code>, <code>projwfc.x</code>, <code>ph.x</code>, <code>q2r.x</code>, <code>matdyn.x</code>, <code>hp.x</code>, and <code>epw.x</code> as needed.</td>
+                <td>All QE workflows</td>
+              </tr>
+              <tr>
+                <td>Pseudopotential directory</td>
+                <td>A folder of UPF files. QCortado reads filenames and metadata, offers SSSP/PAW/USPP/NCPP selection helpers, and can infer missing cutoff ratios cautiously.</td>
+                <td>SCF, NSCF, bands, DOS, Fermi surface</td>
+              </tr>
+              <tr>
+                <td>Execution prefix</td>
+                <td>An optional command prefix, for example <code>mpirun</code> or <code>srun</code>, prepended to local QE launches.</td>
+                <td>Local advanced execution</td>
+              </tr>
+              <tr>
+                <td>MPI defaults</td>
+                <td>Enable MPI and choose a default process count. Wizards can override the process count per run.</td>
+                <td>Local runs</td>
+              </tr>
+              <tr>
+                <td>FermiSurfer path</td>
+                <td>An executable path used to open saved Fermi-surface files externally.</td>
+                <td>Fermi-surface viewer integration</td>
+              </tr>
+              <tr>
+                <td>Wannier90 path</td>
+                <td>A <code>wannier90.x</code> executable. QCortado derives the sibling <code>postw90.x</code> path unless an older saved config supplies it directly.</td>
+                <td>Wannier and BoltzWann transport</td>
+              </tr>
+              <tr>
+                <td>Non-SCF save size</td>
+                <td><strong>Large</strong> keeps full restart files for non-SCF calculations. <strong>Small</strong> compacts non-SCF saves where supported.</td>
+                <td>Project storage</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="callout warning">
+            <strong>Do not mix pseudopotential families casually.</strong>
+            Cutoffs, SOC support, semicore treatment, and exchange-correlation assumptions come from the pseudopotential. QCortado can help select files, but convergence tests remain the user's responsibility.
+          </div>
+        </section>
+
+        <section id="projects" class="guide-section">
+          <h2>Projects, calculations, and storage</h2>
+          <p>
+            QCortado centers work around projects. A project contains one or more CIF variants, and each
+            CIF variant contains saved calculations. The project dashboard is the launch point for all
+            downstream workflows once an SCF or related prerequisite exists.
+          </p>
+
+          <div class="visual-row">
+            <div class="screen-card">
+              <div class="screen-title">Project browser</div>
+              <div class="screen-body project-visual">
+                <span>Folders</span>
+                <span>Project cards</span>
+                <span>Archive import/export</span>
+                <span>Band multiview</span>
+              </div>
+            </div>
+            <div class="screen-card">
+              <div class="screen-title">Project dashboard</div>
+              <div class="screen-body dashboard-visual">
+                <span>CIF variants</span>
+                <span>SCF and relax</span>
+                <span>Post-processing</span>
+                <span>Saved viewers</span>
+              </div>
+            </div>
+          </div>
+
+          <h3>Project browser</h3>
+          <ul>
+            <li>Create, open, delete, import, and export projects.</li>
+            <li>Create folders, rename folders, delete folders, and move projects between root and folders.</li>
+            <li>Filter projects by saved calculation type: SCF, bands, DOS, Wannier, transport, phonon, EPW, and related entries.</li>
+            <li>Open the band multiview to compare saved band calculations across projects.</li>
+          </ul>
+
+          <h3>Project dashboard</h3>
+          <ul>
+            <li>Import CIFs and keep variants under the same project.</li>
+            <li>Run SCF, relaxation, SOC, phonon-ready SCF, and downstream calculations from saved source runs.</li>
+            <li>Open saved viewers for bands, DOS, Wannier, transport, phonons, EPW, magnetism, and Hubbard occupations.</li>
+            <li>Rename saved calculations, add/remove tags, download remote artifacts, inspect logs/inputs, and delete calculations.</li>
+          </ul>
+
+          <h3>Task queue and activity</h3>
+          <p>
+            Local background tasks appear in the task queue with live output, progress, cancel, and dismiss controls.
+            HPC runs are submitted directly from the wizard and surface remote job metadata, Slurm state, remote work
+            directories, and generated Slurm scripts in the activity views.
+          </p>
+
+          <h3>Storage manager</h3>
+          <p>
+            The storage manager scans local or HPC storage and groups data into projects, calculations, temp files,
+            remote orphans, and other paths. It can delete selected entries or lighten supported saved calculations.
+            Lightening removes heavy QE wavefunction/restart artifacts while preserving saved results for supported
+            non-SCF types such as optimization, bands, DOS, and Fermi surface.
+          </p>
+        </section>
+
+        <section id="workflow-map" class="guide-section">
+          <h2>Workflow map</h2>
+          <div class="workflow">
+            <div><strong>Import CIF</strong><span>Parse cell, atoms, symmetry, citations</span></div>
+            <div><strong>SCF or relax</strong><span>Select cell, pseudopotentials, cutoffs, k mesh, magnetism, Hubbard, vdW, SOC</span></div>
+            <div><strong>Choose source</strong><span>Downstream wizards reuse saved density, structure, Fermi level, metadata, and artifacts</span></div>
+            <div><strong>Post-process</strong><span>Bands, DOS, Fermi surface, phonons, Hubbard U, Wannier, transport, EPW</span></div>
+            <div><strong>View and save</strong><span>Interactive plots, logs, input files, artifact manifests, project archive</span></div>
+          </div>
+        </section>
+
+        <section id="wizards" class="guide-section">
+          <h2>Calculation wizards</h2>
+          <p>
+            Each wizard follows the same basic pattern: choose a source, configure parameters, run locally or submit
+            to HPC, inspect live output, then save or open an interactive viewer. Many wizard settings are remembered
+            per project in browser local storage.
+          </p>
+        </section>
+
+        <section id="scf" class="guide-section wizard">
+          <h2>SCF, relaxation, and SOC wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Builds a <code>pw.x</code> input from a CIF-derived or optimized structure and runs SCF-like workflows. Presets include standard SCF, phonon-ready SCF, relaxation, and SOC.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>QE <code>pw.x</code>, pseudopotentials for each element, and a valid CIF. SOC requires fully relativistic pseudopotentials.</p>
+            </div>
+          </div>
+          <h3>Steps</h3>
+          <ol>
+            <li>Import a CIF or start from a project CIF variant.</li>
+            <li>Choose conventional or primitive cell when available and inspect the 3D unit cell.</li>
+            <li>Select pseudopotentials manually or with SSSP/PAW/USPP/NCPP helpers.</li>
+            <li>Review wavefunction and charge-density cutoffs. If QCortado infers a cutoff from companion metadata, treat it as a starting point for convergence testing.</li>
+            <li>Set k-point grid and offsets. Metals usually need smearing and denser sampling than insulators.</li>
+            <li>Configure advanced options: occupations, smearing, total charge, magnetism, noncollinear angles, SOC, DFT+U, exchange-correlation override, convergence thresholds, mixing, diagonalization, and optional relaxation thresholds.</li>
+            <li>Run locally, queue locally, or submit directly to HPC.</li>
+          </ol>
+          <h3>Outputs</h3>
+          <p>Saved SCF/optimization calculations include QE input, output, parsed convergence, Fermi energy when present, optimized structure for relax runs, magnetism viewer data when available, and source metadata for downstream calculations.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>No pseudopotential found:</strong> confirm the selected local or remote pseudo directory and filename conventions.</li>
+            <li><strong>SOC filter empties the list:</strong> use fully relativistic pseudopotentials.</li>
+            <li><strong>SCF does not converge:</strong> adjust mixing, smearing, k mesh, cutoffs, occupations, and starting magnetization.</li>
+            <li><strong>Relaxed structure looks wrong:</strong> inspect the structure viewer before using it downstream.</li>
+          </ul>
+        </section>
+
+        <section id="bands" class="guide-section wizard">
+          <h2>Band structure wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Runs a band-path NSCF calculation with <code>pw.x</code>, then <code>bands.x</code>, and optionally <code>projwfc.x</code> for fat-band projections.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved converged SCF calculation with enough local or remote restart data for the chosen execution mode.</p>
+            </div>
+          </div>
+          <h3>Steps</h3>
+          <ol>
+            <li>Select the source SCF. QCortado shows tags such as HPC and downloaded state.</li>
+            <li>Choose or edit a high-symmetry k path in the Brillouin-zone viewer.</li>
+            <li>Set NSCF controls: number of bands, convergence threshold, electron max steps, occupations, smearing, diagonalization, starting potential/wavefunction, and verbosity.</li>
+            <li>Set <code>bands.x</code> options such as <code>filband</code>, symmetry labels, and overlap-based ordering.</li>
+            <li>Enable orbital projections when <code>projwfc.x</code> is available and fat-band analysis is needed.</li>
+          </ol>
+          <h3>Outputs</h3>
+          <p>The bands viewer plots energy versus k distance, supports Fermi or VBM zeroing, band gap overlays, comparison overlays, high-symmetry labels, projection coloring, and saved viewer metadata.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Missing <code>bands.dat.gnu</code>:</strong> <code>bands.x</code> failed or wrote a different filename.</li>
+            <li><strong>Bad band ordering:</strong> compare symmetry and overlap settings; complex crossings may need manual interpretation.</li>
+            <li><strong>Local run blocked by HPC source:</strong> download the full source bundle or switch to HPC mode.</li>
+          </ul>
+        </section>
+
+        <section id="dos" class="guide-section wizard">
+          <h2>Electronic DOS wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Runs a uniform-grid NSCF calculation with <code>pw.x</code>, then calculates the electronic density of states with <code>dos.x</code>.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved SCF source and pseudopotentials available in the active local or remote environment.</p>
+            </div>
+          </div>
+          <h3>Key controls</h3>
+          <ul>
+            <li>DOS k mesh, typically denser than the SCF mesh.</li>
+            <li>Energy step <code>DeltaE</code>, Gaussian broadening/degauss, and optional energy window.</li>
+            <li>Local MPI or HPC Slurm resources.</li>
+          </ul>
+          <h3>Outputs</h3>
+          <p>The DOS viewer plots total DOS against energy and can reference the saved SCF Fermi energy.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Noisy DOS:</strong> increase k mesh density or adjust broadening.</li>
+            <li><strong>Wrong Fermi alignment:</strong> confirm the source SCF is the intended reference.</li>
+          </ul>
+        </section>
+
+        <section id="fermi" class="guide-section wizard">
+          <h2>Fermi surface wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Runs an NSCF calculation on a uniform Fermi grid with <code>pw.x</code> and saves Fermi-surface artifacts for QCortado and optional FermiSurfer viewing.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A metallic or near-metallic source SCF, selected pseudopotentials, and optional FermiSurfer executable path.</p>
+            </div>
+          </div>
+          <h3>Key controls</h3>
+          <ul>
+            <li>Fermi k grid and Monkhorst-Pack offsets.</li>
+            <li>Optional number of bands, NSCF convergence threshold, mixing beta, occupations, smearing, degauss, and verbosity.</li>
+          </ul>
+          <h3>Outputs</h3>
+          <p>Saved Fermi-surface calculations preserve parsed Fermi energy context and generated artifacts. The project dashboard can launch external FermiSurfer when configured.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Surface missing or sparse:</strong> increase k mesh and ensure enough bands cross the Fermi level.</li>
+            <li><strong>External viewer does not open:</strong> verify the configured FermiSurfer path.</li>
+          </ul>
+        </section>
+
+        <section id="hubbard" class="guide-section wizard">
+          <h2>Hubbard LRT wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Runs QE <code>hp.x</code> to calculate Hubbard parameters by linear response from a saved SCF source.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved SCF calculation with Hubbard-compatible metadata and QE <code>hp.x</code> available locally or remotely.</p>
+            </div>
+          </div>
+          <h3>Key controls</h3>
+          <ul>
+            <li>q mesh <code>nq1 nq2 nq3</code>, perturbation selection, <code>conv_thr_chi</code>, max iterations, verbosity, and response thresholds.</li>
+            <li>Advanced controls include <code>no_metq0</code>, equivalent-q skipping, <code>docc_thr</code>, <code>ethr_nscf</code>, <code>thresh_init</code>, <code>alpha_mix</code>, <code>nmix</code>, and max seconds.</li>
+          </ul>
+          <h3>Outputs</h3>
+          <p>QCortado saves parsed Hubbard U data, raw output, input files, and an occupations viewer when the run exposes occupation data.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>No U values parsed:</strong> inspect <code>hp.x</code> output and confirm the perturbations completed.</li>
+            <li><strong>HPC rank behavior surprises:</strong> QCortado adds conservative defaults for <code>hp.x</code> where needed, including diagonalization and pencil-decomposition handling.</li>
+          </ul>
+        </section>
+
+        <section id="phonons" class="guide-section wizard">
+          <h2>Phonon wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Runs a phonon pipeline: <code>ph.x</code> on a q grid, <code>q2r.x</code> for force constants, and optional <code>matdyn.x</code> calculations for phonon DOS and dispersion.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A phonon-ready SCF source, usually from a relaxed structure with tight convergence. EPW-ready phonons require extra saved artifacts.</p>
+            </div>
+          </div>
+          <h3>Steps</h3>
+          <ol>
+            <li>Select a source SCF. Prefer the wizard's phonon-ready SCF preset for new work.</li>
+            <li>Set the q grid and solver controls: <code>tr2_ph</code>, <code>recover</code>, <code>trans</code>, <code>epsil</code>, <code>fpol</code>, Raman, verbosity, mixing, q/irreducible ranges, and electron-phonon mode.</li>
+            <li>Choose save policy. Plot-only saves are compact; EPW-ready saves retain required perturbation artifacts.</li>
+            <li>Optionally calculate phonon DOS and dispersion with <code>matdyn.x</code>, choosing ASR and q path controls.</li>
+          </ol>
+          <h3>Outputs</h3>
+          <p>The phonon viewer can show dispersion or DOS, switch frequency units between cm-1 and THz, and focus on full, acoustic, or optical modes.</p>
+          <h3>Recovery</h3>
+          <p>QCortado can repair saved phonon metadata from retained work directories and can recover remote phonon runs when the active HPC profile can still see the remote workspace or project archive path.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Imaginary modes:</strong> inspect structural stability, q-grid convergence, ASR choice, and relaxation quality.</li>
+            <li><strong>EPW prerequisites missing:</strong> re-run phonons with EPW-ready artifact retention and required <code>fildvscf</code> behavior.</li>
+          </ul>
+        </section>
+
+        <section id="wannier" class="guide-section wizard">
+          <h2>Wannier90 wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Prepares a Wannier workflow: <code>wannier90.x -pp</code>, <code>pw.x</code> NSCF on a full mesh, <code>pw2wannier90.x</code>, and final <code>wannier90.x</code>.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved scalar SCF. The v1 workflow rejects sources with SOC, noncollinearity, DFT+U, or unsupported vdW flags. Wannier90 and <code>pw2wannier90.x</code> must be available.</p>
+            </div>
+          </div>
+          <h3>Steps</h3>
+          <ol>
+            <li>Select a Wannier-ready SCF source.</li>
+            <li>Set the zero-shift Monkhorst-Pack NSCF mesh, interpolation path, total interpolation points target, seed name, and optional number of bands.</li>
+            <li>Add element-targeted or site-targeted orbital projections. QCortado expands projections into the implied number of Wannier functions.</li>
+            <li>Use a saved band calculation overlay to tune <code>num_wann</code>, <code>num_bands</code>, <code>exclude_bands</code>, and disentanglement/frozen windows.</li>
+            <li>Run locally or on HPC and inspect convergence, spreads, centers, quality warnings, and artifacts.</li>
+          </ol>
+          <h3>Outputs</h3>
+          <p>Saved Wannier results include interpolated bands, spreads, centers, convergence data, Fermi alignment, quality issues, and artifact manifests such as <code>.win</code>, <code>.wout</code>, <code>_band.dat</code>, and Hamiltonian files when available.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Missing source Fermi level:</strong> re-run or repair the source SCF before transport-quality Wannierization.</li>
+            <li><strong>Wannier manifold misses E_F:</strong> choose projections near the Fermi level, increase <code>num_bands</code>, and tune windows against a saved band plot.</li>
+            <li><strong>Disentanglement fails:</strong> widen the outer window, check excluded bands, and verify the projection set spans the target bands.</li>
+          </ul>
+        </section>
+
+        <section id="transport" class="guide-section wizard">
+          <h2>BoltzWann transport wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Copies saved Wannier artifacts, writes a transport-specific Wannier input, and runs <code>postw90.x</code> with BoltzWann transport enabled.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved, transport-quality Wannier calculation with a source Fermi energy and artifact bundle.</p>
+            </div>
+          </div>
+          <h3>Key controls</h3>
+          <ul>
+            <li>Source Wannier selection, sortable by recency or quality signals.</li>
+            <li>BoltzWann k mesh and optional 2D transport direction.</li>
+            <li>Local or HPC run resources. Remote <code>postw90.x</code> is derived from the configured remote Wannier90 path unless specified by the cluster environment.</li>
+          </ul>
+          <h3>Outputs</h3>
+          <p>The transport viewer plots conductivity, Seebeck, electronic thermal conductivity, transport distribution function, tensor components, chemical-potential slices, and temperature slices parsed from upstream tables.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong>Nearly zero transport:</strong> the selected Wannier bands likely do not span the Fermi level.</li>
+            <li><strong><code>postw90.x</code> not found:</strong> configure the Wannier90 executable path so QCortado can derive the sibling <code>postw90.x</code>.</li>
+            <li><strong>EPW transport confusion:</strong> this wizard is BoltzWann-based. EPW transport is configured in the EPW wizard.</li>
+          </ul>
+        </section>
+
+        <section id="epw" class="guide-section wizard">
+          <h2>EPW wizard</h2>
+          <div class="wizard-grid">
+            <div>
+              <h3>Purpose</h3>
+              <p>Builds and runs <code>epw.x</code> workflows for electron-phonon coupling, phonon linewidths/alpha2F, electron self-energy, EPW transport, and superconductivity outputs.</p>
+            </div>
+            <div>
+              <h3>Prerequisites</h3>
+              <p>A saved phonon calculation with q-grid metadata and EPW-ready artifacts. A saved Wannier source is optional for some EPW workflows but important for Wannier-derived interpolation context.</p>
+            </div>
+          </div>
+          <h3>Steps</h3>
+          <ol>
+            <li>Select the phonon source and optional Wannier source.</li>
+            <li>Choose goals: coupling, phonon linewidths/alpha2F, electron self-energy, transport mobility, or superconductivity.</li>
+            <li>Set prefix, outdir, <code>dvscf_dir</code>, Wannier directory, fine k/q meshes, <code>fsthick</code>, <code>degaussw</code>, <code>nbndsub</code>, mode, runtime pools, and max seconds.</li>
+            <li>Set EPW reuse flags such as <code>epbwrite</code>, <code>epbread</code>, <code>epwwrite</code>, and <code>epwread</code>.</li>
+            <li>Choose HPC artifact sync mode: minimal, EPW-ready, or full.</li>
+            <li>Add expert keyword overrides only when you understand the upstream EPW input variable.</li>
+          </ol>
+          <h3>Outputs</h3>
+          <p>The EPW viewer includes summary metrics, transport tables, superconductivity/Eliashberg summaries, spectral and self-energy tables, parsed numeric artifacts, warnings, files, and raw log inspection.</p>
+          <h3>Common problems</h3>
+          <ul>
+            <li><strong><code>epw.x</code> missing:</strong> QCortado checks the QE bin directory and EPW/bin fallback layouts; many QE builds require EPW to be compiled separately.</li>
+            <li><strong>No structured results parsed:</strong> inspect Files + Log. EPW may have completed without emitting a supported table family for the selected goals.</li>
+            <li><strong>Transport tables absent:</strong> confirm scattering/transport EPW flags and carrier/scissor details in advanced overrides.</li>
+          </ul>
+        </section>
+
+        <section id="viewers" class="guide-section">
+          <h2>Viewers and result interpretation</h2>
+          <div class="cards">
+            <div class="card">
+              <h3>Bands viewer</h3>
+              <p>Plots electronic or phonon bands, high-symmetry markers, zero-reference modes, band-gap overlays, comparisons, and fat-band projections.</p>
+            </div>
+            <div class="card">
+              <h3>DOS viewer</h3>
+              <p>Plots electronic DOS against energy with Fermi reference context.</p>
+            </div>
+            <div class="card">
+              <h3>Wannier viewer</h3>
+              <p>Compares interpolated Wannier bands with source context and displays spread/convergence details.</p>
+            </div>
+            <div class="card">
+              <h3>Transport viewer</h3>
+              <p>Switches metrics, components, temperature/chemical-potential slices, heatmaps, and transport distribution diagnostics.</p>
+            </div>
+            <div class="card">
+              <h3>Phonon viewer</h3>
+              <p>Shows dispersion and DOS with frequency unit switching and mode focus.</p>
+            </div>
+            <div class="card">
+              <h3>EPW viewer</h3>
+              <p>Groups EPW summary, transport, superconductivity, spectral data, chartable artifacts, warnings, files, and logs.</p>
+            </div>
+          </div>
+          <p>
+            A separate QCortado Viewer build can sync read-only project snapshots from an HPC-hosted viewer library.
+            The main app can publish that library automatically after project mutations when an active HPC profile is configured.
+          </p>
+        </section>
+
+        <section id="hpc" class="guide-section">
+          <h2>HPC configuration and remote execution</h2>
+          <p>
+            HPC mode submits self-contained calculation bundles to a remote Slurm cluster over SSH. QCortado uploads
+            inputs and scripts to a remote workspace, submits with <code>sbatch</code>, polls scheduler state, streams
+            useful status lines, and syncs artifacts back to the project record.
+          </p>
+
+          <h3>Profile fields</h3>
+          <table>
+            <thead>
+              <tr><th>Field</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Name, cluster, host, port, username</td><td>Connection identity shown in settings and used for SSH/SCP.</td></tr>
+              <tr><td>Auth method</td><td>SSH key or password. Password/secret persistence uses macOS Keychain where supported; otherwise secrets are session-only.</td></tr>
+              <tr><td>Remote QE bin directories</td><td>Default, CPU-specific, and GPU-specific directories. QCortado chooses by resource type.</td></tr>
+              <tr><td>Remote pseudo directories</td><td>Default, CPU-specific, and GPU-specific pseudopotential directories.</td></tr>
+              <tr><td>Remote EPW path</td><td>Optional explicit <code>epw.x</code>. If omitted, QCortado checks QE bin and EPW/bin fallbacks.</td></tr>
+              <tr><td>Remote Wannier90 path</td><td>Path or command for <code>wannier90.x</code>. Remote <code>postw90.x</code> is derived as a sibling when needed.</td></tr>
+              <tr><td>Workspace root</td><td>Scratch area for active remote job bundles.</td></tr>
+              <tr><td>Project root</td><td>Remote archive area for persistent calculation artifacts and viewer-library snapshots.</td></tr>
+              <tr><td>Resource mode</td><td>CPU-only, GPU-only, or both. Wizards constrain run settings to what the profile supports.</td></tr>
+              <tr><td>Launcher</td><td><code>srun</code> or <code>mpirun</code>. Optional resource-specific extra args are appended.</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Run settings</h3>
+          <p>
+            Each HPC-capable wizard shows resource settings before submission. CPU and GPU templates can set partition,
+            walltime, nodes, tasks, CPUs per task, memory, GPU count, QOS, account, constraint, module/setup preamble,
+            and extra SBATCH lines. QCortado previews the generated Slurm script read-only before submission.
+          </p>
+
+          <div class="code-card">
+            <h4>Typical generated shape</h4>
+            <pre><code>#SBATCH --job-name=qcortado-...
+#SBATCH --output=slurm.out
+#SBATCH --error=slurm.err
+#SBATCH --partition=short
+#SBATCH --time=02:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+
+# User module/setup preamble
+module load quantum-espresso
+
+srun "$QE_BIN/pw.x" -in pw.in &gt; pw.out 2&gt;&amp;1</code></pre>
+          </div>
+
+          <h3>Activity, recovery, and cleanup</h3>
+          <ul>
+            <li><strong>HPC activity:</strong> shows active remote tasks, scheduler state, remote job IDs, remote nodes, generated Slurm scripts, and stage output.</li>
+            <li><strong>Node activity:</strong> queries Slurm node and queue snapshots for the active profile and supports filters for node type, partition, state, resources, and queue scope.</li>
+            <li><strong>Artifact download:</strong> saved HPC calculations can download task or calculation artifacts later if remote paths are still reachable.</li>
+            <li><strong>Headless attach:</strong> QCortado can list and attach compatible remote jobs when it can find expected QCortado metadata.</li>
+            <li><strong>Remote phonon recovery:</strong> scans workspace/project archive paths for recoverable phonon runs.</li>
+            <li><strong>Orphan cleanup:</strong> removes remote QCortado directories not linked to saved calculations. Use this only after confirming they are not active jobs.</li>
+            <li><strong>Viewer library:</strong> publishes read-only project snapshots under a remote <code>_qcortado_viewer_library</code> directory and syncs them into the Viewer app.</li>
+          </ul>
+
+          <div class="callout warning">
+            <strong>Security note:</strong>
+            HPC credentials are powerful. Prefer SSH keys with passphrases, avoid storing shared account passwords, and review generated Slurm scripts before submitting jobs that load modules or run custom preambles.
+          </div>
+        </section>
+
+        <section id="tool-matrix" class="guide-section">
+          <h2>QE tool matrix</h2>
+          <table>
+            <thead>
+              <tr><th>QCortado workflow</th><th>Executables</th><th>Main saved result</th><th>Upstream reference</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SCF, relax, SOC</td>
+                <td><code>pw.x</code></td>
+                <td>Convergence, energy, Fermi level, optimized structure, magnetism, source metadata</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_PW.html">INPUT_PW</a></td>
+              </tr>
+              <tr>
+                <td>Band structure</td>
+                <td><code>pw.x</code>, <code>bands.x</code>, optional <code>projwfc.x</code></td>
+                <td>Band energies, high-symmetry markers, projection groups</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_BANDS.html">INPUT_BANDS</a>, <a href="https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html">INPUT_PROJWFC</a></td>
+              </tr>
+              <tr>
+                <td>Electronic DOS</td>
+                <td><code>pw.x</code>, <code>dos.x</code></td>
+                <td>DOS table and Fermi reference</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_DOS.html">INPUT_DOS</a></td>
+              </tr>
+              <tr>
+                <td>Fermi surface</td>
+                <td><code>pw.x</code>, optional FermiSurfer</td>
+                <td>Fermi-grid NSCF artifacts</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_PW.html">INPUT_PW</a></td>
+              </tr>
+              <tr>
+                <td>Hubbard LRT</td>
+                <td><code>hp.x</code></td>
+                <td>Linear-response Hubbard parameters</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_HP.html">INPUT_HP</a></td>
+              </tr>
+              <tr>
+                <td>Phonons</td>
+                <td><code>ph.x</code>, <code>q2r.x</code>, optional <code>matdyn.x</code></td>
+                <td>Dynamical matrices, force constants, phonon DOS, dispersion</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_PH.html">INPUT_PH</a>, <a href="https://www.quantum-espresso.org/Doc/INPUT_Q2R.html">INPUT_Q2R</a>, <a href="https://www.quantum-espresso.org/Doc/INPUT_MATDYN.html">INPUT_MATDYN</a></td>
+              </tr>
+              <tr>
+                <td>Wannier90</td>
+                <td><code>wannier90.x</code>, <code>pw.x</code>, <code>pw2wannier90.x</code></td>
+                <td>Interpolated bands, spreads, centers, Hamiltonian artifacts, quality issues</td>
+                <td><a href="https://www.quantum-espresso.org/Doc/INPUT_pw2wannier90.html">INPUT_pw2wannier90</a>, <a href="https://wannier90.readthedocs.io/en/latest/tutorials/with_pwscf/">Wannier90 PWscf interface</a></td>
+              </tr>
+              <tr>
+                <td>BoltzWann transport</td>
+                <td><code>postw90.x</code></td>
+                <td>Conductivity, Seebeck, thermal conductivity, TDF tables</td>
+                <td><a href="https://wannier90.readthedocs.io/en/latest/tutorials/with_pwscf/">Wannier90 docs</a></td>
+              </tr>
+              <tr>
+                <td>EPW</td>
+                <td><code>epw.x</code>, sometimes <code>pw.x</code> for coarse NSCF rebuild</td>
+                <td>Electron-phonon coupling, linewidths, self-energy, transport, superconductivity, parsed artifacts</td>
+                <td><a href="https://docs.epw-code.org/Documentation.html">EPW documentation</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="troubleshooting" class="guide-section">
+          <h2>Troubleshooting</h2>
+          <div class="accordion">
+            <details open>
+              <summary>QCortado says an executable is missing.</summary>
+              <p>Confirm the configured QE bin directory contains the executable needed by the wizard. EPW may live in <code>EPW/bin</code> depending on your build; QCortado checks common fallbacks but cannot compile EPW for you.</p>
+            </details>
+            <details>
+              <summary>Pseudopotential metadata is incomplete.</summary>
+              <p>Some UPF files do not embed recommended cutoffs or orbital metadata. QCortado can infer conservative ratios from companion values for some pseudo types, but you should run convergence tests and prefer curated libraries when possible.</p>
+            </details>
+            <details>
+              <summary>PSLibrary files trigger projection or atomic-orbital errors.</summary>
+              <p>QCortado includes local and remote repair helpers for a known malformed tenth atomic wavefunction tag pattern in PSLibrary-style UPF files. Use the repair action from settings when the error hint appears.</p>
+            </details>
+            <details>
+              <summary>A dependent local workflow cannot use an HPC source.</summary>
+              <p>Downstream local workflows need the full source bundle locally. Use the offered download action or switch execution mode to HPC and run the dependent calculation remotely.</p>
+            </details>
+            <details>
+              <summary>HPC submission fails before Slurm starts.</summary>
+              <p>Run profile connection and environment validation. Check SSH credentials, remote workspace write access, remote QE/pseudo paths, and whether <code>sbatch</code> and <code>squeue</code> are available in the remote shell.</p>
+            </details>
+            <details>
+              <summary>HPC job runs but results do not sync.</summary>
+              <p>Inspect the activity panel, remote workdir, and artifact sync warnings. For large EPW or phonon runs, use EPW-ready or full sync if minimal artifacts are insufficient.</p>
+            </details>
+            <details>
+              <summary>Phonon run completed but viewer data is missing.</summary>
+              <p>Use saved phonon recovery. QCortado can reconstruct metadata and plot files from retained work directories when <code>q2r.x</code> and <code>matdyn.x</code> outputs are still available.</p>
+            </details>
+            <details>
+              <summary>Storage cleanup might delete too much.</summary>
+              <p>Read each selected entry before deleting. Remote calculations can have linked HPC artifacts; deleting them removes the local saved record and the linked remote files QCortado can identify.</p>
+            </details>
+          </div>
+        </section>
+
+        <section id="references" class="guide-section">
+          <h2>External references</h2>
+          <p>Use these upstream references when checking the scientific meaning of QCortado controls.</p>
+          <ul class="reference-list">
+            <li><a href="https://www.quantum-espresso.org/documentation/input-data-description/">Quantum ESPRESSO input data descriptions</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_PW.html">pw.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_BANDS.html">bands.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_DOS.html">dos.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_PROJWFC.html">projwfc.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_PH.html">ph.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_Q2R.html">q2r.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_MATDYN.html">matdyn.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_HP.html">hp.x input description</a></li>
+            <li><a href="https://www.quantum-espresso.org/Doc/INPUT_pw2wannier90.html">pw2wannier90.x input description</a></li>
+            <li><a href="https://wannier90.readthedocs.io/en/latest/tutorials/with_pwscf/">Wannier90 tutorials with the PWscf interface</a></li>
+            <li><a href="https://docs.epw-code.org/Documentation.html">EPW documentation</a></li>
+          </ul>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>QCortado user guide. Built as a static GitHub Pages bundle.</p>
+    <a href="#top">Back to top</a>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector(".nav-toggle");
+    const nav = document.querySelector("#site-nav");
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!open));
+      nav.classList.toggle("open", !open);
+    });
+
+    const search = document.querySelector("#guide-search");
+    const sections = Array.from(document.querySelectorAll(".guide-section"));
+    search.addEventListener("input", () => {
+      const query = search.value.trim().toLowerCase();
+      sections.forEach((section) => {
+        const text = section.textContent.toLowerCase();
+        section.hidden = query.length > 0 && !text.includes(query);
+      });
+    });
+  </script>
+</body>
+</html>
