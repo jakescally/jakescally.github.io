@@ -114,6 +114,67 @@ pre code {
   gap: 0.35rem;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.theme-toggle {
+  position: relative;
+  width: 2.7rem;
+  min-height: 2.7rem;
+  flex: 0 0 2.7rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.85rem;
+  color: rgba(29, 29, 31, 0.68);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  background: rgba(29, 29, 31, 0.06);
+}
+
+.theme-toggle:active {
+  transform: scale(0.96);
+  transition-duration: 80ms;
+}
+
+.theme-toggle-icon {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 1.05rem;
+  height: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    opacity 180ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html[data-theme="light"] .theme-toggle-icon-sun,
+html[data-theme="dark"] .theme-toggle-icon-moon {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.55) rotate(-18deg);
+}
+
+html[data-theme="light"] .theme-toggle-icon-moon,
+html[data-theme="dark"] .theme-toggle-icon-sun {
+  opacity: 1;
+}
+
 .site-nav a,
 .nav-toggle,
 .button {
@@ -1410,21 +1471,19 @@ th {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --ink: #f5f5f7;
-    --muted: #a1a1a6;
-    --paper: #0c0c0e;
-    --panel: rgba(28, 28, 30, 0.8);
-    --line: rgba(255, 255, 255, 0.11);
-    --green: #42b99b;
-    --green-dark: #64d5b8;
-    --red: #ff8e89;
-    --gold: #e5b454;
-    --blue: #6eb9e8;
-    --violet: #a997dc;
-    color-scheme: dark;
-  }
+html[data-theme="dark"] {
+  --ink: #f5f5f7;
+  --muted: #a1a1a6;
+  --paper: #0c0c0e;
+  --panel: rgba(28, 28, 30, 0.8);
+  --line: rgba(255, 255, 255, 0.11);
+  --green: #42b99b;
+  --green-dark: #64d5b8;
+  --red: #ff8e89;
+  --gold: #e5b454;
+  --blue: #6eb9e8;
+  --violet: #a997dc;
+  color-scheme: dark;
 
   body {
     background:
@@ -1447,11 +1506,17 @@ th {
   }
 
   .site-nav a,
-  .nav-toggle {
+  .nav-toggle,
+  .theme-toggle {
     color: rgba(245, 245, 247, 0.7);
   }
 
   .site-nav a:hover {
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .theme-toggle:hover {
     color: var(--ink);
     background: rgba(255, 255, 255, 0.09);
   }

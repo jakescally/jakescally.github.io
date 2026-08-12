@@ -1,5 +1,6 @@
 ---
 import wordmark from "@/assets/brand/scallynetwork.png";
+import ThemeToggle from "@/components/ThemeToggle.astro";
 import WhiskyGlassIcon from "@/components/WhiskyGlassIcon.astro";
 
 interface Props {
@@ -58,6 +59,7 @@ const navItems = [
         <WhiskyGlassIcon className="site-header__icon" />
         <span class="site-header__icon-label">Bar</span>
       </a>
+      <ThemeToggle />
       {showSearch && (
         <button class="site-header__search" type="button" data-open-search>
           Search

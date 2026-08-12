@@ -1,0 +1,69 @@
+<button
+  class="theme-toggle"
+  type="button"
+  aria-label="Dark mode"
+  aria-pressed="false"
+  data-theme-toggle
+>
+  <svg class="theme-toggle__icon theme-toggle__icon--sun" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="3.5"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+  </svg>
+  <svg class="theme-toggle__icon theme-toggle__icon--moon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"></path>
+  </svg>
+</button>
+
+<script>
+  const themeToggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+  const themeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeStorageKey = "scally-theme";
+
+  const storedTheme = () => {
+    try {
+      const value = window.localStorage.getItem(themeStorageKey);
+      return value === "light" || value === "dark" ? value : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const systemTheme = () => (themeQuery.matches ? "dark" : "light");
+
+  const syncThemeControl = () => {
+    const theme = document.documentElement.dataset.theme ?? systemTheme();
+    const isDark = theme === "dark";
+    themeToggle?.setAttribute("aria-pressed", String(isDark));
+    themeToggle?.setAttribute("aria-label", isDark ? "Light mode" : "Dark mode");
+  };
+
+  const applyTheme = (theme: "light" | "dark") => {
+    document.documentElement.dataset.theme = theme;
+    document.querySelector<HTMLMetaElement>("meta[data-adaptive-theme]")?.setAttribute(
+      "content",
+      theme === "dark" ? "#0c0c0e" : "#f5f5f7"
+    );
+    syncThemeControl();
+  };
+
+  themeToggle?.addEventListener("click", () => {
+    const currentTheme = document.documentElement.dataset.theme ?? systemTheme();
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+
+    try {
+      window.localStorage.setItem(themeStorageKey, nextTheme);
+    } catch {
+      // The current page still switches even when storage is unavailable.
+    }
+
+    applyTheme(nextTheme);
+  });
+
+  themeQuery.addEventListener("change", () => {
+    if (!storedTheme()) {
+      applyTheme(systemTheme());
+    }
+  });
+
+  syncThemeControl();
+</script>
