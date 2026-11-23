@@ -1,7 +1,7 @@
 ---
 import wordmark from "@/assets/brand/scallynetwork.png";
-import ThemeToggle from "@/components/ThemeToggle.astro";
 import WhiskyGlassIcon from "@/components/WhiskyGlassIcon.astro";
+import { getRecipes } from "@/lib/recipes";
 
 interface Props {
   showSearch?: boolean;
@@ -11,17 +11,24 @@ const currentPath = Astro.url.pathname;
 const { showSearch = true } = Astro.props;
 const isBarPage = currentPath.startsWith("/bar/");
 
+const isHome = currentPath === "/";
+
+const hasRecipes = getRecipes().length > 0;
+
 const navItems = [
-  { href: "/", label: "Home" },
   { href: "/writing/", label: "Writing" },
   { href: "/projects/", label: "Projects" },
   { href: "/photography/", label: "Photography" },
+  ...(hasRecipes ? [{ href: "/recipes/", label: "Recipes" }] : []),
   { href: "/qcortado/", label: "QCortado" },
   { href: "/about/", label: "About" }
 ];
+
+const isActive = (href: string) => currentPath.startsWith(href);
+const pad = (index: number) => String(index + 1).padStart(2, "0");
 ---
 
-<header class="site-header" data-site-header>
+<header class:list={["site-header", isHome && "site-header--home"]} data-site-header>
   <div class="site-header__backdrop" data-site-header-backdrop></div>
   <div class="site-header__inner frame">
     <div class="site-header__bar">
@@ -39,11 +46,13 @@ const navItems = [
       </button>
     </div>
     <nav class="site-header__nav" id="site-header-nav" aria-label="Primary">
-      {navItems.map((item) => (
+      {navItems.map((item, index) => (
         <a
           href={item.href}
-          class:list={["site-header__link", currentPath === item.href && "is-active"]}
+          class:list={["site-header__link", isActive(item.href) && "is-active"]}
+          aria-current={isActive(item.href) ? "page" : undefined}
         >
+          <span class="site-header__num" aria-hidden="true">{pad(index)}</span>
           {item.label}
         </a>
       ))}
@@ -56,10 +65,10 @@ const navItems = [
           isBarPage && "is-active"
         ]}
       >
+        <span class="site-header__num" aria-hidden="true">{pad(navItems.length)}</span>
         <WhiskyGlassIcon className="site-header__icon" />
         <span class="site-header__icon-label">Bar</span>
       </a>
-      <ThemeToggle />
       {showSearch && (
         <button class="site-header__search" type="button" data-open-search>
           Search

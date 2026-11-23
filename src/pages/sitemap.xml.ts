@@ -1,4 +1,5 @@
 import { getCaseStudyProjects, getPhotoSets, getPublishedPosts } from "@/lib/content";
+import { getRecipes } from "@/lib/recipes";
 import { siteMeta } from "@/lib/site";
 
 interface SitemapEntry {
@@ -15,6 +16,7 @@ function formatLastmod(value?: Date) {
 }
 
 export function GET() {
+  const recipes = getRecipes();
   const entries: SitemapEntry[] = [
     { path: "/" },
     { path: "/about/" },
@@ -23,6 +25,11 @@ export function GET() {
     { path: "/photography/" },
     { path: "/search/" },
     { path: "/bar/" },
+    ...(recipes.length ? [{ path: "/recipes/" }] : []),
+    ...recipes.map((entry) => ({
+      path: `/recipes/${entry.data.slug}/`,
+      lastmod: entry.data.updatedAt
+    })),
     ...getPublishedPosts().map((entry) => ({
       path: `/writing/${entry.data.slug}/`,
       lastmod: entry.data.updatedAt ?? entry.data.publishedAt

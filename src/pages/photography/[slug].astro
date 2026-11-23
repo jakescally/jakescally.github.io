@@ -1,7 +1,7 @@
 ---
 import GalleryEmbed from "@/components/GalleryEmbed.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getPhotoSetBySlug, getPhotoSets } from "@/lib/content";
+import { formatDate, getPhotoSetBySlug, getPhotoSets } from "@/lib/content";
 
 export function getStaticPaths() {
   return getPhotoSets().map((entry) => ({
@@ -19,15 +19,27 @@ const Content = entry.Content;
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description} image={entry.data.coverImage}>
-  <article class="frame article-shell" data-tone="moss">
-    <header class="page-heading page-heading--narrow">
-      <p class="page-heading__eyebrow">Photography</p>
-      <h1 class="page-heading__title">{entry.data.title}</h1>
-      <p class="page-heading__description">{entry.data.description}</p>
+  <article class="frame article-shell">
+    <header class="article-hero">
+      <p class="eyebrow">Photography</p>
+      <h1>{entry.data.title}</h1>
+      <p class="article-hero__dek">{entry.data.description}</p>
     </header>
 
-    <div class="prose article-content article-content--full">
-      <Content />
+    <div class="article-body">
+      <aside class="article-aside" aria-label="Details">
+        <table class="spec-table">
+          <tbody>
+            {entry.data.camera && <tr><th scope="row">Camera</th><td>{entry.data.camera}</td></tr>}
+            {entry.data.location && <tr><th scope="row">Location</th><td>{entry.data.location}</td></tr>}
+            {entry.data.date && <tr><th scope="row">Date</th><td>{formatDate(entry.data.date)}</td></tr>}
+            <tr><th scope="row">Photos</th><td>{entry.data.images.length}</td></tr>
+          </tbody>
+        </table>
+      </aside>
+      <div class="prose article-content">
+        <Content />
+      </div>
     </div>
 
     <GalleryEmbed set={entry.id} />

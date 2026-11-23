@@ -29,6 +29,7 @@ import drinks_old_fashioned, { frontmatter as drinks_old_fashioned_frontmatter }
 import drinks_pistacio_martini, { frontmatter as drinks_pistacio_martini_frontmatter } from "../content/drinks/pistacio-martini.md";
 import drinks_whisky_highball, { frontmatter as drinks_whisky_highball_frontmatter } from "../content/drinks/whisky-highball.md";
 import drinks_whisky_sour, { frontmatter as drinks_whisky_sour_frontmatter } from "../content/drinks/whisky-sour.md";
+import recipes_example_buttermilk_pancakes, { frontmatter as recipes_example_buttermilk_pancakes_frontmatter } from "../content/recipes/example-buttermilk-pancakes.md";
 
 export const blogModules = [
   { id: "canon-powershot-g2-2001-review", default: blog_canon_powershot_g2_2001_review, frontmatter: blog_canon_powershot_g2_2001_review_frontmatter },
@@ -70,4 +71,8 @@ export const drinksModules = [
   { id: "pistacio-martini", default: drinks_pistacio_martini, frontmatter: drinks_pistacio_martini_frontmatter },
   { id: "whisky-highball", default: drinks_whisky_highball, frontmatter: drinks_whisky_highball_frontmatter },
   { id: "whisky-sour", default: drinks_whisky_sour, frontmatter: drinks_whisky_sour_frontmatter },
+];
+
+export const recipesModules = [
+  { id: "example-buttermilk-pancakes", default: recipes_example_buttermilk_pancakes, frontmatter: recipes_example_buttermilk_pancakes_frontmatter },
 ];

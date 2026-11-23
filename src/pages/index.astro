@@ -5,118 +5,153 @@ import ArticleCard from "@/components/ArticleCard.astro";
 import PageHeading from "@/components/PageHeading.astro";
 import PhotoSetCard from "@/components/PhotoSetCard.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
+import wordmark from "@/assets/brand/scallynetwork.png";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { requireImage, shouldUseCompactImageCard } from "@/lib/assets";
 import {
-  getCompactImageWindowConfig,
-  requireImage,
-  shouldUseCompactImageCard
-} from "@/lib/assets";
-import { getPhotoSets, getProjects, getPublishedPosts } from "@/lib/content";
+  formatDate,
+  getPhotoSets,
+  getPostNumber,
+  getProjects,
+  getPublishedPosts
+} from "@/lib/content";
+import { getPublishedDrinks } from "@/lib/drinks";
 import { frontmatter as about } from "@/content/sitePages/about.md";
 
 const posts = getPublishedPosts();
 const projects = getProjects();
 const photoSets = getPhotoSets();
+const drinks = getPublishedDrinks();
 
-const leadPost = posts.find((entry) => entry.data.featured) ?? posts[0];
-const recentPosts = posts.filter((entry) => entry.id !== leadPost.id).slice(0, 4);
-const writingPosts = [leadPost, ...recentPosts];
+const leadPost = posts.find((entry) => entry.data.featured && entry.data.heroImage) ?? posts[0];
+const recentPosts = posts.filter((entry) => entry.id !== leadPost.id).slice(0, 6);
 const featuredProjects = projects.filter((entry) => entry.data.featured).slice(0, 3);
 const featuredPhotoSets = photoSets.filter((entry) => entry.data.featured).slice(0, 3);
 const visiblePhotoSets = featuredPhotoSets.length ? featuredPhotoSets : photoSets.slice(0, 3);
-const heroImage = requireImage(leadPost.data.heroImage);
-const compactLeadPanel = shouldUseCompactImageCard(heroImage);
-const compactLeadWindow = compactLeadPanel ? getCompactImageWindowConfig(heroImage) : undefined;
-const compactLeadStyle = compactLeadWindow
-  ? {
-      "--compact-media-min": compactLeadWindow.minWidth,
-      "--compact-media-max": compactLeadWindow.maxWidth,
-      "--compact-media-padding": compactLeadWindow.padding,
-      "--compact-media-fit": compactLeadWindow.fit,
-      ...(compactLeadWindow.aspectRatio
-        ? { "--compact-media-aspect": compactLeadWindow.aspectRatio }
-        : {})
-    }
-  : undefined;
-const logoImage = requireImage("brand/logo.png");
+
+const leadHref = `/writing/${leadPost.data.slug}/`;
+const leadNumber = getPostNumber(leadPost);
+const leadImage = leadPost.data.heroImage ? requireImage(leadPost.data.heroImage) : undefined;
+const leadImageCompact = leadImage ? shouldUseCompactImageCard(leadImage) : false;
+const leadPhotoSetCount = leadPost.data.photoSetIds?.length ?? 0;
+
+const counts = [
+  { label: "Entries", value: posts.length, href: "/writing/" },
+  { label: "Projects", value: projects.length, href: "/projects/" },
+  { label: "Photo sets", value: photoSets.length, href: "/photography/" },
+  { label: "Drinks", value: drinks.length, href: "/bar/" }
+];
+const pad = (value: number) => String(value).padStart(2, "0");
 ---
 
 <BaseLayout image={leadPost.data.heroImage}>
-  <section class="frame home-hero" data-tone="brass">
-    <div class="hero-grid">
+  <section class="frame masthead">
+    <div class="masthead__top">
+      <a class="masthead__brand" href="/" aria-label="Scally Network home">
+        <img src={wordmark.src} alt="Scally Network" width={wordmark.width} height={wordmark.height} />
+      </a>
+      <dl class="masthead__counts">
+        {counts.map((count) => (
+          <>
+            <dt><a href={count.href}>{count.label}</a></dt>
+            <dd>{pad(count.value)}</dd>
+          </>
+        ))}
+      </dl>
+    </div>
+    <div class="masthead__intro">
       <div>
-        <p class="eyebrow">The Archive</p>
         <h1 class="hero-title">
           A resource for my work in tech, software, science and photography.
         </h1>
         <p class="hero-copy">
           Plus miscellaneous bits information I note for myself and others.
         </p>
-        <div class="button-row">
-          <a class="button button--primary" href="/writing/">Enter the archive</a>
-          <a class="button button--ghost" href="/projects/">See selected work</a>
-        </div>
       </div>
-      <div
-        class:list={[
-          "hero-panel",
-          compactLeadPanel && "hero-panel--compact",
-          compactLeadWindow?.crop && "hero-panel--compact-crop"
-        ]}
-        style={compactLeadStyle}
-      >
-        <div class="hero-panel__art">
-          <Image src={heroImage} alt={leadPost.data.title} widths={[720, 1200]} sizes="(min-width: 960px) 36vw, 100vw" />
-          <img class="hero-panel__mark" src={logoImage.src} alt="" aria-hidden="true" />
-        </div>
-        <div class="hero-panel__card">
-          <p class="eyebrow">Featured entry</p>
-          <h2>
-            <a href={`/writing/${leadPost.data.slug}/`}>{leadPost.data.title}</a>
-          </h2>
-          <p>{leadPost.data.description}</p>
-        </div>
+      <div class="button-row">
+        <a class="button button--primary" href="/writing/">Enter the archive</a>
+        <a class="button button--ghost" href="/projects/">See selected work</a>
       </div>
     </div>
   </section>
 
-  <section class="frame section-stack" data-tone="slate">
-    <div class="section-heading">
-      <p class="section-heading__eyebrow">Selected work</p>
-      <h2>Recent projects I've worked on</h2>
+  <section class="frame feature" aria-labelledby="featured-entry">
+    {leadImage && (
+      <a class:list={["feature__media", leadImageCompact && "is-compact"]} href={leadHref} tabindex="-1" aria-hidden="true">
+        <Image src={leadImage} alt="" widths={[720, 1100]} sizes="(min-width: 960px) 40vw, 100vw" />
+        {leadNumber && <span class="cat-tag">No. {leadNumber}</span>}
+      </a>
+    )}
+    <div class="feature__body">
+      <p class="cat-label">Featured entry</p>
+      <h2 class="feature__title" id="featured-entry">
+        <a href={leadHref}>{leadPost.data.title}</a>
+      </h2>
+      <p class="feature__dek">{leadPost.data.description}</p>
+      <table class="spec-table">
+        <tbody>
+          {leadNumber && (
+            <tr><th scope="row">No.</th><td>{leadNumber}</td></tr>
+          )}
+          <tr><th scope="row">Published</th><td>{formatDate(leadPost.data.publishedAt)}</td></tr>
+          {leadPost.data.topics.length > 0 && (
+            <tr><th scope="row">Topics</th><td>{leadPost.data.topics.join(", ")}</td></tr>
+          )}
+          {leadPhotoSetCount > 0 && (
+            <tr><th scope="row">Photo sets</th><td>{leadPhotoSetCount}</td></tr>
+          )}
+        </tbody>
+      </table>
+      <a class="button button--primary" href={leadHref}>Read</a>
     </div>
-    <div class="card-grid card-grid--three" data-masonry-grid>
+  </section>
+
+  <section class="frame section-stack">
+    <div class="section-heading">
+      <div>
+        <p class="section-heading__eyebrow">Recent writing</p>
+        <h2>Articles and notes</h2>
+      </div>
+      <a class="section-heading__link" href="/writing/">Full index →</a>
+    </div>
+    <div class="card-grid">
+      {recentPosts.map((entry) => (
+        <ArticleCard entry={entry} />
+      ))}
+    </div>
+  </section>
+
+  <section class="frame section-stack">
+    <div class="section-heading">
+      <div>
+        <p class="section-heading__eyebrow">Selected work</p>
+        <h2>Recent projects I've worked on</h2>
+      </div>
+      <a class="section-heading__link" href="/projects/">All projects →</a>
+    </div>
+    <div class="card-grid">
       {featuredProjects.map((entry) => (
         <ProjectCard entry={entry} />
       ))}
     </div>
   </section>
 
-  <section class="frame section-stack" data-tone="rust">
+  <section class="frame section-stack">
     <div class="section-heading">
-      <p class="section-heading__eyebrow">Recent writing</p>
-      <h2>Articles and notes</h2>
+      <div>
+        <p class="section-heading__eyebrow">Photography</p>
+        <h2>Astrophotography, travel photos, camera reviews, and more</h2>
+      </div>
+      <a class="section-heading__link" href="/photography/">All photo sets →</a>
     </div>
-    <div class="card-grid card-grid--writing" data-masonry-grid>
-      {writingPosts.map((entry, index) => (
-        <ArticleCard entry={entry} featured={index === 0} />
-      ))}
-    </div>
-  </section>
-
-  <section class="frame section-stack section-stack--offset" data-tone="moss">
-    <div class="section-heading">
-      <p class="section-heading__eyebrow">Photography</p>
-      <h2>Astrophotography, travel photos, camera reviews, and more</h2>
-    </div>
-    <div class="card-grid card-grid--three" data-masonry-grid>
+    <div class="card-grid">
       {visiblePhotoSets.map((entry) => (
         <PhotoSetCard entry={entry} />
       ))}
     </div>
   </section>
 
-  <section class="frame about-slice" data-tone="brass">
+  <section class="frame about-slice">
     <PageHeading
       eyebrow="About the site"
       title={about.title}

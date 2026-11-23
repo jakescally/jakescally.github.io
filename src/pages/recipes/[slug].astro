@@ -1,0 +1,347 @@
+---
+import { Image } from "astro:assets";
+
+import RecipesLayout from "@/layouts/RecipesLayout.astro";
+import { requireImage } from "@/lib/assets";
+import { renderQuantity } from "@/lib/recipe-units";
+import {
+  formatMinutes,
+  getRecipeBySlug,
+  getRecipes,
+  slugify,
+  totalMinutes,
+  type RecipeIngredient
+} from "@/lib/recipes";
+
+export function getStaticPaths() {
+  return getRecipes().map((entry) => ({ params: { slug: entry.data.slug } }));
+}
+
+const entry = getRecipeBySlug(Astro.params.slug);
+
+if (!entry) {
+  throw new Error(`Missing recipe: ${Astro.params.slug}`);
+}
+
+const { data } = entry;
+const Content = entry.Content;
+const heroImage = data.heroImage ? requireImage(data.heroImage) : undefined;
+
+const times = [
+  { label: "Prep", value: formatMinutes(data.prepTime) },
+  { label: "Cook", value: formatMinutes(data.cookTime) },
+  { label: "Total", value: formatMinutes(totalMinutes(data)) }
+].filter((time) => time.value);
+
+// Consecutive ingredients with the same `group` share a heading.
+const ingredientGroups = data.ingredients.reduce<Array<{ name?: string; items: RecipeIngredient[] }>>(
+  (groups, ingredient) => {
+    const last = groups.at(-1);
+
+    if (last && last.name === ingredient.group) {
+      last.items.push(ingredient);
+    } else {
+      groups.push({ name: ingredient.group, items: [ingredient] });
+    }
+
+    return groups;
+  },
+  []
+);
+
+const quantityData = (ingredient: RecipeIngredient) =>
+  JSON.stringify({
+    min: ingredient.min,
+    max: ingredient.max,
+    unit: ingredient.unit,
+    grams: ingredient.grams
+  });
+
+const formatTimer = (minutes: number) =>
+  `${Math.floor(minutes)}:${String(Math.round((minutes % 1) * 60)).padStart(2, "0")}`;
+---
+
+<RecipesLayout title={data.title} description={data.description} image={data.heroImage}>
+  <section class="frame recipe-page" data-recipe data-base-servings={data.servings}>
+    <nav class="recipe-crumbs" aria-label="Breadcrumb">
+      <a class="recipe-button" href="/recipes/">← All recipes</a>
+      <a class="recipe-crumbs__category" href={`/recipes/#${slugify(data.category)}`}>{data.category}</a>
+    </nav>
+
+    <article class="recipe-card">
+      <header class="recipe-card__header">
+        <div class="recipe-card__heading">
+          <p class="recipe-card__eyebrow">
+            Recipe · {data.category}{data.cuisine && ` · ${data.cuisine}`}
+            {data.draft && <span class="recipe-card__draft">Draft</span>}
+          </p>
+          <h1>{data.title}</h1>
+          {data.description && <p class="recipe-card__description">{data.description}</p>}
+          {(times.length > 0 || data.tags.length > 0) && (
+            <p class="recipe-card__facts">
+              {times.map((time) => (
+                <span>{time.label} {time.value}</span>
+              ))}
+              {data.tags.map((tag) => (
+                <span>#{tag.toLowerCase()}</span>
+              ))}
+            </p>
+          )}
+        </div>
+        {heroImage && (
+          <div class="recipe-card__photo">
+            <Image src={heroImage} alt={data.title} widths={[400, 720]} sizes="(min-width: 900px) 20rem, 100vw" />
+          </div>
+        )}
+      </header>
+
+      <div class="recipe-controls">
+        <div class="recipe-controls__servings">
+          <span id="servings-label">Serves</span>
+          <button class="recipe-button recipe-button--square" type="button" data-servings-step="-1" aria-label="Fewer servings">−</button>
+          <output class="recipe-controls__count" data-servings-value aria-labelledby="servings-label" aria-live="polite">{data.servings}</output>
+          <button class="recipe-button recipe-button--square" type="button" data-servings-step="1" aria-label="More servings">+</button>
+        </div>
+        <div class="recipe-controls__units" role="group" aria-label="Units">
+          <button class="recipe-toggle" type="button" data-unit-mode="original" aria-pressed="true">As written</button>
+          <button class="recipe-toggle" type="button" data-unit-mode="us" aria-pressed="false">Cups &amp; spoons</button>
+          <button class="recipe-toggle" type="button" data-unit-mode="metric" aria-pressed="false">Grams</button>
+        </div>
+        <span class="recipe-controls__note" data-scale-note></span>
+        <div class="recipe-controls__tools">
+          <button class="recipe-button" type="button" data-wake-lock aria-pressed="false" hidden>Keep screen on</button>
+          <button class="recipe-button" type="button" data-print>Print</button>
+        </div>
+      </div>
+
+      <div class="recipe-card__body">
+        <section class="recipe-ingredients" aria-labelledby="ingredients-heading">
+          <h2 id="ingredients-heading">Ingredients</h2>
+          {ingredientGroups.map((group) => (
+            <div class="recipe-ingredients__group">
+              {group.name && <h3>{group.name}</h3>}
+              <ul>
+                {group.items.map((ingredient) => (
+                  <li>
+                    <label>
+                      <input type="checkbox" />
+                      <span class="recipe-ingredients__qty" data-quantity={quantityData(ingredient)}>
+                        {renderQuantity(ingredient, 1, "original")}
+                      </span>
+                      <span class="recipe-ingredients__item">{ingredient.item}{ingredient.note && <span class="recipe-ingredients__note">, {ingredient.note}</span>}</span>
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        <section class="recipe-method" aria-labelledby="method-heading">
+          <h2 id="method-heading">Method</h2>
+          <ol>
+            {data.steps.map((step) => (
+              <li>
+                <label>
+                  <input type="checkbox" />
+                  <span>{step.text}</span>
+                </label>
+                {step.timer && (
+                  <button class="recipe-timer" type="button" data-timer={step.timer * 60} aria-label={`Start ${formatTimer(step.timer)} timer`}>
+                    ▶ {formatTimer(step.timer)}
+                  </button>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      </div>
+
+      <section class="recipe-notes" aria-labelledby="notes-heading">
+        <h2 id="notes-heading">Notes</h2>
+        <div class="prose recipe-notes__body">
+          <Content />
+        </div>
+        {data.source && (
+          <p class="recipe-notes__source">
+            Source: {data.sourceUrl ? <a href={data.sourceUrl} rel="noreferrer">{data.source}</a> : data.source}
+          </p>
+        )}
+      </section>
+    </article>
+  </section>
+</RecipesLayout>
+
+<script>
+  import { renderQuantity, type RecipeQuantity, type UnitMode } from "@/lib/recipe-units";
+
+  const STORAGE_KEY = "scally-recipe-units";
+  const root = document.querySelector<HTMLElement>("[data-recipe]");
+
+  if (root) {
+    const base = Number(root.dataset.baseServings) || 1;
+    const quantities = [...root.querySelectorAll<HTMLElement>("[data-quantity]")].map((element) => ({
+      element,
+      quantity: JSON.parse(element.dataset.quantity ?? "{}") as RecipeQuantity
+    }));
+    const servingsValue = root.querySelector<HTMLOutputElement>("[data-servings-value]");
+    const scaleNote = root.querySelector<HTMLElement>("[data-scale-note]");
+    const modeButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-unit-mode]")];
+
+    let servings = base;
+    let mode: UnitMode = "original";
+
+    try {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === "us" || stored === "metric" || stored === "original") {
+        mode = stored;
+      }
+    } catch {
+      // Storage can be unavailable; the default still works.
+    }
+
+    const render = () => {
+      const factor = servings / base;
+
+      for (const { element, quantity } of quantities) {
+        element.textContent = renderQuantity(quantity, factor, mode);
+      }
+
+      if (servingsValue) {
+        servingsValue.textContent = String(servings);
+      }
+
+      if (scaleNote) {
+        scaleNote.textContent =
+          servings === base ? "" : `×${Math.round(factor * 100) / 100} (written for ${base})`;
+      }
+
+      for (const button of modeButtons) {
+        button.setAttribute("aria-pressed", String(button.dataset.unitMode === mode));
+      }
+    };
+
+    root.querySelectorAll<HTMLButtonElement>("[data-servings-step]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const next = servings + Number(button.dataset.servingsStep);
+        servings = Math.min(Math.max(next, 1), Math.max(base * 10, 24));
+        render();
+      });
+    });
+
+    for (const button of modeButtons) {
+      button.addEventListener("click", () => {
+        mode = (button.dataset.unitMode as UnitMode) ?? "original";
+
+        try {
+          window.localStorage.setItem(STORAGE_KEY, mode);
+        } catch {
+          // Ignore storage failures.
+        }
+
+        render();
+      });
+    }
+
+    // Step timers: click to start, click again to stop.
+    root.querySelectorAll<HTMLButtonElement>("[data-timer]").forEach((button) => {
+      const seconds = Number(button.dataset.timer);
+      const label = button.textContent?.trim() ?? "";
+      let interval: number | undefined;
+
+      const format = (value: number) => `${Math.floor(value / 60)}:${String(value % 60).padStart(2, "0")}`;
+
+      const reset = () => {
+        window.clearInterval(interval);
+        interval = undefined;
+        button.classList.remove("is-running", "is-done");
+        button.textContent = label;
+      };
+
+      button.addEventListener("click", () => {
+        if (interval !== undefined || button.classList.contains("is-done")) {
+          reset();
+          return;
+        }
+
+        let remaining = seconds;
+        button.classList.add("is-running");
+        button.textContent = `■ ${format(remaining)}`;
+
+        interval = window.setInterval(() => {
+          remaining -= 1;
+
+          if (remaining > 0) {
+            button.textContent = `■ ${format(remaining)}`;
+            return;
+          }
+
+          window.clearInterval(interval);
+          interval = undefined;
+          button.classList.remove("is-running");
+          button.classList.add("is-done");
+          button.textContent = "Done";
+          navigator.vibrate?.([200, 100, 200]);
+
+          try {
+            const audio = new AudioContext();
+            const tone = audio.createOscillator();
+            tone.frequency.value = 880;
+            tone.connect(audio.destination);
+            tone.start();
+            tone.stop(audio.currentTime + 0.4);
+          } catch {
+            // Sound is optional.
+          }
+        }, 1000);
+      });
+    });
+
+    // Keep the screen awake while cooking, where the browser supports it.
+    const wakeButton = root.querySelector<HTMLButtonElement>("[data-wake-lock]");
+    let wakeLock: WakeLockSentinel | null = null;
+
+    const setWakeState = (on: boolean) => {
+      wakeButton?.setAttribute("aria-pressed", String(on));
+      if (wakeButton) {
+        wakeButton.textContent = on ? "Screen stays on" : "Keep screen on";
+      }
+    };
+
+    if (wakeButton && "wakeLock" in navigator) {
+      wakeButton.hidden = false;
+
+      wakeButton.addEventListener("click", async () => {
+        if (wakeLock) {
+          await wakeLock.release();
+          wakeLock = null;
+          setWakeState(false);
+          return;
+        }
+
+        try {
+          wakeLock = await navigator.wakeLock.request("screen");
+          setWakeState(true);
+          wakeLock.addEventListener("release", () => {
+            if (document.visibilityState === "visible") {
+              wakeLock = null;
+              setWakeState(false);
+            }
+          });
+        } catch {
+          setWakeState(false);
+        }
+      });
+
+      document.addEventListener("visibilitychange", async () => {
+        if (wakeLock && document.visibilityState === "visible") {
+          wakeLock = await navigator.wakeLock.request("screen");
+        }
+      });
+    }
+
+    root.querySelector("[data-print]")?.addEventListener("click", () => window.print());
+
+    render();
+  }
+</script>

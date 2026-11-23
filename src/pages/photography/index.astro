@@ -11,23 +11,25 @@ const visualEssays = sortByDate(
 ---
 
 <BaseLayout title="Photography" description="Photo sets, camera studies, and image-led writing from the Scally Network archive.">
-  <section class="frame archive-shell" data-tone="moss">
+  <section class="frame archive-shell">
     <PageHeading
       eyebrow="Photography"
       title="Sets of photos, camera reviews, and photography adventures"
       description="This is where I keep my galleries of photos, whether for reviews or for viewing pleasure"
     />
-    <div class="card-grid card-grid--three" data-masonry-grid>
+    <div class="card-grid">
       {photoSets.map((entry) => (
         <PhotoSetCard entry={entry} />
       ))}
     </div>
   </section>
 
-  <section class="frame section-stack" data-tone="moss">
+  <section class="frame section-stack">
     <div class="section-heading">
-      <p class="section-heading__eyebrow">Photo-first posts</p>
-      <h2>Articles with lots of pictures</h2>
+      <div>
+        <p class="section-heading__eyebrow">Photo-first posts</p>
+        <h2>Articles with lots of pictures</h2>
+      </div>
     </div>
     <div class="essay-rail">
       {visualEssays.map((entry) => (

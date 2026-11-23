@@ -8,13 +8,13 @@ const projects = getProjects();
 ---
 
 <BaseLayout title="Projects" description="Selected systems, experiments, and site work from the Scally Network archive.">
-  <section class="frame archive-shell" data-tone="slate">
+  <section class="frame archive-shell">
     <PageHeading
       eyebrow="Selected work"
       title="Projects and experiences"
       description="Various things I've worked on and felt were worth documenting"
     />
-    <div class="card-grid card-grid--three" data-masonry-grid>
+    <div class="card-grid">
       {projects.map((entry) => (
         <ProjectCard entry={entry} />
       ))}

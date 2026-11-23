@@ -183,6 +183,14 @@ export function getPublishedPosts() {
   return sortByDate(blogPosts.filter((entry) => !entry.data.draft));
 }
 
+/** Catalog number: published posts counted oldest-first, e.g. "009". */
+export function getPostNumber(entry: BlogEntry) {
+  const oldestFirst = [...getPublishedPosts()].reverse();
+  const index = oldestFirst.findIndex((candidate) => candidate.id === entry.id);
+
+  return index < 0 ? undefined : String(index + 1).padStart(3, "0");
+}
+
 export function getBlogPostBySlug(slug?: string) {
   return blogPosts.find((entry) => entry.data.slug === slug);
 }
@@ -254,11 +262,21 @@ export function sortByDate<T extends BlogEntry>(entries: T[]) {
   );
 }
 
+export function formatShortDate(date: Date) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(date);
+}
+
 export function formatDate(date: Date) {
   return new Intl.DateTimeFormat("en-US", {
     month: "long",
     day: "numeric",
-    year: "numeric"
+    year: "numeric",
+    timeZone: "UTC"
   }).format(date);
 }
 

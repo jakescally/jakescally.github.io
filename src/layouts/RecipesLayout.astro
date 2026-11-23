@@ -1,0 +1,35 @@
+---
+import "@/styles/drinks.css";
+import "@/styles/recipes.css";
+
+import HomeIcon from "@/components/HomeIcon.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description, image } = Astro.props;
+---
+
+<!--
+  Recipes share the bar's "Table Card" look (wood table, cream cards), so the
+  body carries page-bar for those base styles plus page-recipes for its own.
+-->
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  bodyClass="page-bar page-recipes"
+  showHeader={false}
+  showSiteSearch={false}
+  showFooter={false}
+  themeColor="#2e2119"
+>
+  <a class="bar-home-link" href="/" aria-label="Back to Scally Network home">
+    <HomeIcon className="bar-home-link__icon" />
+  </a>
+  <slot />
+</BaseLayout>

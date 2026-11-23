@@ -21,36 +21,53 @@ if (!entry || entry.data.detailMode !== "case-study") {
 
 const Content = entry.Content;
 const hasHeroImage = Boolean(entry.data.heroImage);
+const links = [
+  { label: "GitHub", href: entry.data.links.github },
+  { label: "Demo", href: entry.data.links.demo },
+  { label: "Write-up", href: entry.data.links.writeup }
+].filter((link): link is { label: string; href: string } => Boolean(link.href));
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.summary} image={entry.data.heroImage}>
-  <article class="frame article-shell" data-tone="slate">
-    <header class:list={["article-hero", !hasHeroImage && "article-hero--text-only"]}>
-      <div class="article-hero__copy">
-        <p class="eyebrow">Project</p>
-        <h1>{entry.data.title}</h1>
-        <p class="article-hero__dek">{entry.data.summary}</p>
-        <div class="article-meta">
-          <span>{entry.data.year}</span>
-          <span>{entry.data.status}</span>
-        </div>
-      </div>
-      {hasHeroImage && (
-        <LightboxImage
-          asset={entry.data.heroImage}
-          alt={entry.data.title}
-          caption={entry.data.title}
-          rootTag="div"
-          rootId={`project-hero-${entry.data.slug}`}
-          rootClass="article-hero__media"
-          linkClass="article-hero__media-link"
-          widths={[840, 1200, 1600]}
-          sizes="(min-width: 1120px) 42vw, 100vw"
-        />
-      )}
+  <article class="frame article-shell">
+    <header class="article-hero">
+      <p class="eyebrow">Project</p>
+      <h1>{entry.data.title}</h1>
+      <p class="article-hero__dek">{entry.data.summary}</p>
     </header>
-    <div class="prose article-content article-content--full">
-      <Content />
+
+    {hasHeroImage && (
+      <LightboxImage
+        asset={entry.data.heroImage}
+        alt={entry.data.title}
+        caption={entry.data.title}
+        rootTag="div"
+        rootId={`project-hero-${entry.data.slug}`}
+        rootClass="article-hero__media"
+        linkClass="article-hero__media-link"
+        widths={[840, 1200, 1600]}
+        sizes="(min-width: 1120px) 60vw, 100vw"
+      />
+    )}
+
+    <div class="article-body">
+      <aside class="article-aside" aria-label="Details">
+        <table class="spec-table">
+          <tbody>
+            <tr><th scope="row">Year</th><td>{entry.data.year}</td></tr>
+            <tr><th scope="row">Status</th><td>{entry.data.status}</td></tr>
+            {entry.data.stack.length > 0 && (
+              <tr><th scope="row">Stack</th><td>{entry.data.stack.join(", ")}</td></tr>
+            )}
+            {links.map((link) => (
+              <tr><th scope="row">{link.label}</th><td><a href={link.href}>{link.href.replace(/^https?:\/\//, "")}</a></td></tr>
+            ))}
+          </tbody>
+        </table>
+      </aside>
+      <div class="prose article-content">
+        <Content />
+      </div>
     </div>
   </article>
 </BaseLayout>

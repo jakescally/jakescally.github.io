@@ -8,7 +8,8 @@ const collections = [
   { name: "blog", dir: path.join(contentRoot, "blog") },
   { name: "projects", dir: path.join(contentRoot, "projects") },
   { name: "photoSets", dir: path.join(contentRoot, "photoSets") },
-  { name: "drinks", dir: path.join(contentRoot, "drinks") }
+  { name: "drinks", dir: path.join(contentRoot, "drinks") },
+  { name: "recipes", dir: path.join(contentRoot, "recipes") }
 ];
 const supportedExtensions = new Set([".md", ".mdx"]);
 

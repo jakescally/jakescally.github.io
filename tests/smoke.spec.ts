@@ -138,7 +138,9 @@ test("bar menu uses a slide-in control panel on mobile", async ({ page }) => {
   await expect(allSectionsButton).toHaveClass(/is-active/);
   await expect(filteredSectionButton).not.toHaveClass(/is-active/);
 
-  await menuToggle.click();
+  // While the panel is open the toggle reads "Close".
+  await browser.getByRole("button", { name: "Close" }).click();
+  await expect(menuToggle).toBeVisible();
   await expect(searchInput).not.toBeVisible();
 });
 
@@ -245,4 +247,43 @@ test("legacy redirects still land in the new archive", async ({ page }) => {
   await page.goto("/my-crt-history/");
   await page.waitForURL("**/writing/crt-stash-2024/");
   await expect(page).toHaveURL(/\/writing\/crt-stash-2024\/$/);
+});
+
+// The example recipe is a draft, so these run against `npm run dev` (drafts are visible there).
+test("recipe page scales servings and converts units", async ({ page }) => {
+  await page.goto("/recipes/example-buttermilk-pancakes/");
+
+  const flour = page.locator(".recipe-ingredients li", { hasText: "all-purpose flour" }).locator("[data-quantity]");
+  await expect(page.getByRole("heading", { name: "Buttermilk Pancakes" })).toBeVisible();
+  await expect(flour).toHaveText("2 cups");
+
+  await page.getByRole("button", { name: "More servings" }).click();
+  await page.getByRole("button", { name: "More servings" }).click();
+  await expect(page.locator("[data-servings-value]")).toHaveText("6");
+  await expect(flour).toHaveText("3 cups");
+
+  await page.getByRole("button", { name: "Grams" }).click();
+  await expect(flour).toHaveText("375 g");
+
+  await page.getByRole("button", { name: "Fewer servings" }).click();
+  await page.getByRole("button", { name: "Fewer servings" }).click();
+  await page.getByRole("button", { name: "Cups & spoons" }).click();
+  await expect(flour).toHaveText("2 cups");
+  await page.getByRole("button", { name: "As written" }).click();
+});
+
+test("recipe index filters by category tab", async ({ page }) => {
+  await page.goto("/recipes/");
+
+  await expect(page.getByRole("heading", { name: "Recipes" })).toBeVisible();
+  const entry = page.getByRole("link", { name: /Buttermilk Pancakes/ });
+  await expect(entry).toBeVisible();
+
+  await page.getByRole("button", { name: "Breakfast" }).click();
+  await expect(page).toHaveURL(/#breakfast$/);
+  await expect(entry).toBeVisible();
+
+  await page.getByLabel("Search recipes").fill("no-such-recipe");
+  await expect(entry).toBeHidden();
+  await expect(page.getByText("Nothing matches.")).toBeVisible();
 });

@@ -1,0 +1,223 @@
+---
+import RecipesLayout from "@/layouts/RecipesLayout.astro";
+import {
+  collectValues,
+  formatMinutes,
+  getRecipes,
+  slugify,
+  totalMinutes,
+  type RecipeEntry
+} from "@/lib/recipes";
+
+const recipes = getRecipes();
+const categories = collectValues(recipes, (entry) => [entry.data.category]);
+const cuisines = collectValues(recipes, (entry) => (entry.data.cuisine ? [entry.data.cuisine] : []));
+const tags = collectValues(recipes, (entry) => entry.data.tags);
+const sections = categories.map((category) => ({
+  category,
+  entries: recipes.filter((entry) => entry.data.category === category)
+}));
+
+const searchText = (entry: RecipeEntry) =>
+  [
+    entry.data.title,
+    entry.data.description,
+    entry.data.category,
+    entry.data.cuisine,
+    ...entry.data.tags,
+    ...entry.data.ingredients.map((ingredient) => ingredient.item)
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+const details = (entry: RecipeEntry) =>
+  [
+    `Serves ${entry.data.servings}`,
+    formatMinutes(totalMinutes(entry.data)),
+    ...entry.data.tags
+  ].filter(Boolean);
+---
+
+<RecipesLayout title="Recipes">
+  <section class="frame recipe-index" data-recipe-index>
+    <div class="recipe-tabs" role="group" aria-label="Category">
+      <button class="recipe-tab" type="button" data-category="all" aria-pressed="true">All</button>
+      {categories.map((category) => (
+        <button class="recipe-tab" type="button" data-category={slugify(category)} aria-pressed="false">
+          {category}
+        </button>
+      ))}
+    </div>
+
+    <div class="menu-sheet recipe-index__sheet">
+      <div class="menu-sheet__inner">
+        <div class="menu-sheet__header">
+          <h1 class="menu-sheet__title">Recipes</h1>
+        </div>
+
+        {recipes.length > 0 && (
+          <div class="recipe-filters">
+            <label class="recipe-filters__search">
+              <span>Search recipes</span>
+              <input
+                class="drink-browser__search-input"
+                type="search"
+                placeholder="Dish, ingredient, or tag"
+                autocomplete="off"
+                data-recipe-search
+              />
+            </label>
+            {cuisines.length > 0 && (
+              <div class="recipe-filters__group" role="group" aria-label="Cuisine">
+                <span>Cuisine</span>
+                <div class="drink-browser__chip-row">
+                  <button class="filter-chip is-active" type="button" data-filter="cuisine" data-value="all">Any</button>
+                  {cuisines.map((cuisine) => (
+                    <button class="filter-chip" type="button" data-filter="cuisine" data-value={cuisine}>{cuisine}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {tags.length > 0 && (
+              <div class="recipe-filters__group" role="group" aria-label="Tags">
+                <span>Tags</span>
+                <div class="drink-browser__chip-row">
+                  <button class="filter-chip is-active" type="button" data-filter="tag" data-value="all">Any</button>
+                  {tags.map((tag) => (
+                    <button class="filter-chip" type="button" data-filter="tag" data-value={tag}>{tag}</button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <p class="drink-browser__no-results" data-recipe-no-results hidden>Nothing matches.</p>
+
+        {recipes.length === 0 && <p class="drink-browser__no-results">No recipes yet.</p>}
+
+        <div class="drink-browser__sections">
+          {sections.map(({ category, entries }) => (
+            <section class="drink-browser__section" data-recipe-section={slugify(category)}>
+              <div class="drink-browser__section-heading">
+                <p>{category}</p>
+                <span>{entries.length} recipe{entries.length === 1 ? "" : "s"}</span>
+              </div>
+              <div class="drink-browser__list">
+                {entries.map((entry) => (
+                  <a
+                    class="menu-entry recipe-entry"
+                    href={`/recipes/${entry.data.slug}/`}
+                    data-recipe-entry
+                    data-cuisine={entry.data.cuisine ?? ""}
+                    data-tags={entry.data.tags.join("|")}
+                    data-search={searchText(entry)}
+                  >
+                    <span class="menu-entry__head">
+                      <span class="menu-entry__title-row">
+                        <span class="menu-entry__title">{entry.data.title}</span>
+                        {entry.data.draft && <span class="menu-entry__status">Draft</span>}
+                      </span>
+                      {entry.data.cuisine && <span class="menu-entry__spirit">{entry.data.cuisine}</span>}
+                    </span>
+                    {entry.data.description && (
+                      <span class="menu-entry__description">{entry.data.description}</span>
+                    )}
+                    <span class="menu-entry__tail">
+                      {details(entry).map((detail) => (
+                        <span>{detail}</span>
+                      ))}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</RecipesLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-recipe-index]");
+
+  if (root) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-category]")];
+    const chips = [...root.querySelectorAll<HTMLButtonElement>("[data-filter]")];
+    const search = root.querySelector<HTMLInputElement>("[data-recipe-search]");
+    const sections = [...root.querySelectorAll<HTMLElement>("[data-recipe-section]")];
+    const noResults = root.querySelector<HTMLElement>("[data-recipe-no-results]");
+    const state = { category: "all", cuisine: "all", tag: "all" };
+
+    const fromHash = () => {
+      const hash = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+      state.category = tabs.some((tab) => tab.dataset.category === hash) ? hash : "all";
+    };
+
+    const refresh = () => {
+      const term = search?.value.trim().toLowerCase() ?? "";
+      let visibleCount = 0;
+
+      for (const tab of tabs) {
+        tab.setAttribute("aria-pressed", String(tab.dataset.category === state.category));
+      }
+
+      for (const chip of chips) {
+        const group = chip.dataset.filter as "cuisine" | "tag";
+        chip.classList.toggle("is-active", chip.dataset.value === state[group]);
+      }
+
+      for (const section of sections) {
+        const inCategory = state.category === "all" || section.dataset.recipeSection === state.category;
+        let sectionVisible = 0;
+
+        section.querySelectorAll<HTMLElement>("[data-recipe-entry]").forEach((entry) => {
+          const tags = entry.dataset.tags?.split("|") ?? [];
+          const visible =
+            inCategory &&
+            (state.cuisine === "all" || entry.dataset.cuisine === state.cuisine) &&
+            (state.tag === "all" || tags.includes(state.tag)) &&
+            (!term || (entry.dataset.search ?? "").includes(term));
+
+          entry.hidden = !visible;
+          sectionVisible += visible ? 1 : 0;
+        });
+
+        section.hidden = sectionVisible === 0;
+        visibleCount += sectionVisible;
+      }
+
+      if (noResults) {
+        noResults.hidden = visibleCount > 0 || sections.length === 0;
+      }
+    };
+
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        state.category = tab.dataset.category ?? "all";
+        const hash = state.category === "all" ? "" : `#${state.category}`;
+        history.replaceState(null, "", `${window.location.pathname}${hash}`);
+        refresh();
+      });
+    }
+
+    for (const chip of chips) {
+      chip.addEventListener("click", () => {
+        const group = chip.dataset.filter as "cuisine" | "tag";
+        state[group] = chip.dataset.value ?? "all";
+        refresh();
+      });
+    }
+
+    search?.addEventListener("input", refresh);
+    window.addEventListener("hashchange", () => {
+      fromHash();
+      refresh();
+    });
+
+    fromHash();
+    refresh();
+  }
+</script>

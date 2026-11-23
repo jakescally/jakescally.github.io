@@ -93,9 +93,51 @@ const drinks = defineCollection({
   })
 });
 
+const recipes = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string().optional(),
+    category: z.string(),
+    cuisine: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    servings: z.number().positive(),
+    prepTime: z.number().nonnegative().optional(),
+    cookTime: z.number().nonnegative().optional(),
+    totalTime: z.number().nonnegative().optional(),
+    heroImage: z.string().optional(),
+    ingredients: z
+      .array(
+        z.object({
+          group: z.string().optional(),
+          qty: z.union([z.number(), z.string()]).optional(),
+          unit: z.string().optional(),
+          item: z.string(),
+          note: z.string().optional(),
+          grams: z.number().positive().optional()
+        })
+      )
+      .default([]),
+    steps: z
+      .array(
+        z.union([
+          z.string(),
+          z.object({ text: z.string(), timer: z.number().positive().optional() })
+        ])
+      )
+      .default([]),
+    source: z.string().optional(),
+    sourceUrl: z.string().url().optional(),
+    updatedAt: z.coerce.date().optional(),
+    draft: z.boolean().default(false)
+  })
+});
+
 export const collections = {
   blog,
   projects,
   photoSets,
-  drinks
+  drinks,
+  recipes
 };
